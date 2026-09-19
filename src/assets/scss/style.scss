@@ -1,0 +1,122 @@
+//section
+@import "section/header";
+@import "section/intro";
+@import "section/ticker";
+@import "section/problem";
+@import "section/process";
+@import "section/cases";
+@import "section/ai";
+@import "section/portfolio-slider";
+@import "section/contact";
+@import "section/footer";
+@import "section/about";
+@import "section/consult";
+@import "section/service";
+@import "section/location";
+@import "section/portfolio";
+@import "section/qa";
+@import "section/admin";
+
+/* 시작점 */
+ :root {
+   --ink: #0d0d0d;
+   --paper: #f5f0e8;
+   --accent: #f64f1e;
+   --gold: #fad05f;
+   --muted: #7a7060;
+   --light: #ede8dc;
+   --white: #faf8f4;
+ }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* Noise Texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.4;
+}
+
+#root { min-height: 100vh; }
+
+
+/* ── SECTION COMMON ── */
+section { padding: 120px 60px; }
+
+.section-title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: clamp(50px, 10vw, 70px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+/* ── BRAND NAME ── */
+.brand-name{
+  color: var(--accent);
+}
+
+/* ── ANIMATIONS ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── FADE-UP DELAYS ── */
+.fade-up-delay-1 { transition-delay: 0s; }
+.fade-up-delay-2 { transition-delay: 0.15s; }
+.fade-up-delay-3 { transition-delay: 0.3s; }
+.fade-up-delay-4 { transition-delay: 0.45s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  section { padding: 80px 24px; }
+  .intro { padding: 100px 24px 60px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .cases-grid { grid-template-columns: 1fr; }
+  .ai-container { grid-template-columns: 1fr; }
+  .values-grid { grid-template-columns: 1fr; gap: 32px; }
+  footer { padding: 24px; flex-direction: column; gap: 12px;}
+}
+
+/* ── BUTTON STYLES ── */
+.btn-round {
+  display: inline-block;
+  align-items: center;
+  margin-top: 30px;
+  gap: 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  padding: 14px 28px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+
+  &:hover { transform: translateY(-2px); background: var(--gold); transition: all 0.2s; }
+}

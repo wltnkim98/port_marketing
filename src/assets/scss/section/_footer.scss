@@ -1,0 +1,130 @@
+/* ── FOOTER ── */
+footer {
+  background: #080808;
+  padding: 32px 60px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.12em;
+  color: rgba(245,240,232,0.4);
+}
+.footer-logo span { color: var(--accent); }
+.footer-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.footer-info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-info-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-social-links {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(245,240,232,0.1);
+  color: rgba(245,240,232,0.7);
+  transition: all 0.2s;
+}
+.footer-social-link:hover {
+  background: var(--accent);
+  color: #080808;
+}
+.footer-social-link img:not([alt="네이버 블로그"]) {
+  filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(347%) hue-rotate(359deg) brightness(96%) contrast(86%);
+}
+.footer-social-link:hover img:not([alt="네이버 블로그"]) {
+  filter: brightness(0) saturate(100%) invert(5%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(5%) contrast(96%);
+}
+
+.footer-info-right .footer-info-label, .footer-info-right .footer-info-value {
+  font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", AppleGothic, Dotum, "돋움", sans-serif;
+  font-size: 15px;
+}
+
+.footer-info-item {
+  display: flex;
+  gap: 8px;
+}
+.footer-info-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: rgba(245,240,232,0.5);
+  min-width: 50px;
+}
+.footer-info-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: rgba(245,240,232,0.7);
+}
+.footer-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(245,240,232,0.1);
+}
+.footer-menu {
+  display: flex;
+  gap: 20px;
+}
+.footer-menu-item {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: rgba(245,240,232,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-menu-item:hover {
+  color: var(--accent);
+}
+.footer-copy {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(245,240,232,0.2);
+}
+
+@media (max-width: 768px) {
+  footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 20px;
+  }
+  .footer-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .footer-info-right .footer-info-label, .footer-info-right .footer-info-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+  }
+}

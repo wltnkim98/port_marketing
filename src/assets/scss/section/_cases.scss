@@ -1,0 +1,118 @@
+/* ── CASE STUDIES ── */
+.cases-section {
+  position: relative;
+  background: var(--paper);
+  overflow: hidden;
+}
+.cases-video-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.cases-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(13, 13, 13, 0.5), rgba(13, 13, 13, 0.6));
+  z-index: 1;
+}
+.cases-content {
+  position: relative;
+  z-index: 2;
+  padding: 80px 20px;
+  min-height: 60vh;
+}
+.cases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 60px;
+  background: rgba(13,13,13,0.1);
+}
+.case-card {
+  background: var(--paper);
+  padding: 48px;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.case-card:hover { background: var(--ink); }
+.case-card:hover * { color: var(--paper) !important; }
+.case-card:hover .case-tag { background: var(--accent); color: white !important; }
+.case-tag {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--light);
+  color: var(--muted);
+  padding: 4px 12px;
+  margin-bottom: 24px;
+  transition: background 0.3s, color 0.3s;
+}
+.case-problem {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.case-card:hover .case-problem { color: var(--gold) !important; }
+.case-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.case-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+.case-metrics {
+  display: flex; gap: 32px;
+}
+.case-metric {}
+.case-metric-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--accent);
+  line-height: 1;
+}
+.case-card:hover .case-metric-val { color: var(--gold) !important; }
+.case-metric-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.case-arrow {
+  position: absolute; bottom: 48px; right: 48px;
+  font-size: 24px;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.case-card:hover .case-arrow { opacity: 1; transform: translateX(0); color: var(--paper) !important; }
+
+.case-card:hover circle[stroke="var(--accent)"] {
+  stroke: var(--gold);
+}
+.case-card:hover text {
+  fill: var(--paper) !important;
+}

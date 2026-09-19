@@ -1,0 +1,132 @@
+/* ── CONTACT ── */
+.contact-section {
+  background: var(--ink);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.contact-section .section-title {
+  color: var(--paper);
+  font-size: clamp(48px, 6vw, 80px);
+}
+.contact-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(245,240,232,0.55);
+  max-width: 480px;
+  margin: 0 auto 30px;
+}
+.contact-email {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(32px, 5vw, 64px);
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  margin-bottom: 48px;
+  display: block;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-email:hover { color: var(--accent); }
+.contact-phone-wrapper {
+  display: inline-block;
+}
+.contact-phone {
+  font-family: 'Pretendard-Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(48px, 8vw, 80px);
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  margin-bottom: 48px;
+  text-decoration: none;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.contact-phone:hover {
+  transform: translateY(-5px);
+}
+.contact-bg {
+  position: absolute;
+  bottom: -40px; right: -20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 220px;
+  color: rgba(245,240,232,0.03);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+.contact-row {
+  display: flex; justify-content: center; gap: 40px;
+  flex-wrap: wrap;
+}
+.contact-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-link:hover { color: var(--gold); }
+.contact-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 20px 0;
+  border-radius: 8px;
+  transition: all 0.2s;
+  width: 500px;
+  gap : 20px;
+}
+.contact-btn-solid {
+  background: #4a4a4a;
+  color: var(--paper);
+  border: 1px solid #4a4a4a;
+}
+.contact-btn-outline {
+  background: #FFD700;
+  color: var(--ink);
+  border: 1px solid #FFD700;
+}
+.contact-btn-solid:hover {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+.contact-btn-outline:hover {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+.contact-btn-outline img[alt="카카오톡"] {
+  filter: brightness(0) saturate(100%) invert(5%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(5%) contrast(96%);
+}
+.contact-btn-outline:hover img[alt="카카오톡"] {
+  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+/* ── CONTACT RESPONSIVE ── */
+@media (max-width: 900px) {
+  .contact-email {
+    font-size: clamp(20px, 4vw, 32px);
+    word-break: break-all;
+    padding: 0 16px;
+  }
+  .contact-row {
+    gap: 24px;
+  }
+}
