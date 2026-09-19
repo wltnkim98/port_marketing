@@ -3,8 +3,6 @@ import './App.css';
 import React from 'react';
 import {useEffect} from "react";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
-import { getLenis } from "./utils/smooth";
-import smooth from "./utils/smooth";
 import HomeView from "./views/HomeView";
 import AboutView from "./views/AboutView";
 import LocationView from "./views/LocationView";
@@ -46,25 +44,6 @@ function useScrollReveal() {
         return obs;
     };
 
-    //Scroll to top
-    useEffect(() => {
-        // 메인 페이지에서 해시가 있으면
-        // Header의 해시 스크롤 처리가 담당
-        if (location.pathname === '/' && location.hash) {
-            return;
-        }
-
-        const lenis = getLenis();
-
-        if (lenis) {
-            lenis.scrollTo(0, {
-                immediate: true,
-            });
-        } else {
-            window.scrollTo(0, 0);
-        }
-    }, [location.pathname]);
-
     // Run on mount (handles page refresh)
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -83,12 +62,10 @@ function useScrollReveal() {
         return () => cancelAnimationFrame(rafId);
     }, [location.pathname]);
 
-    //Smooth 처리
+    // Scroll to top on route change
     useEffect(() => {
-        const cleanup = smooth();
-
-        return cleanup;
-    }, []);
+        window.scrollTo(0, 0);
+    }, [location]);
 }
 
 const AppRoutes = () => {
@@ -116,6 +93,30 @@ const AppRoutes = () => {
 };
 
 const App = () => {
+    // Scroll to top on page load/refresh
+    useEffect(() => {
+        // Disable browser scroll restoration
+        if ('scrollRestoration' in window.history) {
+            window.history.scrollRestoration = 'manual';
+        }
+
+        // Force scroll to top with delay to ensure DOM is ready
+        const scrollToTop = () => {
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        };
+
+        scrollToTop();
+        const timer = setTimeout(scrollToTop, 100);
+        const timer2 = setTimeout(scrollToTop, 300);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+        };
+    }, []);
+
     return (
         <BrowserRouter>
             <AppRoutes />

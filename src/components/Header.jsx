@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { links, pageLinks } from '../constants';
-import { getLenis } from "../utils/smooth";
 
 const Header = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -23,10 +22,8 @@ const Header = () => {
                 const id = location.hash.replace('#', '');
                 const scrollToElement = () => {
                     const el = document.getElementById(id);
-                    const lenis = getLenis();
-
-                    if (el && lenis) {
-                        lenis.scrollTo(el);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
                     }
                 };
 
@@ -42,12 +39,7 @@ const Header = () => {
         if (location.pathname === '/') {
             const el = document.getElementById(id);
             if (el) {
-                const lenis = getLenis();
-
-                if (lenis) {
-                    lenis.scrollTo(el);
-                }
-
+                el.scrollIntoView({ behavior: 'smooth' });
                 window.history.pushState(null, '', `/#${id}`);
             }
         } else {
