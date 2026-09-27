@@ -34,15 +34,16 @@ const steps = [
 const Process = () => {
     return (
         <section className="process-section" id="process">
-            <h2 className="section-title fade-up">성과를 올려주는<br />맞춤형 컨설팅</h2>
-            <p style={{fontSize:'15px', color:'var(--muted)', maxWidth:'520px', lineHeight:'1.8', marginTop:'24px'}} className="fade-up">
-                처음부터 끝까지 4가지 단계를 통해 성공적인 마케팅 프로세스를 함께 진행합니다.
-            </p>
-
+            <div className="process-title">
+                <h2 className="section-title fade-up">고객을 끌어오는 힘<br /> <span>브랜드 맞춤형</span> 컨설팅</h2>
+                <p className="fade-up">
+                    처음부터 끝까지 4가지 단계를 통해 성공적인 마케팅 프로세스를 함께 진행합니다.
+                </p>
+            </div>
             <div className="process-card-grid">
                 {steps.map((s, i) => (
                     <div
-                        className={`process-card fade-up fade-up-delay-${i + 1}`} 
+                        className={`process-card fade-up fade-up-delay-${i + 1}`}
                         key={i}
                     >
                         <div

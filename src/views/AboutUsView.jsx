@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-const AboutView = () => {
+const AboutUsView = () => {
     const [scrollProgress, setScrollProgress] = useState(0);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const AboutView = () => {
     }, []);
 
     return (
-        <div className="about-page">
+        <div className="aboutus-page">
             {/* Reading Progress Indicator */}
             <div 
                 className="reading-progress-bar" 
@@ -49,16 +49,16 @@ const AboutView = () => {
 
             <Header />
 
-            <main className="about-article">
+            <main className="aboutus-article">
                 {/* ── BLOG POST HEADER ── */}
-                <header className="about-header fade-up">
+                <header className="aboutus-header fade-up">
 
-                    <h1 className="about-main-title">
+                    <h1 className="aboutus-main-title">
                         어떤 곳에 마케팅을 맡겨야 할지 고민되시죠?<br />
                         <span className="highlight-text">구조화된 공식</span>보다 중요한 건 <span className="highlight-text">소비자의 마음</span>입니다.
                     </h1>
 
-                    <p className="about-lead-desc">
+                    <p className="aboutus-lead-desc">
                         수많은 마케팅 성공 공식과 화려한 성공사례 속에서 왜 우리 브랜드는 제자리걸음일까요?
                         MarketWith가 소비자의 실제 성향 분석에서 출발하여 글로벌 무대까지 확장시키는 
                         진짜 브랜드 성장 방정식을 전해드립니다.
@@ -66,18 +66,18 @@ const AboutView = () => {
                 </header>
 
                 {/* ── HERO VISUAL COVER ── */}
-                <div className="about-hero-media fade-up">
+                <div className="aboutus-hero-media fade-up">
                     <img 
                         src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80" 
                         alt="MarketWith Brand Marketing Architecture" 
                     />
-                    <div className="about-hero-caption">
+                    <div className="aboutus-hero-caption">
                         <span>PERSPECTIVE 01</span>
                     </div>
                 </div>
 
                 {/* ── BLOG CONTENT FLOW WITH ALTERNATING LEFT/RIGHT IMAGES ── */}
-                <div className="about-content-flow">
+                <div className="aboutus-content-flow">
 
                     {/* ═══ SECTION 1: 문제 제기 ═══ */}
                     <article className="post-section fade-up">
@@ -341,7 +341,7 @@ const AboutView = () => {
                     </article>
 
                     {/* ═══ SECTION 5: 비교 매트릭스 ═══ */}
-                    <div className="about-comparison-block fade-up">
+                    <div className="aboutus-comparison-block fade-up">
                         <div className="comp-heading">WHY MARKETWITH?</div>
                         <p className="comp-sub">정형화된 일반 대행사와 MarketWith의 본질적인 차이</p>
                         
@@ -372,7 +372,7 @@ const AboutView = () => {
                 </div>
 
                 {/* ── BOTTOM CALL TO ACTION ── */}
-                <section className="about-footer-cta fade-up">
+                <section className="aboutus-footer-cta fade-up">
                     <div className="cta-kicker">READY TO SCALE YOUR BRAND?</div>
                     <h2 className="cta-title">
                         어디에 맡겨야 할지 고민되셨다면,<br />
@@ -383,10 +383,10 @@ const AboutView = () => {
                         MarketWith의 전문가 팀이 귀사의 브랜드 성향을 면밀히 분석해 드립니다.
                     </p>
                     <div className="cta-btn-wrap">
-                        <Link to="/consult" className="about-cta-btn">
+                        <Link to="/support/consult" className="aboutus-cta-btn">
                             무료 브랜드 맞춤 상담 신청하기 →
                         </Link>
-                        <Link to="/" className="about-secondary-btn">
+                        <Link to="/" className="aboutus-secondary-btn">
                             메인 홈 둘러보기
                         </Link>
                     </div>
@@ -398,4 +398,4 @@ const AboutView = () => {
     );
 };
 
-export default AboutView;
+export default AboutUsView;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -216,9 +217,9 @@ const LocationView = () => {
                             전문 컨설턴트가 준비를 마치고 맞이해 드립니다.
                         </p>
                         <div className="cta-btn-wrap">
-                            <a href="/consult" className="cta-primary-btn">
+                            <Link to="/support/consult" className="cta-primary-btn">
                                 방문 상담 예약하기 →
-                            </a>
+                            </Link>
                             <a href={`tel:${locationInfo.phone}`} className="cta-secondary-btn">
                                 전화로 문의하기
                             </a>

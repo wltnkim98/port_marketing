@@ -13,18 +13,16 @@ import Footer from "../components/Footer";
 const HomeView = () => {
     return (
         <div>
-            <>
-                <Header />
-                <Intro />
-                <Ticker />
-                <Problem />
-                <Process />
-                <Cases />
-                <Ai />
-                <PortfolioSlider />
-                <Contact />
-                <Footer />
-            </>
+            <Header />
+            <Intro />
+            <Ticker />
+            <Problem />
+            <Process />
+            <Cases />
+            <Ai />
+            <PortfolioSlider />
+            <Contact />
+            <Footer />
         </div>
     );
 };

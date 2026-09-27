@@ -77,21 +77,7 @@ const metrics = [
 ];
 
 function RisingGraph({ isVisible }) {
-    const [isMobile, setIsMobile] = useState(false);
     const [graphStarted, setGraphStarted] = useState(false);
-
-    useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-
-        return () => {
-            window.removeEventListener('resize', checkMobile);
-        };
-    }, []);
 
     // 그래프 애니메이션 시작 / 초기화
     useEffect(() => {
@@ -113,33 +99,29 @@ function RisingGraph({ isVisible }) {
         };
     }, [isVisible]);
 
-    const graphPath =
-        "M 0 550 L 300 420 L 400 460 L 500 350 L 600 390 L 700 250 L 800 290 L 900 180 L 1000 220 L 1100 100 L 1200 50";
-
-    const viewBox = isMobile
-        ? "0 0 1200 800"
-        : "0 0 1200 600";
-
+    // 끝점은 viewBox 경계에 둔다. 마지막 원은 일부 잘려도 선이 가로 영역 끝까지 이어진다.
     const endX = 1200;
-    const endY = 50;
+    const endY = 60;
+    const maxY = 600;
+
+    const graphPath =
+        `M 0 550 L 300 420 L 400 460 L 500 350 L 600 390 L 700 250 L 800 290 L 900 180 L 1000 220 L 1100 110 L ${endX} ${endY}`;
 
     return (
         <svg
             className={`fade-up ${isVisible ? 'visible' : ''}`}
             width="100%"
-            height="100%"
-            viewBox={viewBox}
-            preserveAspectRatio={
-                isMobile
-                    ? "xMidYMid meet"
-                    : "xMidYMid slice"
-            }
+            height="auto"
+            viewBox="0 0 1200 600"
+            preserveAspectRatio="xMidYMid meet"
             style={{
                 position: 'absolute',
-                top: 0,
+                top: '50%',
                 left: 0,
                 width: '100%',
-                height: '100%',
+                height: 'auto',
+                aspectRatio: '2 / 1',
+                translate: '0 -50%',
                 opacity: 0.4,
                 zIndex: 2,
                 pointerEvents: 'none'
@@ -179,7 +161,7 @@ function RisingGraph({ isVisible }) {
                     <rect
                         x="0"
                         y="0"
-                        height="600"
+                        height={maxY}
                         width={graphStarted ? 1200 : 0}
                         style={{
                             transition: graphStarted
@@ -193,7 +175,7 @@ function RisingGraph({ isVisible }) {
 
             {/* 그라디언트 영역 */}
             <path
-                d={`${graphPath} L ${endX} 600 L 0 600 Z`}
+                d={`${graphPath} L ${endX} ${maxY} L 0 ${maxY} Z`}
                 fill="url(#graphGradient)"
                 stroke="none"
                 style={{
@@ -233,8 +215,7 @@ function RisingGraph({ isVisible }) {
                 fill="var(--paper)"
                 style={{
                     opacity: graphStarted ? 1 : 0,
-                    transition:
-                        'opacity 0.6s ease-out 2s',
+                    transition: 'opacity 0.6s ease-out 1.0s',
                     filter:
                         'drop-shadow(0 8px 12px rgba(0,0,0,0.4))'
                 }}
@@ -270,7 +251,7 @@ const Cases = () => {
 
     return (
         <section className="cases-section" id="cases" ref={sectionRef} style={{ position: 'relative' }}>
-            <video 
+            <video
                 className="cases-video-bg"
                 autoPlay
                 muted
@@ -281,10 +262,12 @@ const Cases = () => {
             </video>
             <RisingGraph isVisible={isVisible} />
             <div className="cases-content">
-                <h2 className="section-title fade-up" style={{color: 'white'}}>마켓위드만의<br /> 설계의 성과</h2>
-                <p style={{fontSize:'15px',color:'white',maxWidth:'480px',lineHeight:'1.8',marginTop:'20px'}} className="fade-up">
-                    수치보다 중요한 건 어떤 판단이 그 수치를 만들었는가입니다.
-                </p>
+                <div>
+                    <h2 className="section-title fade-up" style={{color: 'white'}}>마켓위드만의<br /> 설계의 성과</h2>
+                    <p style={{fontSize:'15px',color:'white',maxWidth:'480px',lineHeight:'1.8',marginTop:'20px'}} className="fade-up">
+                        수치보다 중요한 건 어떤 판단이 그 수치를 만들었는가입니다.
+                    </p>
+                </div>
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -294,10 +277,10 @@ const Cases = () => {
                     flexWrap: 'wrap'
                 }}>
                     {metrics.map((m, i) => (
-                        <AnimatedMetric 
+                        <AnimatedMetric
                             key={i}
                             value={m.val}
-                            label={m.label} 
+                            label={m.label}
                             suffix={m.suffix}
                             delay={i * 100}
                             isVisible={isVisible}

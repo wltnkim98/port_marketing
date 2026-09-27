@@ -4,7 +4,8 @@ import React from 'react';
 import {useEffect} from "react";
 import {BrowserRouter, Route, Routes, useLocation} from "react-router-dom";
 import HomeView from "./views/HomeView";
-import AboutView from "./views/AboutView";
+import AboutUsView from "./views/AboutUsView";
+import CompanyIntroView from "./views/CompanyIntroView";
 import LocationView from "./views/LocationView";
 import ConsultView from "./views/ConsultView";
 import PhotographyServiceView from "./views/PhotographyServiceView";
@@ -73,10 +74,11 @@ const AppRoutes = () => {
 
     return (
         <Routes>
-            <Route path="/about" element={<AboutView />} />
+            <Route path="/about/company" element={<CompanyIntroView />} />
+            <Route path="/about/aboutus" element={<AboutUsView />} />
             <Route path="/about/location" element={<LocationView />} />
             <Route path="/" element={<HomeView />} />
-            <Route path="/consult" element={<ConsultView />} />
+            <Route path="/support/consult" element={<ConsultView />} />
             <Route path="/services" element={<ServiceView />} />
             <Route path="/services/photography" element={<PhotographyServiceView />} />
             <Route path="/services/blog" element={<BlogServiceView />} />
@@ -85,7 +87,7 @@ const AppRoutes = () => {
             <Route path="/services/tester" element={<TesterServiceView />} />
             <Route path="/services/global-marketing" element={<GlobalMarketingServiceView />} />
             <Route path="/portfolio" element={<PortfolioView />} />
-            <Route path="/qa" element={<QaView />} />
+            <Route path="/support/qa" element={<QaView />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>

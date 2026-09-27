@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { links, pageLinks } from '../constants';
 
@@ -6,14 +6,51 @@ const Header = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [expandedDropdowns, setExpandedDropdowns] = useState({});
+    const navRef = useRef(null);
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const h = () => setScrolled(window.scrollY > 60);
-        window.addEventListener('scroll', h);
-        return () => window.removeEventListener('scroll', h);
+        const handleScroll = () => {
+            const isScrolled = window.scrollY > 60;
+            setScrolled(isScrolled);
+            if (isScrolled) {
+                document.body.classList.add('header-scrolled');
+            } else {
+                document.body.classList.remove('header-scrolled');
+            }
+        };
+
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            document.body.classList.remove('header-scrolled');
+        };
     }, []);
+
+    // Keep sticky elements positioned directly below the rendered header.
+    // ResizeObserver also follows the padding transition when the header shrinks.
+    useLayoutEffect(() => {
+        const nav = navRef.current;
+        if (!nav) return undefined;
+
+        const setHeaderHeight = () => {
+            document.documentElement.style.setProperty('--header-height', `${nav.offsetHeight}px`);
+        };
+
+        setHeaderHeight();
+        const observer = new ResizeObserver(setHeaderHeight);
+        observer.observe(nav);
+
+        return () => observer.disconnect();
+    }, []);
+
+    useLayoutEffect(() => {
+        if (navRef.current) {
+            document.documentElement.style.setProperty('--header-height', `${navRef.current.offsetHeight}px`);
+        }
+    }, [scrolled]);
 
     // 메인 페이지 진입 및 해시 변경 시 해당 섹션으로 부드럽게 스크롤
     useEffect(() => {
@@ -56,7 +93,6 @@ const Header = () => {
     };
 
     const toggleMobileMenu = () => {
-        console.log('Toggle mobile menu, current state:', mobileMenuOpen);
         setMobileMenuOpen(!mobileMenuOpen);
     };
 
@@ -64,21 +100,81 @@ const Header = () => {
         setMobileMenuOpen(false);
     };
 
-    const toggleDropdown = (path) => {
+    const toggleDropdown = (key) => {
         setExpandedDropdowns(prev => ({
             ...prev,
-            [path]: !prev[path]
+            [key]: !prev[key]
         }));
+    };
+
+    const renderNavItem = (item) => {
+        const itemKey = item.path || item.label;
+        const isExpanded = expandedDropdowns[itemKey] !== false;
+
+        if (item.children) {
+            return (
+                <li
+                    key={itemKey}
+                    className="nav-item-with-dropdown"
+                >
+                    {item.path ? (
+                        <Link
+                            to={item.path}
+                            className={`nav-link-with-children ${isExpanded ? '' : 'collapsed'}`}
+                            onClick={(e) => {
+                                if (window.innerWidth <= 1030) {
+                                    e.preventDefault();
+                                    toggleDropdown(itemKey);
+                                } else {
+                                    closeMobileMenu();
+                                }
+                            }}
+                        >
+                            {item.label}
+                        </Link>
+                    ) : (
+                        <button
+                            type="button"
+                            className={`nav-link-with-children ${isExpanded ? '' : 'collapsed'}`}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                toggleDropdown(itemKey);
+                            }}
+                        >
+                            {item.label}
+                        </button>
+                    )}
+                    <ul className={`nav-dropdown ${isExpanded ? 'expanded' : 'collapsed'}`}>
+                        {item.children.map(child => (
+                            <li key={child.path}>
+                                <Link to={child.path} onClick={closeMobileMenu}>
+                                    {child.label}
+                                    {child.badge && <span className="nav-dropdown-badge">{child.badge}</span>}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </li>
+            );
+        }
+
+        return (
+            <li key={itemKey}>
+                <Link to={item.path} onClick={closeMobileMenu}>
+                    {item.label}
+                </Link>
+            </li>
+        );
     };
 
     return (
         <>
-            <nav className={scrolled ? 'scrolled' : ''}>
+            <nav ref={navRef} className={scrolled ? 'scrolled' : ''}>
                 <Link to="/" className="nav-logo" onClick={handleLogoClick}>
                     Market<span>With</span>
                 </Link>
 
-                <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+                <button className="mobile-menu-toggle" onClick={toggleMobileMenu} aria-label="메뉴 열기">
                     <span className={mobileMenuOpen ? 'open' : ''}></span>
                     <span className={mobileMenuOpen ? 'open' : ''}></span>
                     <span className={mobileMenuOpen ? 'open' : ''}></span>
@@ -93,36 +189,7 @@ const Header = () => {
                             Market<span>With</span>
                         </Link>
                     </li>
-                    {pageLinks.slice(0, -1).map(l => (
-                        <li
-                            key={l.path}
-                            className={l.children ? 'nav-item-with-dropdown' : ''}
-                        >
-                            {l.children ? (
-                                <>
-                                    <Link
-                                        to={l.path}
-                                        className="nav-link-with-children"
-                                        onClick={(e) => {
-                                            toggleDropdown(l.path);
-                                            closeMobileMenu();
-                                        }}
-                                    >
-                                        {l.label}
-                                    </Link>
-                                    <ul className={`nav-dropdown ${expandedDropdowns[l.path] !== false ? 'expanded' : 'collapsed'}`}>
-                                        {l.children.map(child => (
-                                            <li key={child.path}>
-                                                <Link to={child.path} onClick={closeMobileMenu}>{child.label}</Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </>
-                            ) : (
-                                <Link to={l.path} onClick={closeMobileMenu}>{l.label}</Link>
-                            )}
-                        </li>
-                    ))}
+                    {pageLinks.slice(0, -1).map(renderNavItem)}
 
                     {links.map(l => (
                         <li key={l.id}>
@@ -138,11 +205,7 @@ const Header = () => {
                         </li>
                     ))}
 
-                    {pageLinks.slice(-1).map(l => (
-                        <li key={l.path}>
-                            <Link to={l.path} onClick={closeMobileMenu}>{l.label}</Link>
-                        </li>
-                    ))}
+                    {pageLinks.slice(-1).map(renderNavItem)}
                 </ul>
             </nav>
 

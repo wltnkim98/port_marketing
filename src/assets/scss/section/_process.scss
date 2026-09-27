@@ -1,5 +1,31 @@
 /* ── PROCESS CARD GRID ── */
-.process-section { background: var(--white); }
+.process-section {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--white);
+
+  .process-title {
+    h2 {
+      font-size: clamp(40px, 8vw, 60px);
+      margin: 0 auto;
+      text-align: center;
+
+      > span {
+        color: var(--tangerine);
+      }
+    }
+    p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.8;
+      margin: 24px auto 0;
+      text-align: center;
+    }
+  }
+}
 .process-card-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

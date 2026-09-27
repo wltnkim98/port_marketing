@@ -1,5 +1,9 @@
 /* ── PROBLEM ── */
 .problem-section {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  min-height: 100vh;
   background: var(--ink);
   color: var(--paper);
   position: relative;

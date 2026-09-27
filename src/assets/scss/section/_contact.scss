@@ -1,5 +1,10 @@
 /* ── CONTACT ── */
 .contact-section {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  min-height: 100vh;
   background: var(--ink);
   text-align: center;
   position: relative;
@@ -7,7 +12,6 @@
 }
 .contact-section .section-title {
   color: var(--paper);
-  font-size: clamp(48px, 6vw, 80px);
 }
 .contact-desc {
   font-size: 16px;

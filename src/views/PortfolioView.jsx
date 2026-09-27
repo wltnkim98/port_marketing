@@ -410,10 +410,15 @@ const PortfolioView = () => {
             <Header />
 
             <main className="portfolio-container">
-                {/* ── 원래 웹사이트의 히어로 헤더 (ServiceView와 동일한 규격) ── */}
+                {/* ── 포트폴리오 히어로 ── */}
                 <section className="service-hero fade-up">
-                    <h1>포트폴리오</h1>
-                    <p>브랜드의 성장을 이끄는 디지털 커머스 & 브랜딩 솔루션 성공 사례</p>
+                    <div className="service-hero__glow service-hero__glow--one" aria-hidden="true" />
+                    <div className="service-hero__glow service-hero__glow--two" aria-hidden="true" />
+                    <div className="service-hero__content">
+                        <span className="service-hero__eyebrow">SELECTED WORKS</span>
+                        <h1>포트폴리오</h1>
+                        <p>브랜드의 성장을 이끄는 디지털 커머스 &amp; 브랜딩 솔루션 성공 사례</p>
+                    </div>
                 </section>
 
                 <section className="portfolio-controls-wrap fade-up">
@@ -604,7 +609,7 @@ const PortfolioView = () => {
                         마켓위드의 실력 있는 전문 컨설턴트 팀과 함께 시작해 보세요.
                     </p>
                     <div className="portfolio-cta-buttons">
-                        <Link to="/consult" className="portfolio-cta-btn-primary">
+                        <Link to="/support/consult" className="portfolio-cta-btn-primary">
                             무료 브랜드 맞춤 상담 신청하기 →
                         </Link>
                         <Link to="/services" className="portfolio-cta-btn-secondary">

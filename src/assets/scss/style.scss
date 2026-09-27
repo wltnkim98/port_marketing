@@ -20,12 +20,18 @@
 /* 시작점 */
  :root {
    --ink: #0d0d0d;
+   --muted: #686052;
    --paper: #f5f0e8;
-   --accent: #f64f1e;
-   --gold: #fad05f;
-   --muted: #7a7060;
    --light: #ede8dc;
    --white: #faf8f4;
+   --red: #ef2f26;
+   --accent: #f64f1e;
+   --tangerine: #ff7a00;
+   --gold: #d1ae4d;
+   --yellow: #ffca0a;
+   --mocha: #92725d;
+
+   --header-height: 58.5px;
  }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,7 +43,6 @@ body {
   color: var(--ink);
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   font-weight: 400;
-  overflow-x: hidden;
 }
 
 /* Noise Texture */
@@ -50,8 +55,9 @@ body::before {
   opacity: 0.4;
 }
 
-#root { min-height: 100vh; }
-
+#root {
+  min-height: 100vh;
+  }
 
 /* ── SECTION COMMON ── */
 section { padding: 120px 60px; }

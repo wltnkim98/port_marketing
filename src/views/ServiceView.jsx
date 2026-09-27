@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -9,6 +9,9 @@ import LiveMetricCountUp from '../components/motion/LiveMetricCountUp';
 import MagneticButton from '../components/motion/MagneticButton';
 
 const ServiceView = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const cardRefs = useRef([]);
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -27,6 +30,26 @@ const ServiceView = () => {
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        const cardObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const index = parseInt(entry.target.dataset.index);
+                        setActiveIndex(index);
+                    }
+                });
+            },
+            { threshold: 0.5, rootMargin: '-20% 0px -20% 0px' }
+        );
+
+        cardRefs.current.forEach((ref) => {
+            if (ref) cardObserver.observe(ref);
+        });
+
+        return () => cardObserver.disconnect();
+    }, []);
+
     const serviceList = [
         {
             path: '/services/photography',
@@ -34,7 +57,8 @@ const ServiceView = () => {
             icon: '📸',
             title: '사진·영상·숏폼 촬영 제작',
             desc: '소비자의 첫 3초를 사로잡는 4K/6K 시네마틱 홍보 영상, 릴스 숏폼, 룩북 및 제품 상업 화보를 기획부터 모델 매칭, 마스터링까지 원스톱으로 제작합니다.',
-            highlights: ['숏폼 & 릴스 최적화 제작', '4K/6K 시네마 브랜드 필름', '제품 & 공간 연출 상업 화보', '전문 모델·크리에이터 매칭']
+            highlights: ['숏폼 & 릴스 최적화 제작', '4K/6K 시네마 브랜드 필름', '제품 & 공간 연출 상업 화보', '전문 모델·크리에이터 매칭'],
+            image: '/img/process_01.jpg'
         },
         {
             path: '/services/blog',
@@ -42,7 +66,8 @@ const ServiceView = () => {
             icon: '✍️',
             title: '브랜드 블로그 운영 관리',
             desc: '네이버 스마트블록과 D.I.A+ 알고리즘을 분석한 전략 키워드 추출과 전문 에디터의 고밀도 칼럼 스토리텔링으로 검색 1위 점유와 자산형 트래픽을 만듭니다.',
-            highlights: ['스마트블록 SEO 1위 상위 노출', '업종별 전문 칼럼 집필', '홈페이지형 프리미엄 스킨 UI', '플레이스 & 상담 채널 연동']
+            highlights: ['스마트블록 SEO 1위 상위 노출', '업종별 전문 칼럼 집필', '홈페이지형 프리미엄 스킨 UI', '플레이스 & 상담 채널 연동'],
+            image: '/img/process_02.jpg'
         },
         {
             path: '/services/instagram',
@@ -50,7 +75,8 @@ const ServiceView = () => {
             icon: '📱',
             title: '인스타그램 계정 관리',
             desc: 'KAIT 공인 SNS 마케터 1급 전문 인력이 9그리드 피드 브랜딩, 알고리즘 맞춤 릴스 바이럴, DM 자동화 퍼널로 팔로워를 진성 충성 고객으로 전환시킵니다.',
-            highlights: ['고감도 9그리드 피드 큐레이션', '알고리즘 저격 바이럴 릴스', '24시간 인터랙티브 스토리', 'DM 응답 자동화 & 메타 광고']
+            highlights: ['고감도 9그리드 피드 큐레이션', '알고리즘 저격 바이럴 릴스', '24시간 인터랙티브 스토리', 'DM 응답 자동화 & 메타 광고'],
+            image: '/img/process_03.jpg'
         },
         {
             path: '/services/global-marketing',
@@ -58,7 +84,8 @@ const ServiceView = () => {
             icon: '🌐',
             title: '글로벌 브랜딩 & 마케팅',
             desc: '북미, 일본, 동남아, 중화권 등 현지 문화에 맞춘 원어민 로컬라이징과 2,500+ 해외 크리에이터 네트워크, 글로벌 퍼포먼스 광고로 세계 시장을 공략합니다.',
-            highlights: ['권역별 해외 현지 SNS & 틱톡', '2,500+ 글로벌 인플루언서 협업', 'Google / Meta 글로벌 광고', 'Shopify & 아마존 크로스보더 연동']
+            highlights: ['권역별 해외 현지 SNS & 틱톡', '2,500+ 글로벌 인플루언서 협업', 'Google / Meta 글로벌 광고', 'Shopify & 아마존 크로스보더 연동'],
+            image: '/img/process_04.jpg'
         },
         {
             path: '/services/website',
@@ -66,7 +93,8 @@ const ServiceView = () => {
             icon: '💻',
             title: '맞춤형 웹사이트 제작 & 개발',
             desc: '부드러운 모션 인터랙션과 초고속 로딩 스피드, 완벽한 모바일 반응형 및 네이버·구글 SEO를 갖춘 브랜드 전용 고전환 디지털 플래그십을 구축합니다.',
-            highlights: ['고전환 인터랙티브 랜딩페이지', '프리미엄 기업 공식 웹사이트', '반응형 D2C 이커머스 쇼핑몰', 'React / Next.js 커스텀 개발']
+            highlights: ['고전환 인터랙티브 랜딩페이지', '프리미엄 기업 공식 웹사이트', '반응형 D2C 이커머스 쇼핑몰', 'React / Next.js 커스텀 개발'],
+            image: '/img/graph_growth.jpg'
         },
         {
             path: '/services/tester',
@@ -74,7 +102,8 @@ const ServiceView = () => {
             icon: '⭐',
             title: '체험단 & 인플루언서 마케팅',
             desc: '15,000+ 검증된 진성 리뷰어 풀을 기반으로 매장 방문형, 제품 배송형, 기자단, 네이버 공식 인플루언서를 통해 소비자 검색 점유와 신뢰를 완성합니다.',
-            highlights: ['매장 방문형 로컬 체험단', '제품 배송형 실사용 리뷰', '신속 확산 정보 배포형 기자단', '네이버 공식 인플루언서 매칭']
+            highlights: ['매장 방문형 로컬 체험단', '제품 배송형 실사용 리뷰', '신속 확산 정보 배포형 기자단', '네이버 공식 인플루언서 매칭'],
+            image: '/img/process_01.jpg'
         }
     ];
 
@@ -84,6 +113,7 @@ const ServiceView = () => {
             <ServiceNav currentPath="/services" />
 
             <main className="service-content">
+
                 {/* ─── Hero Section with Motion Canvas ─── */}
                 <section className="service-hero-detail fade-up">
                     <HeroMotionCanvas />
@@ -146,7 +176,7 @@ const ServiceView = () => {
                     </div>
 
                     <div className="hero-action-buttons">
-                        <MagneticButton to="/consult" className="btn-primary-consult">
+                        <MagneticButton to="/support/consult" className="btn-primary-consult">
                             무료 통합 마케팅 진단 상담 →
                         </MagneticButton>
                         <MagneticButton to="/portfolio" className="btn-secondary-outline">
@@ -156,26 +186,45 @@ const ServiceView = () => {
                 </section>
 
                 {/* Sticky 작업 */}
-                <section className="services-grid">
-                    {serviceList.map((srv, idx) => (
-                        <div className="fade-up">
-                            <span className="service-card-index">Service 0{idx +1}</span>
-                            <h2 className="service-card-title">{srv.title}</h2>
-                            <p className="service-card-desc">{srv.desc}</p>
+                <section className="service-section">
+                    <div className="service-img-section">
+                        <img 
+                            src={serviceList[activeIndex]?.image} 
+                            alt={serviceList[activeIndex]?.title}
+                            className="service-sticky-image"
+                        />
+                    </div>
+                    <div className="service-cards-container">
+                        {serviceList.map((srv, idx) => (
+                            <div 
+                                key={idx}
+                                ref={(el) => (cardRefs.current[idx] = el)}
+                                data-index={idx}
+                                className={`service-card ${activeIndex === idx ? 'active' : ''}`}
+                            >
+                                <span className="service-card-index">Service 0{idx + 1}</span>
+                                <h2 className="service-card-title">{srv.title}</h2>
+                                <p className="service-card-desc">{srv.desc}</p>
 
-                            <dl className="service-card-grid">
-                                <dt>상세 서비스</dt>
-                                <ul className="service-card-highlights">
-                                    {srv.highlights.map((h, hIdx) => (
-                                        <li key={hIdx}>{h}</li>
-                                    ))}
-                                </ul>
-                            </dl>
-                        </div>
+                                <dl className="service-card-grid">
+                                    <dt>상세 서비스</dt>
+                                    <ul className="service-card-highlights">
+                                        {srv.highlights.map((h, hIdx) => (
+                                            <li key={hIdx}>{h}</li>
+                                        ))}
+                                    </ul>
+                                </dl>
+
+                                <Link to={srv.path} className="service-card-footer">
+                                    <span className="service-view-text">상세 솔루션 & 프로세스 보기</span>
+                                    <span className="service-arrow-btn">→</span>
+                                </Link>
+                            </div>
                         ))}
+                    </div>
                 </section>
 
-                {/* ─── 6 Hub Cards Grid with Tilt Effect ─── */}
+                {/* ─── 6 Hub Cards Grid with Tilt Effect ───
                 <section className="hub-services-grid fade-up">
                     {serviceList.map((srv, idx) => (
                         <TiltCard key={idx} maxTilt={7} className="hub-tilt-wrapper">
@@ -201,7 +250,7 @@ const ServiceView = () => {
                             </Link>
                         </TiltCard>
                     ))}
-                </section>
+                </section>*/}
 
                 {/* ─── Bottom CTA ─── */}
                 <section className="service-footer-cta fade-up">
@@ -213,7 +262,7 @@ const ServiceView = () => {
                         현재 귀사의 성장 단계와 예산, 목표에 맞춘 최적의 마케팅 믹스와 견적을 무료로 제안해 드립니다.
                     </p>
                     <div className="cta-button-group">
-                        <MagneticButton to="/consult" className="btn-primary-consult">
+                        <MagneticButton to="/support/consult" className="btn-primary-consult">
                             1:1 맞춤 마케팅 솔루션 문의 →
                         </MagneticButton>
                         <MagneticButton to="/portfolio" className="btn-secondary-outline">

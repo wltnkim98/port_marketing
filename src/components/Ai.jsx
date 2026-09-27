@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {Link} from "react-router-dom";
 
+// 모바일환경 정의
+const isMobile = window.innerWidth <= 768;
+
 // 마케팅 진단 추천 질문 칩
 const QUICK_QUESTIONS = [
     "광고비는 늘렸는데 ROAS가 계속 떨어져요.",
@@ -13,13 +16,14 @@ const Ai = () => {
     const [messages, setMessages] = useState([
         {
             role: 'bot',
-            text: '안녕하세요. MARKETWITH AI 마케팅 진단 디렉터입니다.\n현재 마케팅에서 가장 고민되는 문제(전환율, 유입, 광고 효율, 이탈 등)를 말씀해 주시거나 아래 추천 질문을 선택해 보세요.'
+            text: '안녕하세요. MARKETWITH AI 마케팅 진단 디렉터입니다.\n현재 마케팅에서 가장 고민되는 문제(전환율, 유입, 광고 효율, 이탈 등)를 말씀해 주시거나 추천 질문을 선택해 보세요.'
         }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
 
     const chatContainerRef = useRef(null);
+    const inputRef = useRef(null);
 
     // 채팅 박스 내부만 자동 하단 스크롤 (전체 윈도우 스크롤 방지)
     useEffect(() => {
@@ -159,7 +163,7 @@ const Ai = () => {
                     </p>
 
                     {/* 추천 질문 칩 */}
-                    <div style={{ marginTop: '16px' }}>
+                    <div className="quick-questions" style={{ marginTop: '16px' }}>
                         <p style={{ fontSize: '13px', color: '#888', marginBottom: '8px' }}>자주 묻는 진단 주제:</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                             {QUICK_QUESTIONS.map((q, i) => (
@@ -185,12 +189,11 @@ const Ai = () => {
                         </div>
                     </div>
 
-                    <Link to="/consult" className="btn-round fade-up fade-up-delay-3">
+                    <Link to="/support/consult" className="btn-round">
                         심층 컨설팅 신청하기 →
                     </Link>
                 </div>
-
-                <div className="ai-right fade-up fade-up-delay-4">
+                <div className="ai-right fade-up fade-up-delay-3">
                     <div className="ai-messages" ref={chatContainerRef}>
                         {messages.map((m, i) => (
                             // 빈 텍스트(스트리밍 직전)는 렌더링 제외
@@ -206,25 +209,49 @@ const Ai = () => {
                             </div>
                         )}
                     </div>
-                    <div className="ai-input-row">
-                        <input
-                            className="ai-input"
-                            value={input}
-                            onChange={e => setInput(e.target.value)}
-                            onKeyDown={e => {
-                                if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    send();
+                    <div className="ai-bottom">
+                        <div className="ai-input-row">
+                            <textarea
+                                className="ai-input"
+                                ref={inputRef}
+                                value={input}
+                                onChange={e => setInput(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key !== 'Enter') return;
+
+                                    if (e.ctrlKey || e.metaKey) {
+                                        // 브라우저별 기본 동작에 의존하지 않고 줄바꿈을 직접 삽입합니다.
+                                        e.preventDefault();
+                                        const { value, selectionStart, selectionEnd } = e.currentTarget;
+                                        const nextInput = `${value.slice(0, selectionStart)}\n${value.slice(selectionEnd)}`;
+                                        const cursorPosition = selectionStart + 1;
+
+                                        setInput(nextInput);
+                                        requestAnimationFrame(() => {
+                                            inputRef.current?.setSelectionRange(cursorPosition, cursorPosition);
+                                        });
+                                        return;
+                                    }
+
+                                    if (!e.ctrlKey && !e.metaKey) {
+                                        e.preventDefault();
+                                        send();
+                                    }
+                                }}
+                                rows={3}
+                                placeholder={
+                                    isMobile
+                                    ? "궁금한 내용을 질문해 보세요."
+                                    : "예: 광고비는 늘었는데 ROAS가 떨어지고 있어요..."
                                 }
-                            }}
-                            placeholder="예: 광고비는 늘었는데 ROAS가 떨어지고 있어요..."
-                            disabled={loading}
-                        />
-                        <button className="ai-send" onClick={() => send()} disabled={loading || !input.trim()}>
-                            진단하기
-                        </button>
+                                disabled={loading}
+                            />
+                            <button className="ai-send" onClick={() => send()} disabled={loading || !input.trim()}>
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            </button>
+                        </div>
+                        <p className="ai-disclaimer">자세한 상담은 심층 컨설팅을 통해 상담 받으실 수 있습니다.</p>
                     </div>
-                    <p className="ai-disclaimer">자세한 상담은 심층 컨설팅을 통해 상담 받으실 수 있습니다.</p>
                 </div>
             </div>
         </section>
