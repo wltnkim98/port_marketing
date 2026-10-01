@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PhotographyVideo from '../../assets/video/photography.mp4';
+import GlobalVideo from '../../assets/video/global_video.mp4';
 
 const InteractiveDeviceMockup = ({ serviceType }) => {
     const [mockupTab, setMockupTab] = useState(0);
@@ -8,14 +10,23 @@ const InteractiveDeviceMockup = ({ serviceType }) => {
             {/* ─── Photography Viewfinder Mockup ─── */}
             {serviceType === 'photography' && (
                 <div className="mockup-camera-hud">
+                    <video
+                        className="photography-video"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                    >
+                        <source src={PhotographyVideo} type="video/mp4" />
+                    </video>
                     <div className="hud-top-bar">
                         <span className="hud-rec-dot">● REC [4K 60FPS HDR]</span>
-                        <span className="hud-battery">BAT 98% ▮▮▮</span>
+                        <span className="hud-battery">98% ▮▮▮</span>
                     </div>
                     <div className="hud-center-grid">
                         <div className="crosshair-center">+</div>
                         <div className="hud-focus-box">
-                            <span className="focus-label">AI TRACKING: SUBJECT LOCKED</span>
+                            <span className="focus-label">TRACKING: SUBJECT LOCKED</span>
                         </div>
                     </div>
                     <div className="hud-bottom-bar">
@@ -121,34 +132,15 @@ const InteractiveDeviceMockup = ({ serviceType }) => {
             {/* ─── Global Marketing World Map Mockup ─── */}
             {serviceType === 'global-marketing' && (
                 <div className="mockup-world-network">
-                    <div className="network-hud-title">GLOBAL ACTIVE HUBS & INFLUENCER NODES</div>
-                    <div className="map-nodes-container">
-                        <div className="map-hub seoul active">
-                            <span className="hub-ping"></span>
-                            <span className="hub-label">🇰🇷 SEOUL (HQ)</span>
-                        </div>
-                        <div className="map-hub tokyo active">
-                            <span className="hub-ping"></span>
-                            <span className="hub-label">🇯🇵 TOKYO [650+ Creators]</span>
-                        </div>
-                        <div className="map-hub newyork active">
-                            <span className="hub-ping"></span>
-                            <span className="hub-label">🇺🇸 NEW YORK [850+ Creators]</span>
-                        </div>
-                        <div className="map-hub singapore active">
-                            <span className="hub-ping"></span>
-                            <span className="hub-label">🇸🇬 SINGAPORE [480+ Creators]</span>
-                        </div>
-                        <div className="map-hub london active">
-                            <span className="hub-ping"></span>
-                            <span className="hub-label">🇬🇧 LONDON [320+ Creators]</span>
-                        </div>
-                    </div>
-                    <div className="network-data-ticker">
-                        <span>LIVE TRAFFIC: TOKYO +340% ↗</span>
-                        <span>US SHOPIFY ROAS 4.8x ↗</span>
-                        <span>TIKTOK VIRAL: 2.4M VIEWS ↗</span>
-                    </div>
+                    <video
+                        className="global-video"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                    >
+                        <source src={GlobalVideo} type="video/mp4" />
+                    </video>
                 </div>
             )}
 

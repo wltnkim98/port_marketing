@@ -76,6 +76,9 @@ footer {
   font-size: 11px;
   letter-spacing: 0.05em;
   color: rgba(245,240,232,0.7);
+
+  min-width: 0;              // 추가: 공간이 좁으면 줄어들 수 있게
+  overflow-wrap: anywhere;   // 추가: 이메일처럼 끊을 곳 없는 글자도 줄바꿈
 }
 .footer-bottom {
   width: 100%;

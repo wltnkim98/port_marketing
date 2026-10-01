@@ -194,7 +194,11 @@ const Ai = () => {
                     </Link>
                 </div>
                 <div className="ai-right fade-up fade-up-delay-3">
-                    <div className="ai-messages" ref={chatContainerRef}>
+                    <div
+                        className="ai-messages"
+                        ref={chatContainerRef}
+                        data-lenis-prevent
+                    >
                         {messages.map((m, i) => (
                             // 빈 텍스트(스트리밍 직전)는 렌더링 제외
                             m.text ? (

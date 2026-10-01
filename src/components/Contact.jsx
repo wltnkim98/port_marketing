@@ -18,7 +18,7 @@ const Contact = () => {
             </div>
             <div className="contact-buttons fade-up">
                 <a href="https://pf.kakao.com" target="_blank" rel="noopener noreferrer" className="contact-btn contact-btn-outline">
-                    <img src={require('../assets/img/kakaotalk_logo.png')} alt="카카오톡" width="20" height="20" />
+                    <img src={require('../assets/img/logos/kakaotalk_logo.png')} alt="카카오톡" width="20" height="20" />
                     카카오톡 상담하기
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M7 7L17 17M17 17H7M17 17V7"/>

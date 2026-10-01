@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import AnimatedTitle from './AnimatedTitle';
 
 const ServiceSimulator = ({ serviceType }) => {
-    // 1. Photography & Video Simulator State
-    const [videoCount, setVideoCount] = useState(4);
-    const [includeModel, setIncludeModel] = useState(true);
-    const [resolution4k, setResolution4k] = useState(true);
-
     // 2. Blog SEO Simulator State
     const [keywordCount, setKeywordCount] = useState(15);
     const [postFrequency, setPostFrequency] = useState(12);
@@ -14,16 +10,6 @@ const ServiceSimulator = ({ serviceType }) => {
     // 3. Instagram Growth Simulator State
     const [reelsCount, setReelsCount] = useState(8);
     const [feedCount, setFeedCount] = useState(12);
-
-    // 4. Global Marketing Matrix State
-    const [targetRegions, setTargetRegions] = useState(['japan', 'usa']);
-    const toggleRegion = (reg) => {
-        if (targetRegions.includes(reg)) {
-            if (targetRegions.length > 1) setTargetRegions(targetRegions.filter((r) => r !== reg));
-        } else {
-            setTargetRegions([...targetRegions, reg]);
-        }
-    };
 
     // 5. Website Benchmark State
     const [siteType, setSiteType] = useState('landing');
@@ -33,12 +19,6 @@ const ServiceSimulator = ({ serviceType }) => {
     const [channelType, setChannelType] = useState('all');
 
     // Calculations
-    const calcPhotography = {
-        reach: (videoCount * 65000 + (includeModel ? 120000 : 0)).toLocaleString(),
-        assets: videoCount * 3 + (includeModel ? 20 : 10),
-        days: videoCount <= 4 ? '7~10일' : '12~14일'
-    };
-
     const calcBlog = {
         organicVisits: (keywordCount * postFrequency * 42).toLocaleString(),
         adSavings: Math.round((keywordCount * postFrequency * 42 * 850) / 10000).toLocaleString(),
@@ -49,12 +29,6 @@ const ServiceSimulator = ({ serviceType }) => {
         organicReach: (reelsCount * 38000 + feedCount * 6500).toLocaleString(),
         dmLeads: Math.round((reelsCount * 38000 + feedCount * 6500) * 0.024).toLocaleString(),
         engagement: (4.2 + (reelsCount > 10 ? 1.4 : 0.6)).toFixed(1)
-    };
-
-    const calcGlobal = {
-        totalMarket: targetRegions.length * 1.8 + '억 명',
-        influencerPool: targetRegions.length * 650 + '명+',
-        roas: (3.8 + targetRegions.length * 0.4).toFixed(1) + 'x'
     };
 
     const calcWebsite = {
@@ -73,81 +47,13 @@ const ServiceSimulator = ({ serviceType }) => {
         <div className="service-simulator-wrapper">
             <div className="simulator-header">
                 <span className="sim-pill-kicker">LIVE CAMPAIGN SIMULATOR</span>
-                <h3 className="sim-title">실시간 성과 예측 시뮬레이터</h3>
+                <AnimatedTitle className="sim-title">실시간 성과 예측 시뮬레이터</AnimatedTitle>
                 <p className="sim-desc">
                     슬라이더와 옵션을 조절하여 예상 도달 수치와 마케팅 기대 효과를 실시간으로 확인해보세요.
                 </p>
             </div>
 
             <div className="simulator-grid">
-                {/* ─── Photography & Video ─── */}
-                {serviceType === 'photography' && (
-                    <>
-                        <div className="sim-controls-panel">
-                            <div className="sim-control-group">
-                                <div className="sim-label-row">
-                                    <label>월 숏폼 & 영상 제작 편수</label>
-                                    <span className="sim-val-badge">{videoCount}편</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="2"
-                                    max="16"
-                                    step="2"
-                                    value={videoCount}
-                                    onChange={(e) => setVideoCount(Number(e.target.value))}
-                                    className="sim-slider"
-                                />
-                                <div className="sim-range-limits">
-                                    <span>2편</span>
-                                    <span>8편 (추천)</span>
-                                    <span>16편</span>
-                                </div>
-                            </div>
-
-                            <div className="sim-toggle-row">
-                                <label className="sim-checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={includeModel}
-                                        onChange={(e) => setIncludeModel(e.target.checked)}
-                                    />
-                                    <span>전문 모델 / 크리에이터 매칭 포함</span>
-                                </label>
-                                <label className="sim-checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={resolution4k}
-                                        onChange={(e) => setResolution4k(e.target.checked)}
-                                    />
-                                    <span>4K/6K 시네마 마스터링</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className="sim-results-panel">
-                            <span className="sim-result-heading">예상 캠페인 성과 지표</span>
-                            <div className="sim-metric-card-group">
-                                <div className="sim-res-box highlight">
-                                    <span className="res-title">예상 오가닉 바이럴 조회수</span>
-                                    <span className="res-num">{calcPhotography.reach} 회+</span>
-                                    <span className="res-sub">인스타그램 릴스 & 숏폼 알고리즘</span>
-                                </div>
-                                <div className="sim-res-box">
-                                    <span className="res-title">최종 납품 에셋 수</span>
-                                    <span className="res-num">{calcPhotography.assets} 개</span>
-                                    <span className="res-sub">영상 컷 + 리터칭 화보 + 썸네일</span>
-                                </div>
-                                <div className="sim-res-box">
-                                    <span className="res-title">예상 제작 완료 소요일</span>
-                                    <span className="res-num">{calcPhotography.days}</span>
-                                    <span className="res-sub">기획부터 마스터링 완료까지</span>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                )}
-
                 {/* ─── Brand Blog ─── */}
                 {serviceType === 'blog' && (
                     <>
@@ -262,55 +168,6 @@ const ServiceSimulator = ({ serviceType }) => {
                                     <span className="res-title">평균 인게이지먼트율</span>
                                     <span className="res-num">{calcInstagram.engagement}%</span>
                                     <span className="res-sub">업계 평균 대비 3.5배 수준</span>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                )}
-
-                {/* ─── Global Marketing ─── */}
-                {serviceType === 'global-marketing' && (
-                    <>
-                        <div className="sim-controls-panel">
-                            <div className="sim-control-group">
-                                <label className="sim-block-label">타겟 진출 국가 선택 (복수 선택 가능)</label>
-                                <div className="sim-button-pills">
-                                    {[
-                                        { id: 'japan', name: '🇯🇵 일본 (Japan)' },
-                                        { id: 'usa', name: '🇺🇸 북미 (USA/Canada)' },
-                                        { id: 'sea', name: '🇸🇬 동남아 (Singapore/VN)' },
-                                        { id: 'china', name: '🇨🇳 중화권 (Taiwan/HK)' }
-                                    ].map((r) => (
-                                        <button
-                                            key={r.id}
-                                            type="button"
-                                            className={`pill-choice-btn ${targetRegions.includes(r.id) ? 'active' : ''}`}
-                                            onClick={() => toggleRegion(r.id)}
-                                        >
-                                            {r.name}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="sim-results-panel">
-                            <span className="sim-result-heading">글로벌 시장 확장 지표</span>
-                            <div className="sim-metric-card-group">
-                                <div className="sim-res-box highlight">
-                                    <span className="res-title">접근 가능한 타겟 시장 인구</span>
-                                    <span className="res-num">{calcGlobal.totalMarket}</span>
-                                    <span className="res-sub">현지 SNS 및 모바일 실사용자</span>
-                                </div>
-                                <div className="sim-res-box">
-                                    <span className="res-title">매칭 가능한 현지 크리에이터</span>
-                                    <span className="res-num">{calcGlobal.influencerPool}</span>
-                                    <span className="res-sub">현지 로컬라이징 원어민 네트워크</span>
-                                </div>
-                                <div className="sim-res-box">
-                                    <span className="res-title">예상 크로스보더 ROAS</span>
-                                    <span className="res-num">{calcGlobal.roas}</span>
-                                    <span className="res-sub">Amazon/Shopee/Shopify 연동 기준</span>
                                 </div>
                             </div>
                         </div>

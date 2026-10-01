@@ -63,9 +63,14 @@ function useScrollReveal() {
         return () => cancelAnimationFrame(rafId);
     }, [location.pathname]);
 
-    // Scroll to top on route change
+    // Scroll to top on route change (except when navigating to a section with hash)
     useEffect(() => {
-        window.scrollTo(0, 0);
+        if (!location.hash) {
+            window.scrollTo(0, 0);
+            if (window.lenis) {
+                window.lenis.scrollTo(0);
+            }
+        }
     }, [location]);
 }
 
@@ -107,6 +112,9 @@ const App = () => {
             window.scrollTo(0, 0);
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
+            if (window.lenis) {
+                window.lenis.scrollTo(0);
+            }
         };
 
         scrollToTop();

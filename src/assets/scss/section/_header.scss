@@ -215,6 +215,10 @@ nav.scrolled { padding: 12px 60px; }
     display: block;
 }
 
+.mobile-nav-toggle {
+    display: none;
+}
+
 @media (max-width: 1030px) {
 
     nav {
@@ -290,24 +294,77 @@ nav.scrolled { padding: 12px 60px; }
         flex-direction: column;
     }
 
-    .nav-link-with-children {
+    .mobile-nav-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 58px;
+        padding: 0 8px 0 24px;
+        background: rgba(13, 13, 13, 0.08);
+        box-sizing: border-box;
+    }
+
+    // 왼쪽 메뉴명
+    .nav-links .mobile-nav-link {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        padding: 18px 0;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--ink);
+        opacity: unset;
+        text-decoration: none;
+        background: transparent;
+    }
+
+    // 오른쪽 + / - 버튼
+    .mobile-nav-toggle {
+        flex: 0 0 50px;
+        width: 50px;
+        height: 50px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    // 기존 ::after 대신 실제 버튼 내부에 기호 표시
+    .mobile-nav-toggle span {
         position: relative;
-        padding-right: 40px !important;
+        display: block;
+        width: 18px;
+        height: 18px;
     }
 
-    .nav-link-with-children::after {
-        content: '-';
+    .mobile-nav-toggle span::before,
+    .mobile-nav-toggle span::after {
+        content: '';
         position: absolute;
-        right: 24px;
-        font-size: 20px;
-        font-weight: 300;
+        left: 50%;
         top: 50%;
-        transform: translateY(-50%);
-        opacity: 0.6;
+        width: 10px;
+        height: 1px;
+        background: currentColor;
+        transform: translate(-50%, -50%);
     }
 
-    .nav-link-with-children.collapsed::after {
-        content: '+';
+    // 세로선을 추가해서 +
+    .mobile-nav-toggle span::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    // 펼쳐지면 세로선 제거 → -
+    .mobile-nav-toggle.expanded span::after {
+        display: none;
     }
 
     .nav-dropdown {
@@ -315,13 +372,13 @@ nav.scrolled { padding: 12px 60px; }
         opacity: 1;
         visibility: visible;
         transform: none;
-        background: rgba(245,240,232,0.95);
+        background: rgba(245, 240, 232, 0.95);
         border: none;
         box-shadow: none;
         padding: 0;
         margin: 0;
         min-width: 100%;
-        border-top: 1px solid rgba(13,13,13,0.08);
+        border-top: 1px solid rgba(13, 13, 13, 0.08);
         display: block;
     }
 
@@ -330,16 +387,20 @@ nav.scrolled { padding: 12px 60px; }
     }
 
     .nav-dropdown a {
+        display: flex;
+        align-items: center;
+        width: 100%;
         padding: 14px 32px;
         font-size: 15px;
         font-weight: 500;
         color: var(--ink);
+        text-decoration: none;
         opacity: 0.8;
     }
 
     .nav-dropdown a:hover {
         padding-left: 32px;
-        background: rgba(13,13,13,0.04);
+        background: rgba(13, 13, 13, 0.04);
         opacity: 1;
     }
 

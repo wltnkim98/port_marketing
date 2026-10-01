@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const InteractiveProcessTimeline = ({ steps = [], serviceName = '' }) => {
     const [activeStep, setActiveStep] = useState(0);
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleWheel = (e) => {
+            e.preventDefault();
+            
+            if (e.deltaY > 0) {
+                // Scroll down - next step
+                setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
+            } else if (e.deltaY < 0) {
+                // Scroll up - previous step
+                setActiveStep((prev) => Math.max(prev - 1, 0));
+            }
+        };
+
+        container.addEventListener('wheel', handleWheel, { passive: false });
+        return () => container.removeEventListener('wheel', handleWheel);
+    }, [steps]);
 
     return (
-        <div className="interactive-process-container">
+        <div className="interactive-process-container" ref={containerRef}>
             {/* Step Progress Line Bar */}
             <div className="timeline-nav-bar">
                 <div className="timeline-track">
@@ -17,15 +38,14 @@ const InteractiveProcessTimeline = ({ steps = [], serviceName = '' }) => {
                 </div>
                 <div className="timeline-nodes-row">
                     {steps.map((item, idx) => (
-                        <button
+                        <div
                             key={idx}
                             className={`timeline-node-btn ${activeStep === idx ? 'active' : ''} ${idx <= activeStep ? 'passed' : ''}`}
-                            onClick={() => setActiveStep(idx)}
                             aria-label={`Step ${item.step}: ${item.title}`}
                         >
                             <span className="node-step-num">{item.step}</span>
                             <span className="node-title-label">{item.title.split(' ')[0]}</span>
-                        </button>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -47,32 +67,11 @@ const InteractiveProcessTimeline = ({ steps = [], serviceName = '' }) => {
                 </div>
 
                 <div className="stage-right-stepper">
-                    <div className="stepper-nav-controls">
-                        <button
-                            className="stepper-btn prev"
-                            onClick={() => setActiveStep((prev) => Math.max(prev - 1, 0))}
-                            disabled={activeStep === 0}
-                        >
-                            ← 이전 단계
-                        </button>
-                        <span className="stepper-indicator">
-                            {activeStep + 1} / {steps.length}
-                        </span>
-                        <button
-                            className="stepper-btn next"
-                            onClick={() => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1))}
-                            disabled={activeStep === steps.length - 1}
-                        >
-                            다음 단계 →
-                        </button>
-                    </div>
-
                     <div className="all-steps-mini-list">
                         {steps.map((s, idx) => (
                             <div
                                 key={idx}
                                 className={`mini-step-item ${activeStep === idx ? 'current' : ''}`}
-                                onClick={() => setActiveStep(idx)}
                             >
                                 <span className="mini-step-badge">{s.step}</span>
                                 <span className="mini-step-text">{s.title}</span>

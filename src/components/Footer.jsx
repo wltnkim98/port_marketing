@@ -6,7 +6,7 @@ const Footer = () => {
             <span className="footer-logo">MARKET<span>With</span></span>
             <div className="footer-social-links">
                 <a href="https://pf.kakao.com" className="footer-social-link" aria-label="카카오톡 상담" rel="noopener noreferrer" target="_blank">
-                    <img src={require('../assets/img/kakaotalk_logo.png')} alt="카카오톡" width="20" height="20" />
+                    <img src={require('../assets/img/logos/kakaotalk_logo.png')} alt="카카오톡" width="20" height="20" />
                 </a>
                 <a href="https://instagram.com" className="footer-social-link" aria-label="인스타그램" rel="noopener noreferrer" target="_blank">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -16,7 +16,7 @@ const Footer = () => {
                     </svg>
                 </a>
                 <a href="https://section.blog.naver.com" className="footer-social-link" aria-label="네이버 블로그"  rel="noopener noreferrer" target="_blank">
-                    <img src={require('../assets/img/naverblog_logo.png')} alt="네이버 블로그" width="20" height="20" />
+                    <img src={require('../assets/img/logos/naverblog_logo.png')} alt="네이버 블로그" width="20" height="20" />
                 </a>
             </div>
             <div className="footer-info">

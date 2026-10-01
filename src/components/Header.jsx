@@ -60,7 +60,19 @@ const Header = () => {
                 const scrollToElement = () => {
                     const el = document.getElementById(id);
                     if (el) {
+                        // Stop Lenis temporarily
+                        if (window.lenis) {
+                            window.lenis.stop();
+                        }
+
                         el.scrollIntoView({ behavior: 'smooth' });
+
+                        // Restart Lenis after scroll
+                        setTimeout(() => {
+                            if (window.lenis) {
+                                window.lenis.start();
+                            }
+                        }, 1000);
                     }
                 };
 
@@ -76,7 +88,20 @@ const Header = () => {
         if (location.pathname === '/') {
             const el = document.getElementById(id);
             if (el) {
+                // Stop Lenis temporarily
+                if (window.lenis) {
+                    window.lenis.stop();
+                }
+
                 el.scrollIntoView({ behavior: 'smooth' });
+
+                // Restart Lenis after scroll
+                setTimeout(() => {
+                    if (window.lenis) {
+                        window.lenis.start();
+                    }
+                }, 1000);
+
                 window.history.pushState(null, '', `/#${id}`);
             }
         } else {
@@ -117,34 +142,35 @@ const Header = () => {
                     key={itemKey}
                     className="nav-item-with-dropdown"
                 >
-                    {item.path ? (
-                        <Link
-                            to={item.path}
-                            className={`nav-link-with-children ${isExpanded ? '' : 'collapsed'}`}
-                            onClick={(e) => {
-                                if (window.innerWidth <= 1030) {
-                                    e.preventDefault();
-                                    toggleDropdown(itemKey);
-                                } else {
-                                    closeMobileMenu();
-                                }
-                            }}
-                        >
-                            {item.label}
-                        </Link>
-                    ) : (
+                    <div className="mobile-nav-row">
+                        {item.path ? (
+                            <Link
+                                to={item.path}
+                                className="mobile-nav-link"
+                                onClick={closeMobileMenu}
+                            >
+                                {item.label}
+                            </Link>
+                        ) : (
+                            <span className="mobile-nav-link">
+                                {item.label}
+                            </span>
+                        )}
+
                         <button
                             type="button"
-                            className={`nav-link-with-children ${isExpanded ? '' : 'collapsed'}`}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                toggleDropdown(itemKey);
-                            }}
+                            className={`mobile-nav-toggle ${isExpanded ? 'expanded' : 'collapsed'}`}
+                            onClick={() => toggleDropdown(itemKey)}
+                            aria-expanded={isExpanded}
+                            aria-label={`${item.label} 하위 메뉴 ${isExpanded ? '닫기' : '열기'}`}
                         >
-                            {item.label}
+                            <span />
                         </button>
-                    )}
+
+                    </div>
+
                     <ul className={`nav-dropdown ${isExpanded ? 'expanded' : 'collapsed'}`}>
+                        {/* 기존 children 렌더링 */}
                         {item.children.map(child => (
                             <li key={child.path}>
                                 <Link to={child.path} onClick={closeMobileMenu}>

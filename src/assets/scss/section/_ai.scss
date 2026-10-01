@@ -67,6 +67,7 @@
     min-height: 280px;
     max-height: 320px;
     overflow-y: auto;
+    overscroll-behavior: contain;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -163,7 +164,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 10px;
-    cursor: none;
+    cursor: auto;
     transition: background 0.2s;
     white-space: nowrap;
   }

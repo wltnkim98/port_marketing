@@ -1,5 +1,5 @@
 import React from 'react';
-import IntroVideo from '../assets/img/Intro_video.mp4';
+import IntroVideo from '../assets/video/Intro_video.mp4';
 
 const Intro = () => {
     return (
