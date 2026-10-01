@@ -142,6 +142,28 @@ const Header = () => {
                     key={itemKey}
                     className="nav-item-with-dropdown"
                 >
+                    {/* PC용 */}
+                    <div className="desktop-nav-item">
+                        {item.path ? (
+                            <Link
+                                to={item.path}
+                                className={`nav-link-with-children ${isExpanded ? '' : 'collapsed'}`}
+                                onClick={closeMobileMenu}
+                            >
+                                {item.label}
+                            </Link>
+                        ) : (
+                            <button
+                                type="button"
+                                className={`nav-link-with-children ${isExpanded ? '' : 'collapsed'}`}
+                                onClick={() => toggleDropdown(itemKey)}
+                            >
+                                {item.label}
+                            </button>
+                        )}
+                    </div>
+
+                    {/* 모바일용 */}
                     <div className="mobile-nav-row">
                         {item.path ? (
                             <Link
@@ -153,8 +175,8 @@ const Header = () => {
                             </Link>
                         ) : (
                             <span className="mobile-nav-link">
-                                {item.label}
-                            </span>
+                        {item.label}
+                    </span>
                         )}
 
                         <button
@@ -166,16 +188,23 @@ const Header = () => {
                         >
                             <span />
                         </button>
-
                     </div>
 
+                    {/* 하위 메뉴 */}
                     <ul className={`nav-dropdown ${isExpanded ? 'expanded' : 'collapsed'}`}>
-                        {/* 기존 children 렌더링 */}
-                        {item.children.map(child => (
+                        {item.children.map((child) => (
                             <li key={child.path}>
-                                <Link to={child.path} onClick={closeMobileMenu}>
+                                <Link
+                                    to={child.path}
+                                    onClick={closeMobileMenu}
+                                >
                                     {child.label}
-                                    {child.badge && <span className="nav-dropdown-badge">{child.badge}</span>}
+
+                                    {child.badge && (
+                                        <span className="nav-dropdown-badge">
+                                    {child.badge}
+                                </span>
+                                    )}
                                 </Link>
                             </li>
                         ))}

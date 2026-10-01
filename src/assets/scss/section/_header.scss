@@ -215,6 +215,14 @@ nav.scrolled { padding: 12px 60px; }
     display: block;
 }
 
+.desktop-nav-item {
+    display: block;
+}
+
+.mobile-nav-row {
+    display: none;
+}
+
 .mobile-nav-toggle {
     display: none;
 }
@@ -294,14 +302,30 @@ nav.scrolled { padding: 12px 60px; }
         flex-direction: column;
     }
 
+    .desktop-nav-item {
+        display: none;
+    }
+
     .mobile-nav-row {
         display: flex;
         align-items: center;
         width: 100%;
-        min-height: 58px;
         padding: 0 8px 0 24px;
         background: rgba(13, 13, 13, 0.08);
-        box-sizing: border-box;
+    }
+
+    .mobile-nav-toggle {
+        display: flex;
+        flex: 0 0 50px;
+        width: 50px;
+        height: 58px;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
     }
 
     // 왼쪽 메뉴명
@@ -319,22 +343,6 @@ nav.scrolled { padding: 12px 60px; }
         opacity: unset;
         text-decoration: none;
         background: transparent;
-    }
-
-    // 오른쪽 + / - 버튼
-    .mobile-nav-toggle {
-        flex: 0 0 50px;
-        width: 50px;
-        height: 50px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        padding: 0;
-        border: 0;
-        background: transparent;
-        cursor: pointer;
     }
 
     // 기존 ::after 대신 실제 버튼 내부에 기호 표시
