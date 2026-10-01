@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <path d="M23 12V20L15 32C13.5 34.5 15.3 38 18.2 38H31.8C34.7 38 36.5 34.5 35 32L27 20V12H23Z" stroke="#FAF8F4" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M20 12H30" stroke="#FAF8F4" stroke-width="2" stroke-linecap="round"/>
+  <path d="M25 34C25 30 29 28 29 24C26 24 23 27 23 30" stroke="#FAF8F4" stroke-width="1.8" stroke-linecap="round" fill="#FAF8F4" fill-opacity="0.4"/>
+  <text x="48" y="27" font-family="'Noto Sans KR', 'Montserrat', sans-serif" font-size="15" font-weight="800" fill="#FAF8F4" letter-spacing="2">VITA ROOT</text>
+  <text x="49" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="600" fill="#FAF8F4" fill-opacity="0.75" letter-spacing="2.5">BIO LABS</text>
+</svg>

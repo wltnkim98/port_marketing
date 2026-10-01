@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <path d="M24 10L36 15V25C36 32 24 38 24 38C24 38 12 32 12 25V15L24 10Z" stroke="#FAF8F4" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M24 18V28M19 23H29" stroke="#FAF8F4" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="48" y="27" font-family="'Noto Sans KR', 'Montserrat', sans-serif" font-size="16" font-weight="800" fill="#FAF8F4" letter-spacing="2">MEDICARE</text>
+  <text x="49" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="600" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2">SMART HEALTH</text>
+</svg>

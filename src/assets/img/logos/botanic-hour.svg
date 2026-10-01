@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 50" fill="none">
+  <path d="M24 38C24 38 12 30 12 18C12 14 16 10 21 10C23 10 24 12 24 12C24 12 25 10 27 10C32 10 36 14 36 18C36 30 24 38 24 38Z" stroke="#FAF8F4" stroke-width="2" fill="#FAF8F4" fill-opacity="0.25" stroke-linejoin="round"/>
+  <path d="M24 16V34" stroke="#FAF8F4" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="48" y="27" font-family="'Cinzel', 'Playfair Display', serif" font-size="14.5" font-weight="700" fill="#FAF8F4" letter-spacing="2">BOTANIC HOUR</text>
+  <text x="49" y="38" font-family="'Noto Sans KR', sans-serif" font-size="7.5" font-weight="500" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2.5">PLANT &amp; LIVING</text>
+</svg>

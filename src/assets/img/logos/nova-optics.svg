@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <circle cx="18" cy="25" r="8" stroke="#FAF8F4" stroke-width="2.2"/>
+  <circle cx="34" cy="25" r="8" stroke="#FAF8F4" stroke-width="2.2"/>
+  <path d="M26 23C26 21 26 21 26 23" stroke="#FAF8F4" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="24" y1="23" x2="28" y2="23" stroke="#FAF8F4" stroke-width="2.2"/>
+  <circle cx="18" cy="25" r="3" fill="#FAF8F4" fill-opacity="0.4"/>
+  <circle cx="34" cy="25" r="3" fill="#FAF8F4" fill-opacity="0.4"/>
+  <text x="50" y="27" font-family="'Space Mono', 'Montserrat', monospace" font-size="14.5" font-weight="700" fill="#FAF8F4" letter-spacing="2">NOVA OPTICS</text>
+  <text x="51" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="500" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2">3D EYEWEAR LAB</text>
+</svg>

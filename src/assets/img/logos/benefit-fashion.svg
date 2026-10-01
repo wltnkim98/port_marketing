@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <path d="M12 11H26C31 11 34 14 34 18C34 21 32 23 29 24C33 25 35 28 35 32C35 37 31 40 26 40H12V11Z" stroke="#FAF8F4" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M20 18H25C26.5 18 28 19 28 20.5C28 22 26.5 23 25 23H20V18Z" fill="#FAF8F4"/>
+  <path d="M20 28H26C27.5 28 29 29 29 30.5C29 32 27.5 33 26 33H20V28Z" fill="#FAF8F4"/>
+  <text x="46" y="27" font-family="'Bebas Neue', sans-serif" font-size="20" font-weight="700" fill="#FAF8F4" letter-spacing="2">BENEFIT</text>
+  <text x="47" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="600" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2">FASHION MALL</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" fill="none">
+  <circle cx="24" cy="24" r="15" stroke="#FAF8F4" stroke-width="1.5" stroke-dasharray="2 2"/>
+  <circle cx="24" cy="24" r="12" stroke="#FAF8F4" stroke-width="1.2"/>
+  <text x="19" y="28" font-family="'Playfair Display', serif" font-size="13" font-weight="700" font-style="italic" fill="#FAF8F4">M</text>
+  <text x="48" y="26" font-family="'Cinzel', 'Playfair Display', serif" font-size="13.5" font-weight="700" fill="#FAF8F4" letter-spacing="2.5">MAISON D'ATELIER</text>
+  <text x="49" y="38" font-family="'Space Mono', monospace" font-size="7" font-weight="500" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="3">HAUTE COUTURE</text>
+</svg>

@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>style.scss</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bc9455; font-style: italic;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #6aab73;}
+.s4 { color: #bcbec4;}
+.s5 { color: #bcbec4;}
+.s6 { color: #d5b778;}
+.s7 { color: #bababa;}
+.s8 { color: #56a8f5;}
+.s9 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+style.scss</font>
+</center></td></tr></table>
+<pre><span class="s0">//section</span>
+<span class="s2">@import </span><span class="s3">&quot;section/header&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/intro&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/ticker&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/problem&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/process&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/cases&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/ai&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/portfolio-slider&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/contact&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/footer&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/about&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/consult&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/service&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/location&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/portfolio&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/qa&quot;</span><span class="s4">;</span>
+<span class="s2">@import </span><span class="s3">&quot;section/admin&quot;</span><span class="s4">;</span>
+
+<span class="s0">/* 시작점 */</span>
+ <span class="s5">:</span><span class="s6">root </span><span class="s4">{</span>
+   <span class="s7">--ink</span><span class="s5">: </span><span class="s8">#0d0d0d</span><span class="s4">;</span>
+   <span class="s7">--muted</span><span class="s5">: </span><span class="s8">#686052</span><span class="s4">;</span>
+   <span class="s7">--paper</span><span class="s5">: </span><span class="s8">#f5f0e8</span><span class="s4">;</span>
+   <span class="s7">--light</span><span class="s5">: </span><span class="s8">#ede8dc</span><span class="s4">;</span>
+   <span class="s7">--white</span><span class="s5">: </span><span class="s8">#faf8f4</span><span class="s4">;</span>
+   <span class="s7">--red</span><span class="s5">: </span><span class="s8">#ef2f26</span><span class="s4">;</span>
+   <span class="s7">--accent</span><span class="s5">: </span><span class="s8">#f64f1e</span><span class="s4">;</span>
+   <span class="s7">--tangerine</span><span class="s5">: </span><span class="s8">#ff7a00</span><span class="s4">;</span>
+   <span class="s7">--gold</span><span class="s5">: </span><span class="s8">#d1ae4d</span><span class="s4">;</span>
+   <span class="s7">--yellow</span><span class="s5">: </span><span class="s8">#ffca0a</span><span class="s4">;</span>
+   <span class="s7">--mocha</span><span class="s5">: </span><span class="s8">#92725d</span><span class="s4">;</span>
+
+   <span class="s7">--header-height</span><span class="s5">: </span><span class="s9">58.5</span><span class="s3">px</span><span class="s4">;</span>
+ <span class="s4">}</span>
+
+<span class="s6">*</span><span class="s4">, </span><span class="s6">*</span><span class="s5">::</span><span class="s6">before</span><span class="s4">, </span><span class="s6">*</span><span class="s5">::</span><span class="s6">after </span><span class="s4">{ </span><span class="s7">box-sizing</span><span class="s5">: </span><span class="s3">border-box</span><span class="s4">; </span><span class="s7">margin</span><span class="s5">: </span><span class="s9">0</span><span class="s4">; </span><span class="s7">padding</span><span class="s5">: </span><span class="s9">0</span><span class="s4">; }</span>
+
+<span class="s6">html </span><span class="s4">{ </span><span class="s7">scroll-behavior</span><span class="s5">: </span><span class="s3">auto</span><span class="s4">; }</span>
+
+<span class="s6">body </span><span class="s4">{</span>
+  <span class="s7">background</span><span class="s5">: </span><span class="s6">var</span><span class="s4">(</span><span class="s6">--paper</span><span class="s4">);</span>
+  <span class="s7">color</span><span class="s5">: </span><span class="s6">var</span><span class="s4">(</span><span class="s6">--ink</span><span class="s4">);</span>
+  <span class="s7">font-family</span><span class="s5">: </span><span class="s3">'Pretendard'</span><span class="s4">, </span><span class="s3">'Noto Sans KR'</span><span class="s4">, </span><span class="s3">sans-serif</span><span class="s4">;</span>
+  <span class="s7">font-weight</span><span class="s5">: </span><span class="s9">400</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s0">/* Noise Texture 
+body::before { 
+  content: ''; 
+  position: fixed; inset: 0; 
+  background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E&quot;); 
+  pointer-events: none; 
+  z-index: 9998; 
+  opacity: 0.4; 
+}*/</span>
+
+<span class="s6">#root </span><span class="s4">{</span>
+  <span class="s7">min-height</span><span class="s5">: </span><span class="s9">100</span><span class="s3">vh</span><span class="s4">;</span>
+  <span class="s4">}</span>
+
+<span class="s0">/* ── SECTION COMMON ── */</span>
+<span class="s6">section </span><span class="s4">{ </span><span class="s7">padding</span><span class="s5">: </span><span class="s9">120</span><span class="s3">px </span><span class="s9">60</span><span class="s3">px</span><span class="s4">; }</span>
+
+<span class="s4">.</span><span class="s6">section-title </span><span class="s4">{</span>
+  <span class="s7">font-family</span><span class="s5">: </span><span class="s3">'Pretendard'</span><span class="s4">, </span><span class="s3">sans-serif</span><span class="s4">;</span>
+  <span class="s7">font-weight</span><span class="s5">: </span><span class="s9">700</span><span class="s4">;</span>
+  <span class="s7">font-size</span><span class="s5">: </span><span class="s6">clamp</span><span class="s4">(</span><span class="s9">50</span><span class="s3">px</span><span class="s4">, </span><span class="s9">10</span><span class="s3">vw</span><span class="s4">, </span><span class="s9">70</span><span class="s3">px</span><span class="s4">);</span>
+  <span class="s7">line-height</span><span class="s5">: </span><span class="s9">0.95</span><span class="s4">;</span>
+  <span class="s7">letter-spacing</span><span class="s5">: </span><span class="s9">0.02</span><span class="s3">em</span><span class="s4">;</span>
+  <span class="s7">color</span><span class="s5">: </span><span class="s6">var</span><span class="s4">(</span><span class="s6">--ink</span><span class="s4">);</span>
+  <span class="s7">margin-bottom</span><span class="s5">: </span><span class="s9">24</span><span class="s3">px</span><span class="s4">;</span>
+<span class="s4">}</span>
+
+<span class="s0">/* ── BRAND NAME ── */</span>
+<span class="s4">.</span><span class="s6">brand-name</span><span class="s4">{</span>
+  <span class="s7">color</span><span class="s5">: </span><span class="s6">var</span><span class="s4">(</span><span class="s6">--accent</span><span class="s4">);</span>
+<span class="s4">}</span>
+
+<span class="s0">/* ── ANIMATIONS ── */</span>
+<span class="s4">.</span><span class="s6">fade-up </span><span class="s4">{</span>
+  <span class="s7">opacity</span><span class="s5">: </span><span class="s9">0</span><span class="s4">;</span>
+  <span class="s7">transform</span><span class="s5">: </span><span class="s6">translateY</span><span class="s4">(</span><span class="s9">40</span><span class="s3">px</span><span class="s4">);</span>
+  <span class="s7">transition</span><span class="s5">: </span><span class="s3">opacity </span><span class="s9">0.7</span><span class="s3">s ease</span><span class="s4">, </span><span class="s3">transform </span><span class="s9">0.7</span><span class="s3">s ease</span><span class="s4">;</span>
+
+  <span class="s6">&amp;</span><span class="s4">.</span><span class="s6">visible </span><span class="s4">{</span>
+    <span class="s7">opacity</span><span class="s5">: </span><span class="s9">1</span><span class="s4">;</span>
+    <span class="s7">transform</span><span class="s5">: </span><span class="s6">translateY</span><span class="s4">(</span><span class="s9">0</span><span class="s4">);</span>
+  <span class="s4">}</span>
+<span class="s4">}</span>
+
+<span class="s0">/* ── FADE-UP DELAYS ── */</span>
+<span class="s4">.</span><span class="s6">fade-up-delay-1 </span><span class="s4">{ </span><span class="s7">transition-delay</span><span class="s5">: </span><span class="s9">0</span><span class="s3">s</span><span class="s4">; }</span>
+<span class="s4">.</span><span class="s6">fade-up-delay-2 </span><span class="s4">{ </span><span class="s7">transition-delay</span><span class="s5">: </span><span class="s9">0.15</span><span class="s3">s</span><span class="s4">; }</span>
+<span class="s4">.</span><span class="s6">fade-up-delay-3 </span><span class="s4">{ </span><span class="s7">transition-delay</span><span class="s5">: </span><span class="s9">0.3</span><span class="s3">s</span><span class="s4">; }</span>
+<span class="s4">.</span><span class="s6">fade-up-delay-4 </span><span class="s4">{ </span><span class="s7">transition-delay</span><span class="s5">: </span><span class="s9">0.45</span><span class="s3">s</span><span class="s4">; }</span>
+
+<span class="s0">/* ── RESPONSIVE ── */</span>
+<span class="s2">@media </span><span class="s4">(</span><span class="s7">max-width</span><span class="s5">: </span><span class="s9">900</span><span class="s3">px</span><span class="s4">) {</span>
+  <span class="s6">nav </span><span class="s4">{ </span><span class="s7">padding</span><span class="s5">: </span><span class="s9">16</span><span class="s3">px </span><span class="s9">24</span><span class="s3">px</span><span class="s4">; }</span>
+  <span class="s6">section </span><span class="s4">{ </span><span class="s7">padding</span><span class="s5">: </span><span class="s9">80</span><span class="s3">px </span><span class="s9">24</span><span class="s3">px</span><span class="s4">; }</span>
+  <span class="s4">.</span><span class="s6">intro </span><span class="s4">{ </span><span class="s7">padding</span><span class="s5">: </span><span class="s9">100</span><span class="s3">px </span><span class="s9">24</span><span class="s3">px </span><span class="s9">60</span><span class="s3">px</span><span class="s4">; }</span>
+  <span class="s4">.</span><span class="s6">problem-grid </span><span class="s4">{ </span><span class="s7">grid-template-columns</span><span class="s5">: </span><span class="s9">1</span><span class="s3">fr</span><span class="s4">; }</span>
+  <span class="s4">.</span><span class="s6">cases-grid </span><span class="s4">{ </span><span class="s7">grid-template-columns</span><span class="s5">: </span><span class="s9">1</span><span class="s3">fr</span><span class="s4">; }</span>
+  <span class="s4">.</span><span class="s6">ai-container </span><span class="s4">{ </span><span class="s7">grid-template-columns</span><span class="s5">: </span><span class="s9">1</span><span class="s3">fr</span><span class="s4">; }</span>
+  <span class="s4">.</span><span class="s6">values-grid </span><span class="s4">{ </span><span class="s7">grid-template-columns</span><span class="s5">: </span><span class="s9">1</span><span class="s3">fr</span><span class="s4">; </span><span class="s7">gap</span><span class="s5">: </span><span class="s9">32</span><span class="s3">px</span><span class="s4">; }</span>
+  <span class="s6">footer </span><span class="s4">{ </span><span class="s7">padding</span><span class="s5">: </span><span class="s9">24</span><span class="s3">px</span><span class="s4">; </span><span class="s7">flex-direction</span><span class="s5">: </span><span class="s3">column</span><span class="s4">; </span><span class="s7">gap</span><span class="s5">: </span><span class="s9">12</span><span class="s3">px</span><span class="s4">;}</span>
+<span class="s4">}</span>
+
+<span class="s0">/* ── BUTTON STYLES ── */</span>
+<span class="s4">.</span><span class="s6">btn-round </span><span class="s4">{</span>
+  <span class="s7">display</span><span class="s5">: </span><span class="s3">inline-block</span><span class="s4">;</span>
+  <span class="s7">align-items</span><span class="s5">: </span><span class="s3">center</span><span class="s4">;</span>
+  <span class="s7">margin-top</span><span class="s5">: </span><span class="s9">30</span><span class="s3">px</span><span class="s4">;</span>
+  <span class="s7">gap</span><span class="s5">: </span><span class="s9">12</span><span class="s3">px</span><span class="s4">;</span>
+  <span class="s7">background</span><span class="s5">: </span><span class="s6">var</span><span class="s4">(</span><span class="s6">--accent</span><span class="s4">);</span>
+  <span class="s7">color</span><span class="s5">: </span><span class="s8">#fff</span><span class="s4">;</span>
+  <span class="s7">border</span><span class="s5">: </span><span class="s3">none</span><span class="s4">;</span>
+  <span class="s7">border-radius</span><span class="s5">: </span><span class="s9">25</span><span class="s3">px</span><span class="s4">;</span>
+  <span class="s7">font-family</span><span class="s5">: </span><span class="s3">'JetBrains Mono'</span><span class="s4">, </span><span class="s3">monospace</span><span class="s4">;</span>
+  <span class="s7">font-size</span><span class="s5">: </span><span class="s9">15</span><span class="s3">px</span><span class="s4">;</span>
+  <span class="s7">font-weight</span><span class="s5">: </span><span class="s9">500</span><span class="s4">;</span>
+  <span class="s7">letter-spacing</span><span class="s5">: </span><span class="s9">0.02</span><span class="s3">em</span><span class="s4">;</span>
+  <span class="s7">text-transform</span><span class="s5">: </span><span class="s3">none</span><span class="s4">;</span>
+  <span class="s7">padding</span><span class="s5">: </span><span class="s9">14</span><span class="s3">px </span><span class="s9">28</span><span class="s3">px</span><span class="s4">;</span>
+  <span class="s7">transition</span><span class="s5">: </span><span class="s3">transform </span><span class="s9">0.2</span><span class="s3">s</span><span class="s4">, </span><span class="s3">box-shadow </span><span class="s9">0.2</span><span class="s3">s</span><span class="s4">;</span>
+  <span class="s7">text-decoration</span><span class="s5">: </span><span class="s3">none</span><span class="s4">;</span>
+
+  <span class="s6">&amp;</span><span class="s5">:</span><span class="s6">hover </span><span class="s4">{ </span><span class="s7">transform</span><span class="s5">: </span><span class="s6">translateY</span><span class="s4">(-</span><span class="s9">2</span><span class="s3">px</span><span class="s4">); </span><span class="s7">background</span><span class="s5">: </span><span class="s6">var</span><span class="s4">(</span><span class="s6">--gold</span><span class="s4">); </span><span class="s7">transition</span><span class="s5">: </span><span class="s3">all </span><span class="s9">0.2</span><span class="s3">s</span><span class="s4">; }</span>
+<span class="s4">}</span>
+</pre>
+</body>
+</html>

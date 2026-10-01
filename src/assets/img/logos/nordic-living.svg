@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <path d="M12 36L24 12L36 36" stroke="#FAF8F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="16" y1="28" x2="32" y2="28" stroke="#FAF8F4" stroke-width="2"/>
+  <circle cx="24" cy="20" r="2.5" fill="#FAF8F4"/>
+  <text x="48" y="27" font-family="'Noto Sans KR', 'Montserrat', sans-serif" font-size="14.5" font-weight="800" fill="#FAF8F4" letter-spacing="2">NORDIC LIVING</text>
+  <text x="49" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="600" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2">HOME &amp; OBJECT</text>
+</svg>

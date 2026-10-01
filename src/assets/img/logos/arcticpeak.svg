@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 50" fill="none">
+  <path d="M10 36L22 14L34 36H10Z" stroke="#FAF8F4" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M22 14L27 25L31 22L34 36" stroke="#FAF8F4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 36L34 24L42 36H28Z" stroke="#FAF8F4" stroke-width="2" fill="#FAF8F4" fill-opacity="0.3" stroke-linejoin="round"/>
+  <text x="52" y="27" font-family="'Noto Sans KR', 'Montserrat', sans-serif" font-size="15" font-weight="800" fill="#FAF8F4" letter-spacing="2.5">ARCTIC PEAK</text>
+  <text x="53" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="600" fill="#FAF8F4" fill-opacity="0.75" letter-spacing="2">OUTDOOR GEAR</text>
+</svg>

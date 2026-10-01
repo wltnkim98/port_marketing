@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" fill="none">
+  <path d="M24 10C24 10 12 20 12 28C12 34.6 17.4 40 24 40C30.6 40 36 34.6 36 28C36 20 24 10 24 10Z" stroke="#FAF8F4" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M24 20C24 20 20 25 20 28C20 30.2 21.8 32 24 32C26.2 32 28 30.2 28 28C28 25 24 20 24 20Z" fill="#FAF8F4" fill-opacity="0.4"/>
+  <text x="48" y="27" font-family="'Cinzel', 'Playfair Display', serif" font-size="14" font-weight="700" fill="#FAF8F4" letter-spacing="2.5">PURE ORGANIC</text>
+  <text x="49" y="38" font-family="'Noto Sans KR', sans-serif" font-size="7.5" font-weight="500" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2.5">TEA &amp; BOTANIC</text>
+</svg>

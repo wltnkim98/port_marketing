@@ -1,0 +1,295 @@
+<html>
+<head>
+<title>Header.jsx</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+.s6 { color: #d5b778;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Header.jsx</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">React</span><span class="s2">, { </span><span class="s1">useState</span><span class="s2">, </span><span class="s1">useEffect</span><span class="s2">, </span><span class="s1">useLayoutEffect</span><span class="s2">, </span><span class="s1">useRef </span><span class="s2">} </span><span class="s1">from </span><span class="s3">'react'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s2">{ </span><span class="s1">Link</span><span class="s2">, </span><span class="s1">useLocation</span><span class="s2">, </span><span class="s1">useNavigate </span><span class="s2">} </span><span class="s1">from </span><span class="s3">'react-router-dom'</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s2">{ </span><span class="s1">links</span><span class="s2">, </span><span class="s1">pageLinks </span><span class="s2">} </span><span class="s1">from </span><span class="s3">'../constants'</span><span class="s2">;</span>
+
+<span class="s0">const </span><span class="s1">Header </span><span class="s2">= () =&gt; {</span>
+    <span class="s0">const </span><span class="s2">[</span><span class="s1">scrolled</span><span class="s2">, </span><span class="s1">setScrolled</span><span class="s2">] = </span><span class="s1">useState</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+    <span class="s0">const </span><span class="s2">[</span><span class="s1">mobileMenuOpen</span><span class="s2">, </span><span class="s1">setMobileMenuOpen</span><span class="s2">] = </span><span class="s1">useState</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+    <span class="s0">const </span><span class="s2">[</span><span class="s1">expandedDropdowns</span><span class="s2">, </span><span class="s1">setExpandedDropdowns</span><span class="s2">] = </span><span class="s1">useState</span><span class="s2">({});</span>
+    <span class="s0">const </span><span class="s1">navRef </span><span class="s2">= </span><span class="s1">useRef</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+    <span class="s0">const </span><span class="s1">location </span><span class="s2">= </span><span class="s1">useLocation</span><span class="s2">();</span>
+    <span class="s0">const </span><span class="s1">navigate </span><span class="s2">= </span><span class="s1">useNavigate</span><span class="s2">();</span>
+
+    <span class="s1">useEffect</span><span class="s2">(() =&gt; {</span>
+        <span class="s0">const </span><span class="s1">handleScroll </span><span class="s2">= () =&gt; {</span>
+            <span class="s0">const </span><span class="s1">isScrolled </span><span class="s2">= </span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY </span><span class="s2">&gt; </span><span class="s4">60</span><span class="s2">;</span>
+            <span class="s1">setScrolled</span><span class="s2">(</span><span class="s1">isScrolled</span><span class="s2">);</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">isScrolled</span><span class="s2">) {</span>
+                <span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">.</span><span class="s1">classList</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s3">'header-scrolled'</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">.</span><span class="s1">classList</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s3">'header-scrolled'</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">};</span>
+
+        <span class="s1">handleScroll</span><span class="s2">();</span>
+        <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">handleScroll</span><span class="s2">, { </span><span class="s1">passive</span><span class="s2">: </span><span class="s0">true </span><span class="s2">});</span>
+        <span class="s0">return </span><span class="s2">() =&gt; {</span>
+            <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">handleScroll</span><span class="s2">);</span>
+            <span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">.</span><span class="s1">classList</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s3">'header-scrolled'</span><span class="s2">);</span>
+        <span class="s2">};</span>
+    <span class="s2">}, []);</span>
+
+    <span class="s5">// Keep sticky elements positioned directly below the rendered header.</span>
+    <span class="s5">// ResizeObserver also follows the padding transition when the header shrinks.</span>
+    <span class="s1">useLayoutEffect</span><span class="s2">(() =&gt; {</span>
+        <span class="s0">const </span><span class="s1">nav </span><span class="s2">= </span><span class="s1">navRef</span><span class="s2">.</span><span class="s1">current</span><span class="s2">;</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">nav</span><span class="s2">) </span><span class="s0">return </span><span class="s1">undefined</span><span class="s2">;</span>
+
+        <span class="s0">const </span><span class="s1">setHeaderHeight </span><span class="s2">= () =&gt; {</span>
+            <span class="s1">document</span><span class="s2">.</span><span class="s1">documentElement</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">setProperty</span><span class="s2">(</span><span class="s3">'--header-height'</span><span class="s2">, </span><span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">nav</span><span class="s2">.</span><span class="s1">offsetHeight</span><span class="s2">}</span><span class="s3">px`</span><span class="s2">);</span>
+        <span class="s2">};</span>
+
+        <span class="s1">setHeaderHeight</span><span class="s2">();</span>
+        <span class="s0">const </span><span class="s1">observer </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ResizeObserver</span><span class="s2">(</span><span class="s1">setHeaderHeight</span><span class="s2">);</span>
+        <span class="s1">observer</span><span class="s2">.</span><span class="s1">observe</span><span class="s2">(</span><span class="s1">nav</span><span class="s2">);</span>
+
+        <span class="s0">return </span><span class="s2">() =&gt; </span><span class="s1">observer</span><span class="s2">.</span><span class="s1">disconnect</span><span class="s2">();</span>
+    <span class="s2">}, []);</span>
+
+    <span class="s1">useLayoutEffect</span><span class="s2">(() =&gt; {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">navRef</span><span class="s2">.</span><span class="s1">current</span><span class="s2">) {</span>
+            <span class="s1">document</span><span class="s2">.</span><span class="s1">documentElement</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">setProperty</span><span class="s2">(</span><span class="s3">'--header-height'</span><span class="s2">, </span><span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">navRef</span><span class="s2">.</span><span class="s1">current</span><span class="s2">.</span><span class="s1">offsetHeight</span><span class="s2">}</span><span class="s3">px`</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}, [</span><span class="s1">scrolled</span><span class="s2">]);</span>
+
+    <span class="s5">// 메인 페이지 진입 및 해시 변경 시 해당 섹션으로 부드럽게 스크롤</span>
+    <span class="s1">useEffect</span><span class="s2">(() =&gt; {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">location</span><span class="s2">.</span><span class="s1">pathname </span><span class="s2">=== </span><span class="s3">'/'</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">location</span><span class="s2">.</span><span class="s1">hash</span><span class="s2">) {</span>
+                <span class="s0">const </span><span class="s1">id </span><span class="s2">= </span><span class="s1">location</span><span class="s2">.</span><span class="s1">hash</span><span class="s2">.</span><span class="s1">replace</span><span class="s2">(</span><span class="s3">'#'</span><span class="s2">, </span><span class="s3">''</span><span class="s2">);</span>
+                <span class="s0">const </span><span class="s1">scrollToElement </span><span class="s2">= () =&gt; {</span>
+                    <span class="s0">const </span><span class="s1">el </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">getElementById</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+                    <span class="s0">if </span><span class="s2">(</span><span class="s1">el</span><span class="s2">) {</span>
+                        <span class="s5">// Stop Lenis temporarily</span>
+                        <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">) {</span>
+                            <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">stop</span><span class="s2">();</span>
+                        <span class="s2">}</span>
+
+                        <span class="s1">el</span><span class="s2">.</span><span class="s1">scrollIntoView</span><span class="s2">({ </span><span class="s1">behavior</span><span class="s2">: </span><span class="s3">'smooth' </span><span class="s2">});</span>
+
+                        <span class="s5">// Restart Lenis after scroll</span>
+                        <span class="s1">setTimeout</span><span class="s2">(() =&gt; {</span>
+                            <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">) {</span>
+                                <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">start</span><span class="s2">();</span>
+                            <span class="s2">}</span>
+                        <span class="s2">}, </span><span class="s4">1000</span><span class="s2">);</span>
+                    <span class="s2">}</span>
+                <span class="s2">};</span>
+
+                <span class="s5">// DOM 렌더링 타이밍을 고려하여 지연 후 스크롤</span>
+                <span class="s0">const </span><span class="s1">timer </span><span class="s2">= </span><span class="s1">setTimeout</span><span class="s2">(</span><span class="s1">scrollToElement</span><span class="s2">, </span><span class="s4">100</span><span class="s2">);</span>
+                <span class="s0">return </span><span class="s2">() =&gt; </span><span class="s1">clearTimeout</span><span class="s2">(</span><span class="s1">timer</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}, [</span><span class="s1">location</span><span class="s2">.</span><span class="s1">pathname</span><span class="s2">, </span><span class="s1">location</span><span class="s2">.</span><span class="s1">hash</span><span class="s2">]);</span>
+
+    <span class="s0">const </span><span class="s1">handleSectionClick </span><span class="s2">= (</span><span class="s1">e</span><span class="s2">, </span><span class="s1">id</span><span class="s2">) =&gt; {</span>
+        <span class="s1">e</span><span class="s2">.</span><span class="s1">preventDefault</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">location</span><span class="s2">.</span><span class="s1">pathname </span><span class="s2">=== </span><span class="s3">'/'</span><span class="s2">) {</span>
+            <span class="s0">const </span><span class="s1">el </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">getElementById</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">el</span><span class="s2">) {</span>
+                <span class="s5">// Stop Lenis temporarily</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">) {</span>
+                    <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">stop</span><span class="s2">();</span>
+                <span class="s2">}</span>
+
+                <span class="s1">el</span><span class="s2">.</span><span class="s1">scrollIntoView</span><span class="s2">({ </span><span class="s1">behavior</span><span class="s2">: </span><span class="s3">'smooth' </span><span class="s2">});</span>
+
+                <span class="s5">// Restart Lenis after scroll</span>
+                <span class="s1">setTimeout</span><span class="s2">(() =&gt; {</span>
+                    <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">) {</span>
+                        <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">start</span><span class="s2">();</span>
+                    <span class="s2">}</span>
+                <span class="s2">}, </span><span class="s4">1000</span><span class="s2">);</span>
+
+                <span class="s1">window</span><span class="s2">.</span><span class="s1">history</span><span class="s2">.</span><span class="s1">pushState</span><span class="s2">(</span><span class="s0">null</span><span class="s2">, </span><span class="s3">''</span><span class="s2">, </span><span class="s3">`/#</span><span class="s1">$</span><span class="s2">{</span><span class="s1">id</span><span class="s2">}</span><span class="s3">`</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s5">// 다른 페이지에 있을 때 메인 페이지로 이동하면서 해시 전달</span>
+            <span class="s1">navigate</span><span class="s2">(</span><span class="s3">`/#</span><span class="s1">$</span><span class="s2">{</span><span class="s1">id</span><span class="s2">}</span><span class="s3">`</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">};</span>
+
+    <span class="s0">const </span><span class="s1">handleLogoClick </span><span class="s2">= (</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">location</span><span class="s2">.</span><span class="s1">pathname </span><span class="s2">=== </span><span class="s3">'/'</span><span class="s2">) {</span>
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">preventDefault</span><span class="s2">();</span>
+            <span class="s1">window</span><span class="s2">.</span><span class="s1">location</span><span class="s2">.</span><span class="s1">reload</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">};</span>
+
+    <span class="s0">const </span><span class="s1">toggleMobileMenu </span><span class="s2">= () =&gt; {</span>
+        <span class="s1">setMobileMenuOpen</span><span class="s2">(!</span><span class="s1">mobileMenuOpen</span><span class="s2">);</span>
+    <span class="s2">};</span>
+
+    <span class="s0">const </span><span class="s1">closeMobileMenu </span><span class="s2">= () =&gt; {</span>
+        <span class="s1">setMobileMenuOpen</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span>
+    <span class="s2">};</span>
+
+    <span class="s0">const </span><span class="s1">toggleDropdown </span><span class="s2">= (</span><span class="s1">key</span><span class="s2">) =&gt; {</span>
+        <span class="s1">setExpandedDropdowns</span><span class="s2">(</span><span class="s1">prev </span><span class="s2">=&gt; ({</span>
+            <span class="s1">...prev</span><span class="s2">,</span>
+            <span class="s2">[</span><span class="s1">key</span><span class="s2">]: !</span><span class="s1">prev</span><span class="s2">[</span><span class="s1">key</span><span class="s2">]</span>
+        <span class="s2">}));</span>
+    <span class="s2">};</span>
+
+    <span class="s0">const </span><span class="s1">renderNavItem </span><span class="s2">= (</span><span class="s1">item</span><span class="s2">) =&gt; {</span>
+        <span class="s0">const </span><span class="s1">itemKey </span><span class="s2">= </span><span class="s1">item</span><span class="s2">.</span><span class="s1">path </span><span class="s2">|| </span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">;</span>
+        <span class="s0">const </span><span class="s1">isExpanded </span><span class="s2">= </span><span class="s1">expandedDropdowns</span><span class="s2">[</span><span class="s1">itemKey</span><span class="s2">] !== </span><span class="s0">false</span><span class="s2">;</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">item</span><span class="s2">.</span><span class="s1">children</span><span class="s2">) {</span>
+            <span class="s0">return </span><span class="s2">(</span>
+                <span class="s6">&lt;li</span>
+                    <span class="s2">key</span><span class="s3">=</span><span class="s2">{</span><span class="s1">itemKey</span><span class="s2">}</span>
+                    <span class="s2">className</span><span class="s3">=&quot;nav-item-with-dropdown&quot;</span>
+                <span class="s6">&gt;</span>
+                    <span class="s2">{</span><span class="s5">/* PC용 */</span><span class="s2">}</span>
+                    <span class="s6">&lt;div </span><span class="s2">className</span><span class="s3">=&quot;desktop-nav-item&quot;</span><span class="s6">&gt;</span>
+                        <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">path </span><span class="s2">? (</span>
+                            <span class="s6">&lt;Link</span>
+                                <span class="s2">to</span><span class="s3">=</span><span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">path</span><span class="s2">}</span>
+                                <span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`nav-link-with-children </span><span class="s1">$</span><span class="s2">{</span><span class="s1">isExpanded </span><span class="s2">? </span><span class="s3">'' </span><span class="s2">: </span><span class="s3">'collapsed'</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span>
+                                <span class="s2">onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">closeMobileMenu</span><span class="s2">}</span>
+                            <span class="s6">&gt;</span>
+                                <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+                            <span class="s6">&lt;/Link&gt;</span>
+                        <span class="s2">) : (</span>
+                            <span class="s6">&lt;button</span>
+                                <span class="s2">type</span><span class="s3">=&quot;button&quot;</span>
+                                <span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`nav-link-with-children </span><span class="s1">$</span><span class="s2">{</span><span class="s1">isExpanded </span><span class="s2">? </span><span class="s3">'' </span><span class="s2">: </span><span class="s3">'collapsed'</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span>
+                                <span class="s2">onClick</span><span class="s3">=</span><span class="s2">{() =&gt; </span><span class="s1">toggleDropdown</span><span class="s2">(</span><span class="s1">itemKey</span><span class="s2">)}</span>
+                            <span class="s6">&gt;</span>
+                                <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+                            <span class="s6">&lt;/button&gt;</span>
+                        <span class="s2">)}</span>
+                    <span class="s6">&lt;/div&gt;</span>
+
+                    <span class="s2">{</span><span class="s5">/* 모바일용 */</span><span class="s2">}</span>
+                    <span class="s6">&lt;div </span><span class="s2">className</span><span class="s3">=&quot;mobile-nav-row&quot;</span><span class="s6">&gt;</span>
+                        <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">path </span><span class="s2">? (</span>
+                            <span class="s6">&lt;Link</span>
+                                <span class="s2">to</span><span class="s3">=</span><span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">path</span><span class="s2">}</span>
+                                <span class="s2">className</span><span class="s3">=&quot;mobile-nav-link&quot;</span>
+                                <span class="s2">onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">closeMobileMenu</span><span class="s2">}</span>
+                            <span class="s6">&gt;</span>
+                                <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+                            <span class="s6">&lt;/Link&gt;</span>
+                        <span class="s2">) : (</span>
+                            <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=&quot;mobile-nav-link&quot;</span><span class="s6">&gt;</span>
+                        <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+                    <span class="s6">&lt;/span&gt;</span>
+                        <span class="s2">)}</span>
+
+                        <span class="s6">&lt;button</span>
+                            <span class="s2">type</span><span class="s3">=&quot;button&quot;</span>
+                            <span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`mobile-nav-toggle </span><span class="s1">$</span><span class="s2">{</span><span class="s1">isExpanded </span><span class="s2">? </span><span class="s3">'expanded' </span><span class="s2">: </span><span class="s3">'collapsed'</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span>
+                            <span class="s2">onClick</span><span class="s3">=</span><span class="s2">{() =&gt; </span><span class="s1">toggleDropdown</span><span class="s2">(</span><span class="s1">itemKey</span><span class="s2">)}</span>
+                            <span class="s2">aria-expanded</span><span class="s3">=</span><span class="s2">{</span><span class="s1">isExpanded</span><span class="s2">}</span>
+                            <span class="s2">aria-label</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">} </span><span class="s3">하위 메뉴 </span><span class="s1">$</span><span class="s2">{</span><span class="s1">isExpanded </span><span class="s2">? </span><span class="s3">'닫기' </span><span class="s2">: </span><span class="s3">'열기'</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span>
+                        <span class="s6">&gt;</span>
+                            <span class="s6">&lt;span /&gt;</span>
+                        <span class="s6">&lt;/button&gt;</span>
+                    <span class="s6">&lt;/div&gt;</span>
+
+                    <span class="s2">{</span><span class="s5">/* 하위 메뉴 */</span><span class="s2">}</span>
+                    <span class="s6">&lt;ul </span><span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`nav-dropdown </span><span class="s1">$</span><span class="s2">{</span><span class="s1">isExpanded </span><span class="s2">? </span><span class="s3">'expanded' </span><span class="s2">: </span><span class="s3">'collapsed'</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span><span class="s6">&gt;</span>
+                        <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">children</span><span class="s2">.</span><span class="s1">map</span><span class="s2">((</span><span class="s1">child</span><span class="s2">) =&gt; (</span>
+                            <span class="s6">&lt;li </span><span class="s2">key</span><span class="s3">=</span><span class="s2">{</span><span class="s1">child</span><span class="s2">.</span><span class="s1">path</span><span class="s2">}</span><span class="s6">&gt;</span>
+                                <span class="s6">&lt;Link</span>
+                                    <span class="s2">to</span><span class="s3">=</span><span class="s2">{</span><span class="s1">child</span><span class="s2">.</span><span class="s1">path</span><span class="s2">}</span>
+                                    <span class="s2">onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">closeMobileMenu</span><span class="s2">}</span>
+                                <span class="s6">&gt;</span>
+                                    <span class="s2">{</span><span class="s1">child</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+
+                                    <span class="s2">{</span><span class="s1">child</span><span class="s2">.</span><span class="s1">badge </span><span class="s2">&amp;&amp; (</span>
+                                        <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=&quot;nav-dropdown-badge&quot;</span><span class="s6">&gt;</span>
+                                    <span class="s2">{</span><span class="s1">child</span><span class="s2">.</span><span class="s1">badge</span><span class="s2">}</span>
+                                <span class="s6">&lt;/span&gt;</span>
+                                    <span class="s2">)}</span>
+                                <span class="s6">&lt;/Link&gt;</span>
+                            <span class="s6">&lt;/li&gt;</span>
+                        <span class="s2">))}</span>
+                    <span class="s6">&lt;/ul&gt;</span>
+                <span class="s6">&lt;/li&gt;</span>
+            <span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s0">return </span><span class="s2">(</span>
+            <span class="s6">&lt;li </span><span class="s2">key</span><span class="s3">=</span><span class="s2">{</span><span class="s1">itemKey</span><span class="s2">}</span><span class="s6">&gt;</span>
+                <span class="s6">&lt;Link </span><span class="s2">to</span><span class="s3">=</span><span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">path</span><span class="s2">} onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">closeMobileMenu</span><span class="s2">}</span><span class="s6">&gt;</span>
+                    <span class="s2">{</span><span class="s1">item</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+                <span class="s6">&lt;/Link&gt;</span>
+            <span class="s6">&lt;/li&gt;</span>
+        <span class="s2">);</span>
+    <span class="s2">};</span>
+
+    <span class="s0">return </span><span class="s2">(</span>
+        <span class="s6">&lt;&gt;</span>
+            <span class="s6">&lt;nav </span><span class="s2">ref</span><span class="s3">=</span><span class="s2">{</span><span class="s1">navRef</span><span class="s2">} className</span><span class="s3">=</span><span class="s2">{</span><span class="s1">scrolled </span><span class="s2">? </span><span class="s3">'scrolled' </span><span class="s2">: </span><span class="s3">''</span><span class="s2">}</span><span class="s6">&gt;</span>
+                <span class="s6">&lt;Link </span><span class="s2">to</span><span class="s3">=&quot;/&quot; </span><span class="s2">className</span><span class="s3">=&quot;nav-logo&quot; </span><span class="s2">onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">handleLogoClick</span><span class="s2">}</span><span class="s6">&gt;</span>
+                    <span class="s1">Market</span><span class="s6">&lt;span&gt;</span><span class="s1">With</span><span class="s6">&lt;/span&gt;</span>
+                <span class="s6">&lt;/Link&gt;</span>
+
+                <span class="s6">&lt;button </span><span class="s2">className</span><span class="s3">=&quot;mobile-menu-toggle&quot; </span><span class="s2">onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">toggleMobileMenu</span><span class="s2">} aria-label</span><span class="s3">=&quot;메뉴 열기&quot;</span><span class="s6">&gt;</span>
+                    <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s1">mobileMenuOpen </span><span class="s2">? </span><span class="s3">'open' </span><span class="s2">: </span><span class="s3">''</span><span class="s2">}</span><span class="s6">&gt;&lt;/span&gt;</span>
+                    <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s1">mobileMenuOpen </span><span class="s2">? </span><span class="s3">'open' </span><span class="s2">: </span><span class="s3">''</span><span class="s2">}</span><span class="s6">&gt;&lt;/span&gt;</span>
+                    <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s1">mobileMenuOpen </span><span class="s2">? </span><span class="s3">'open' </span><span class="s2">: </span><span class="s3">''</span><span class="s2">}</span><span class="s6">&gt;&lt;/span&gt;</span>
+                <span class="s6">&lt;/button&gt;</span>
+
+                <span class="s6">&lt;ul </span><span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`nav-links </span><span class="s1">$</span><span class="s2">{</span><span class="s1">mobileMenuOpen </span><span class="s2">? </span><span class="s3">'mobile-open' </span><span class="s2">: </span><span class="s3">''</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span><span class="s6">&gt;</span>
+                    <span class="s6">&lt;li </span><span class="s2">className</span><span class="s3">=&quot;mobile-menu-logo&quot;</span><span class="s6">&gt;</span>
+                        <span class="s6">&lt;Link </span><span class="s2">to</span><span class="s3">=&quot;/&quot; </span><span class="s2">className</span><span class="s3">=&quot;nav-logo&quot; </span><span class="s2">onClick</span><span class="s3">=</span><span class="s2">{(</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
+                            <span class="s1">handleLogoClick</span><span class="s2">(</span><span class="s1">e</span><span class="s2">);</span>
+                            <span class="s1">closeMobileMenu</span><span class="s2">();</span>
+                        <span class="s2">}}</span><span class="s6">&gt;</span>
+                            <span class="s1">Market</span><span class="s6">&lt;span&gt;</span><span class="s1">With</span><span class="s6">&lt;/span&gt;</span>
+                        <span class="s6">&lt;/Link&gt;</span>
+                    <span class="s6">&lt;/li&gt;</span>
+                    <span class="s2">{</span><span class="s1">pageLinks</span><span class="s2">.</span><span class="s1">slice</span><span class="s2">(</span><span class="s4">0</span><span class="s2">, -</span><span class="s4">1</span><span class="s2">).</span><span class="s1">map</span><span class="s2">(</span><span class="s1">renderNavItem</span><span class="s2">)}</span>
+
+                    <span class="s2">{</span><span class="s1">links</span><span class="s2">.</span><span class="s1">map</span><span class="s2">(</span><span class="s1">l </span><span class="s2">=&gt; (</span>
+                        <span class="s6">&lt;li </span><span class="s2">key</span><span class="s3">=</span><span class="s2">{</span><span class="s1">l</span><span class="s2">.</span><span class="s1">id</span><span class="s2">}</span><span class="s6">&gt;</span>
+                            <span class="s6">&lt;a</span>
+                                <span class="s2">href</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`/#</span><span class="s1">$</span><span class="s2">{</span><span class="s1">l</span><span class="s2">.</span><span class="s1">id</span><span class="s2">}</span><span class="s3">`</span><span class="s2">}</span>
+                                <span class="s2">onClick</span><span class="s3">=</span><span class="s2">{(</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
+                                    <span class="s1">handleSectionClick</span><span class="s2">(</span><span class="s1">e</span><span class="s2">, </span><span class="s1">l</span><span class="s2">.</span><span class="s1">id</span><span class="s2">);</span>
+                                    <span class="s1">closeMobileMenu</span><span class="s2">();</span>
+                                <span class="s2">}}</span>
+                            <span class="s6">&gt;</span>
+                                <span class="s2">{</span><span class="s1">l</span><span class="s2">.</span><span class="s1">label</span><span class="s2">}</span>
+                            <span class="s6">&lt;/a&gt;</span>
+                        <span class="s6">&lt;/li&gt;</span>
+                    <span class="s2">))}</span>
+
+                    <span class="s2">{</span><span class="s1">pageLinks</span><span class="s2">.</span><span class="s1">slice</span><span class="s2">(-</span><span class="s4">1</span><span class="s2">).</span><span class="s1">map</span><span class="s2">(</span><span class="s1">renderNavItem</span><span class="s2">)}</span>
+                <span class="s6">&lt;/ul&gt;</span>
+            <span class="s6">&lt;/nav&gt;</span>
+
+            <span class="s6">&lt;div </span><span class="s2">className</span><span class="s3">=</span><span class="s2">{</span><span class="s3">`mobile-menu-overlay </span><span class="s1">$</span><span class="s2">{</span><span class="s1">mobileMenuOpen </span><span class="s2">? </span><span class="s3">'active' </span><span class="s2">: </span><span class="s3">''</span><span class="s2">}</span><span class="s3">`</span><span class="s2">} onClick</span><span class="s3">=</span><span class="s2">{</span><span class="s1">closeMobileMenu</span><span class="s2">}</span><span class="s6">&gt;&lt;/div&gt;</span>
+        <span class="s6">&lt;/&gt;</span>
+    <span class="s2">);</span>
+<span class="s2">};</span>
+
+<span class="s0">export default </span><span class="s1">Header</span><span class="s2">;</span>
+</pre>
+</body>
+</html>

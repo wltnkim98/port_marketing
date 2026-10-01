@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 50" fill="none">
+  <rect x="11" y="22" width="7" height="16" stroke="#FAF8F4" stroke-width="1.8" fill="#FAF8F4" fill-opacity="0.3"/>
+  <rect x="20" y="14" width="8" height="24" stroke="#FAF8F4" stroke-width="2" fill="#FAF8F4" fill-opacity="0.5"/>
+  <rect x="30" y="18" width="7" height="20" stroke="#FAF8F4" stroke-width="1.8" fill="#FAF8F4" fill-opacity="0.3"/>
+  <text x="48" y="27" font-family="'Cinzel', 'Playfair Display', serif" font-size="14.5" font-weight="700" fill="#FAF8F4" letter-spacing="2">SKYLINE ASSET</text>
+  <text x="49" y="38" font-family="'Space Mono', monospace" font-size="7.5" font-weight="600" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2">MANAGEMENT</text>
+</svg>

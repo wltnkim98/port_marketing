@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 50" fill="none">
+  <path d="M11 20H31V30C31 34.4 27.4 38 23 38H19C14.6 38 11 34.4 11 30V20Z" stroke="#FAF8F4" stroke-width="2.2"/>
+  <path d="M31 22H34C36.2 22 38 23.8 38 26C38 28.2 36.2 30 34 30H31" stroke="#FAF8F4" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M17 11C17 14 15 15 15 17" stroke="#FAF8F4" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M21 9C21 13 19 14 19 17" stroke="#FAF8F4" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M25 11C25 14 23 15 23 17" stroke="#FAF8F4" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="48" y="27" font-family="'Noto Sans KR', 'Montserrat', sans-serif" font-size="14.5" font-weight="800" fill="#FAF8F4" letter-spacing="2">ESPRESSOTECA</text>
+  <text x="49" y="38" font-family="'Space Mono', monospace" font-size="7" font-weight="600" fill="#FAF8F4" fill-opacity="0.8" letter-spacing="2.5">ROASTERY FIRENZE</text>
+</svg>
