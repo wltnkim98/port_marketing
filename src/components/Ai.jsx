@@ -251,7 +251,7 @@ const Ai = () => {
                                 disabled={loading}
                             />
                             <button className="ai-send" onClick={() => send()} disabled={loading || !input.trim()}>
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" strokeWidth="1.2" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round"></path></svg>
                             </button>
                         </div>
                         <p className="ai-disclaimer">자세한 상담은 심층 컨설팅을 통해 상담 받으실 수 있습니다.</p>

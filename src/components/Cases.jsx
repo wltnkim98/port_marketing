@@ -111,7 +111,6 @@ function RisingGraph({ isVisible }) {
         <svg
             className={`fade-up ${isVisible ? 'visible' : ''}`}
             width="100%"
-            height="auto"
             viewBox="0 0 1200 600"
             preserveAspectRatio="xMidYMid meet"
             style={{
