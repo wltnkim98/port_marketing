@@ -1,63 +1,49 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-const AnimatedTitle = ({ children, className = '', delay = 0 }) => {
+const AnimatedTitleInner = ({ children, className = '', delay = 0 }) => {
     const titleRef = useRef(null);
-    const observerRef = useRef(null);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const titleElement = titleRef.current;
-        if (!titleElement) return;
+        const el = titleRef.current;
+        if (!el) return;
 
-        // Get text content from the element
-        const text = titleElement.textContent;
-        titleElement.innerHTML = '';
-
-        const chars = text.split('');
-        chars.forEach((char, index) => {
-            const span = document.createElement('span');
-            if (char === ' ') {
-                span.className = 'space';
-                span.innerHTML = '&nbsp;';
-            } else {
-                span.className = 'char';
-                span.textContent = char;
-                span.style.transitionDelay = `${delay + index * 0.05}s`;
-            }
-            titleElement.appendChild(span);
-        });
-
-        // Set up intersection observer
-        observerRef.current = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const charSpans = entry.target.querySelectorAll('.char');
-                        charSpans.forEach((span) => {
-                            span.classList.add('visible');
-                        });
-                    }
-                });
-            },
+        const observer = new IntersectionObserver(
+            ([entry]) => setVisible(entry.isIntersecting),   // 들어오면 true, 벗어나면 false
             { threshold: 0.2 }
         );
 
-        observerRef.current.observe(titleElement);
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
-        return () => {
-            if (observerRef.current) {
-                observerRef.current.disconnect();
-            }
-        };
-    }, [children, delay]);
+    const text = typeof children === 'string' ? children : String(children ?? '');
 
     return (
-        <h2 
-            ref={titleRef} 
-            className={`section-main-title ${className}`}
-        >
-            {children}
+        <h2 ref={titleRef} className={`section-main-title ${className}`} aria-label={text}>
+            {Array.from(text).map((char, index) =>
+                char === ' ' ? (
+                    <span key={index} className="space" aria-hidden="true">&nbsp;</span>
+                ) : (
+                    <span
+                        key={index}
+                        className={`char${visible ? ' visible' : ''}`}
+                        style={{ transitionDelay: `${delay + index * 0.05}s` }}
+                        aria-hidden="true"
+                    >
+                        {char}
+                    </span>
+                )
+            )}
         </h2>
     );
+};
+
+// 페이지 주소가 바뀌면 key가 바뀌어 처음부터 다시 생성 → 효과 재생
+const AnimatedTitle = (props) => {
+    const { pathname } = useLocation();
+    return <AnimatedTitleInner key={pathname} {...props} />;
 };
 
 export default AnimatedTitle;

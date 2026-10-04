@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import ServiceNav from '../components/ServiceNav';
-import TiltCard from '../components/motion/TiltCard';
-import LiveMetricCountUp from '../components/motion/LiveMetricCountUp';
-import InteractiveProcessTimeline from '../components/motion/InteractiveProcessTimeline';
-import ServiceSimulator from '../components/motion/ServiceSimulator';
-import InteractiveDeviceMockup from '../components/motion/InteractiveDeviceMockup';
-import AnimatedTitle from '../components/motion/AnimatedTitle';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import ServiceNav from '../../components/ServiceNav';
+import TiltCard from '../../components/motion/TiltCard';
+import LiveMetricCountUp from '../../components/motion/LiveMetricCountUp';
+import InteractiveProcessTimeline from '../../components/motion/InteractiveProcessTimeline';
+import ServiceSimulator from '../../components/motion/ServiceSimulator';
+import InteractiveDeviceMockup from '../../components/motion/InteractiveDeviceMockup';
+import AnimatedTitle from '../../components/motion/AnimatedTitle';
 
 const BlogServiceView = () => {
     const [activeTab, setActiveTab] = useState(0);

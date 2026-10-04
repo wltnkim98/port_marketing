@@ -57,7 +57,7 @@ body::before {
 
 #root {
   min-height: 100vh;
-  overflow-x: hidden
+  overflow-x: clip;
   }
 
 /* ── SECTION COMMON ── */

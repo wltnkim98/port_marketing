@@ -17,8 +17,8 @@
 }
 
 // ─── STICKY SUB-NAVIGATION BAR ───
-.service-subnav-sticky {
-    position: sticky;
+.service-subnav-fixed {
+    position: fixed;
     top: 74px;
     z-index: 95;
     background: rgba(245, 240, 232, 0.88);
@@ -109,7 +109,7 @@
 .service-hero-detail {
     max-width: 1300px;
     margin: 0 auto;
-    padding: 110px 24px 50px;
+    padding: 180px 24px 50px;
     text-align: center;
     position: relative;
     z-index: 1;
@@ -608,6 +608,8 @@
     }
 }
 
+
+
 // ─── INTERACTIVE PROCESS TIMELINE (MOTION) ───
 .interactive-process-container {
     background: #ffffff;
@@ -619,6 +621,13 @@
 
     @media (max-width: 768px) {
         padding: 24px 16px;
+
+        .timeline-nav-bar {
+            display: none;
+        }
+        .timeline-active-stage {
+            min-height: 420px;                // 스텝마다 글 길이가 달라도 높이가 덜 출렁이게
+        }
     }
 
     .timeline-nav-bar {
@@ -646,6 +655,7 @@
     }
 
     .timeline-nodes-row {
+        cursor: pointer;
         position: relative;
         z-index: 2;
         display: flex;
@@ -820,6 +830,16 @@
             border: 1px solid rgba(13, 13, 13, 0.06);
             border-radius: 10px;
             transition: all 0.25s ease;
+
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font: inherit;
+            appearance: none;
+
+            &:not(.current):hover {
+                border-color: var(--accent, #f64f1e);
+            }
 
             &.current {
                 background: var(--ink, #0d0d0d);
@@ -1912,9 +1932,21 @@
     }
 }
 
-//여기부터 스티키 작업
-.service-scroll-wrap {                       // ← 새로 추가
-    height: calc(100vh + (var(--count, 6) - 1) * 90vh);
+// Sticky Scroll
+.service-scroll-wrap {
+    --service-top: 130px;
+    --service-bottom: 40px;
+    --service-media-height: clamp(460px, calc(100vh - 170px), 720px);
+    // sticky 박스의 실제 높이 = 내용 높이
+    --service-sticky-h: calc(
+            var(--service-top) + var(--service-media-height) + var(--service-bottom)
+    );
+    --service-step: clamp(480px, 75vh, 800px);
+
+    height: calc(
+            var(--service-sticky-h) + var(--count, 6) * var(--service-step)
+    );
+
     @media (max-width: 960px) {
         height: auto;
         padding-bottom: unset;
@@ -1922,16 +1954,18 @@
 }
 
 .service-section {
-    position: sticky;                        // ← 추가
-    top: 0;                                  // ← 추가
-    height: 100vh;                           // ← 추가
+    // --service-top, --service-media-height 정의는 삭제 (위로 이동)
+    position: sticky;
+    top: max(0px, calc((100vh - var(--service-sticky-h)) / 2)); // 화면 중앙에 고정
+    height: var(--service-sticky-h);                            // 100vh → 내용 높이
+    padding: var(--service-top) 24px var(--service-bottom);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     max-width: 1400px;
-    margin: 0 auto;                          // ← 기존 80px auto 에서 변경
-    padding: 100px 24px 40px;                // ← 기존 0 24px 에서 변경 (위 100px = 헤더 여백)
-    align-items: center;                     // ← 기존 start 에서 변경
+    margin: 0 auto;
+    align-items: start;
+    box-sizing: border-box;
 
     @media (max-width: 960px) {
         display: block;
@@ -1939,7 +1973,8 @@
         height: auto;
         margin: 0 auto;
         padding: 0 16px 0;
-        --img-h: clamp(140px, 24svh, 230px);   // 이미지 높이 지정용으로만 유지
+        --media-height: clamp(180px, 28svh, 260px);
+        --img-h: var(--media-height);
         --card-space: calc(
                 100svh - var(--cards-top, 300px)
                 - (var(--count, 6) - 1) * 10px - 12px
@@ -1949,17 +1984,16 @@
     .service-img-wrap {
         @media (max-width: 960px) {
             position: sticky;
-            top: var(--stick-top, 110px);     // subnav 바로 아래에서 고정
+            top: var(--stick-top, 110px);
             z-index: 10;
-            margin: 0 -16px;                  // section 좌우 padding(16px)만큼 넓혀서 옆으로 안 비치게
-            padding: 20px 16px 25px;          // 위 20px: subnav와의 여백 / 아래 25px: 카드와의 여백
+            margin: 0 -16px;
+            padding: 20px 16px;
             background: var(--paper, #f5f0e8);
         }
 
         .service-img-section {
-            position: sticky;
-            top: 150px;
-            height: 530px;
+            position: relative;
+            height: var(--service-media-height);
             border-radius: 20px;
             overflow: hidden;
             background: #111;
@@ -1985,28 +2019,34 @@
     }
 
     .service-cards-container {
-        display: grid;                       // ← flex 에서 변경 (카드 겹쳐 쌓기)
-        // flex-direction, gap: 60px 삭제
+        display: grid;
+        height: var(--service-media-height);
 
         @media (max-width: 960px) {
             display: block;
+            height: auto;
         }
     }
 
     .service-card {
-        grid-area: 1 / 1;                    // ← 추가 (6장이 같은 칸에 겹침)
+        grid-area: 1 / 1;
+        display: flex;
+        width: 100%;
+        height: 100%;
         padding: 40px;
         background: #ffffff;
         border-radius: 24px;
         border: 1px solid rgba(13, 13, 13, 0.08);
+        box-sizing: border-box;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         opacity: 0;
         visibility: hidden;
         transform: translateY(60px);
         pointer-events: none;
-        transition: opacity 0.5s ease,
-        transform 0.8s cubic-bezier(0.65, 0, 0.35, 1),
-        visibility 0s linear 0.5s;
+        transition:
+                opacity 0.35s ease,
+                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                visibility 0s linear 0.4s;
 
         &.past {
             transform: translateY(-60px);
@@ -2017,32 +2057,45 @@
             visibility: visible;
             transform: translateY(0);
             pointer-events: auto;
-            //border-color: var(--accent, #f64f1e);
-            //box-shadow: 0 8px 32px rgba(246, 79, 30, 0.15);
-            transition: opacity 1s ease 0.2s,
-            transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s,
-            border-color 0.8s ease 0.2s,
-            box-shadow 0.8s ease 0.2s,
-            visibility 0s linear 0s;
+
+            transition:
+                    opacity 0.4s ease,
+                    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                    border-color 0.4s ease,
+                    box-shadow 0.4s ease,
+                    visibility 0s linear 0s;
         }
+
         @media (max-width: 960px) {
             position: sticky;
-            top: calc(var(--cards-top, 300px) + var(--i, 0) * 10px);
+            top: var(--cards-top, 300px);
+            height: auto;
+            min-height: var(--media-height);
+            box-sizing: border-box;
+
             margin-bottom: 24px;
-            font-size: max(9px, min(14px, 3.6vw, calc(var(--card-space) / 26)));
+
+            font-size: max(
+                    9px,
+                    min(14px, 3.6vw, calc(var(--card-space) / 26))
+            );
+
             padding: 1.1em 1.2em;
             border-radius: 1.4em;
+
             pointer-events: auto;
             box-shadow: unset;
 
-            // past / active 상태의 이동·딜레이를 모바일에서 확실히 제거
             &,
             &.past,
             &.active {
                 opacity: 1;
                 visibility: visible;
                 transform: none;
-                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+                transition:
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
             }
         }
 
@@ -2082,6 +2135,8 @@
 
         .service-card-grid {
             width: 100%;
+            margin-bottom: 20px;
+            margin-block: auto;
             background: var(--paper, #f5f0e8);
             padding: 24px 28px;
             border-radius: 16px;
@@ -2123,12 +2178,13 @@
         }
 
         .service-card-footer {
-            display: flex;
+            display: inline-flex;
+            align-self: flex-start;
             justify-content: space-between;
             width: 100%;
             align-items: center;
             border-top: 1px solid rgba(13, 13, 13, 0.06);
-            padding-top: 16px;
+            padding-top: 0.6em;
             margin-top: 20px;
             text-decoration: none;
             color: var(--ink, #0d0d0d);
@@ -2177,7 +2233,7 @@
             }
 
             .service-card-grid {
-                margin: 0;
+                margin: 0 0 0.7em;
                 padding: 0.8em 1em;
                 border-radius: 1em;
 

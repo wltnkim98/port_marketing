@@ -12,7 +12,7 @@ const serviceRoutes = [
 
 const ServiceNav = ({ currentPath }) => {
     return (
-        <nav className="service-subnav-sticky" aria-label="마케팅 서비스 세부 메뉴">
+        <nav className="service-subnav-fixed" aria-label="마케팅 서비스 세부 메뉴">
             <div className="service-subnav-container">
                 <ul className="service-subnav-list">
                     {serviceRoutes.map((service) => (

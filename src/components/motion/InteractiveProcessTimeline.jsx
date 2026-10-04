@@ -1,28 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+const AUTO_INTERVAL = 3200;   // 자동 전환 간격 (ms)
+
 const InteractiveProcessTimeline = ({ steps = [], serviceName = '' }) => {
+    const total = steps.length;
     const [activeStep, setActiveStep] = useState(0);
+    const [isInView, setIsInView] = useState(false);     // 화면에 보일 때만 자동 전환
     const containerRef = useRef(null);
 
+    // 1) 화면에 보이는지 감지
     useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
+        const el = containerRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsInView(entry.isIntersecting),
+            { threshold: 0.4 }   // 카드의 40% 이상 보일 때
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
-        const handleWheel = (e) => {
-            e.preventDefault();
-            
-            if (e.deltaY > 0) {
-                // Scroll down - next step
-                setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
-            } else if (e.deltaY < 0) {
-                // Scroll up - previous step
-                setActiveStep((prev) => Math.max(prev - 1, 0));
-            }
-        };
-
-        container.addEventListener('wheel', handleWheel, { passive: false });
-        return () => container.removeEventListener('wheel', handleWheel);
-    }, [steps]);
+    // 2) 자동 전환 (activeStep이 바뀔 때마다 타이머 재시작 → 클릭해도 자연스러움)
+    useEffect(() => {
+        if (total < 2 || !isInView) return;
+        const timer = setTimeout(() => {
+            setActiveStep((prev) => (prev + 1) % total);
+        }, AUTO_INTERVAL);
+        return () => clearTimeout(timer);
+    }, [total, activeStep, isInView]);
 
     return (
         <div className="interactive-process-container" ref={containerRef}>
@@ -31,21 +36,21 @@ const InteractiveProcessTimeline = ({ steps = [], serviceName = '' }) => {
                 <div className="timeline-track">
                     <div
                         className="timeline-laser-progress"
-                        style={{
-                            width: `${(activeStep / (steps.length - 1)) * 100}%`
-                        }}
+                        style={{ width: `${(activeStep / Math.max(total - 1, 1)) * 100}%` }}
                     />
                 </div>
                 <div className="timeline-nodes-row">
                     {steps.map((item, idx) => (
-                        <div
+                        <button
+                            type="button"
                             key={idx}
                             className={`timeline-node-btn ${activeStep === idx ? 'active' : ''} ${idx <= activeStep ? 'passed' : ''}`}
+                            onClick={() => setActiveStep(idx)}
                             aria-label={`Step ${item.step}: ${item.title}`}
                         >
                             <span className="node-step-num">{item.step}</span>
                             <span className="node-title-label">{item.title.split(' ')[0]}</span>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>
@@ -69,13 +74,16 @@ const InteractiveProcessTimeline = ({ steps = [], serviceName = '' }) => {
                 <div className="stage-right-stepper">
                     <div className="all-steps-mini-list">
                         {steps.map((s, idx) => (
-                            <div
+                            <button
+                                type="button"
                                 key={idx}
                                 className={`mini-step-item ${activeStep === idx ? 'current' : ''}`}
+                                onClick={() => setActiveStep(idx)}
+                                aria-current={activeStep === idx ? 'step' : undefined}
                             >
                                 <span className="mini-step-badge">{s.step}</span>
                                 <span className="mini-step-text">{s.title}</span>
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </div>

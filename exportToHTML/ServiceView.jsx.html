@@ -25,7 +25,6 @@ ServiceView.jsx</font>
 <span class="s0">import </span><span class="s1">Header from </span><span class="s3">'../components/Header'</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">Footer from </span><span class="s3">'../components/Footer'</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">ServiceNav from </span><span class="s3">'../components/ServiceNav'</span><span class="s2">;</span>
-<span class="s0">import </span><span class="s1">HeroMotionCanvas from </span><span class="s3">'../components/motion/HeroMotionCanvas'</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">TiltCard from </span><span class="s3">'../components/motion/TiltCard'</span><span class="s2">;</span>
 <span class="s0">import </span><span class="s1">LiveMetricCountUp from </span><span class="s3">'../components/motion/LiveMetricCountUp'</span><span class="s2">;</span>
 
@@ -90,143 +89,511 @@ ServiceView.jsx</font>
     <span class="s0">const </span><span class="s2">[</span><span class="s1">activeIndex</span><span class="s2">, </span><span class="s1">setActiveIndex</span><span class="s2">] = </span><span class="s1">useState</span><span class="s2">(</span><span class="s4">0</span><span class="s2">);</span>
     <span class="s0">const </span><span class="s1">wrapRef </span><span class="s2">= </span><span class="s1">useRef</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);          </span><span class="s5">// cardRefs 대신 이것</span>
 
+    <span class="s5">/*useEffect(() =&gt; { 
+        const wrap = wrapRef.current; 
+        if (!wrap) return; 
+ 
+        const total = serviceList.length; 
+        const lastIndex = total - 1; 
+ 
+        let animating = false; 
+        let currentIndex = 0; 
+        let sectionEngaged = false; 
+        let wheelConsumed = false; 
+ 
+        let edgePending = false; 
+        let edgePendingDir = 0; 
+        let edgePendingAt = 0; 
+ 
+        let lastWheel = 0; 
+        let unlockTimer; 
+ 
+        const metrics = () =&gt; { 
+            const start = 
+                wrap.getBoundingClientRect().top + 
+                window.scrollY; 
+ 
+            const end = 
+                start + 
+                wrap.offsetHeight - 
+                window.innerHeight; 
+ 
+            return { 
+                start, 
+                end, 
+                step: (end - start) / lastIndex, 
+            }; 
+        }; 
+ 
+        const block = (e) =&gt; { 
+            e.preventDefault(); 
+            e.stopPropagation(); 
+        }; 
+ 
+        const goTo = (next) =&gt; { 
+            const { start, end } = metrics(); 
+ 
+            currentIndex = next; 
+            sectionEngaged = true; 
+            wheelConsumed = true; 
+            edgePending = false; 
+            edgePendingDir = 0; 
+            animating = true; 
+ 
+            setActiveIndex(next); 
+ 
+            const target = 
+                start + 
+                (next / lastIndex) * 
+                (end - start); 
+ 
+            window.lenis.scrollTo(target, { 
+                duration: 0.45, 
+            }); 
+ 
+            clearTimeout(unlockTimer); 
+ 
+            unlockTimer = setTimeout(() =&gt; { 
+                animating = false; 
+            }, 500); 
+        }; 
+ 
+        const onWheel = (e) =&gt; { 
+            if ( 
+                window.innerWidth &lt;= 960 || 
+                !window.lenis || 
+                e.ctrlKey 
+            ) { 
+                return; 
+            } 
+ 
+            const dir = Math.sign(e.deltaY); 
+            if (!dir) return; 
+ 
+            const now = performance.now(); 
+            const gap = now - lastWheel; 
+            lastWheel = now; 
+ 
+            const { 
+                start, 
+                end, 
+                step, 
+            } = metrics(); 
+ 
+            const y = window.scrollY; 
+ 
+            const TOL = 8; 
+ 
+            const inRange = 
+                y &gt;= start - TOL &amp;&amp; 
+                y &lt;= end + TOL; 
+ 
+            const entryZone = Math.min( 
+                step * 0.45, 
+                window.innerHeight * 0.35 
+            ); 
+ 
+            const nearStart = 
+                y &lt;= start + entryZone; 
+ 
+            const nearEnd = 
+                y &gt;= end - entryZone; 
+ 
+            if (animating) { 
+                block(e); 
+                return; 
+            } 
+ 
+            if (wheelConsumed) { 
+                if (gap &lt; 140) { 
+                    block(e); 
+                    return; 
+                } 
+ 
+                wheelConsumed = false; 
+            } 
+ 
+            // 서비스 영역 진입 
+            if (!sectionEngaged) { 
+                if (dir &gt; 0 &amp;&amp; nearStart) { 
+                    block(e); 
+                    goTo(0); 
+                    return; 
+                } 
+ 
+                if (dir &lt; 0 &amp;&amp; nearEnd) { 
+                    block(e); 
+                    goTo(lastIndex); 
+                    return; 
+                } 
+ 
+                if (inRange) { 
+                    const rawIndex = Math.round( 
+                        ((y - start) / 
+                            (end - start)) * 
+                        lastIndex 
+                    ); 
+ 
+                    currentIndex = Math.max( 
+                        0, 
+                        Math.min( 
+                            lastIndex, 
+                            rawIndex 
+                        ) 
+                    ); 
+ 
+                    sectionEngaged = true; 
+                    setActiveIndex(currentIndex); 
+ 
+                    block(e); 
+                    return; 
+                } 
+ 
+                return; 
+            } 
+ 
+            // 1번 카드에서 위로 나가기 
+            if ( 
+                currentIndex === 0 &amp;&amp; 
+                dir &lt; 0 
+            ) { 
+                if ( 
+                    !edgePending || 
+                    edgePendingDir !== dir || 
+                    now - edgePendingAt &gt; 2000 
+                ) { 
+                    block(e); 
+ 
+                    edgePending = true; 
+                    edgePendingDir = dir; 
+                    edgePendingAt = now; 
+ 
+                    return; 
+                } 
+ 
+                if (gap &gt;= 140) { 
+                    edgePending = false; 
+                    edgePendingDir = 0; 
+                    sectionEngaged = false; 
+                    wheelConsumed = false; 
+ 
+                    return; 
+                } 
+ 
+                block(e); 
+                return; 
+            } 
+ 
+            // 6번 카드에서 아래로 나가기 
+            if ( 
+                currentIndex === lastIndex &amp;&amp; 
+                dir &gt; 0 
+            ) { 
+                if ( 
+                    !edgePending || 
+                    edgePendingDir !== dir || 
+                    now - edgePendingAt &gt; 2000 
+                ) { 
+                    block(e); 
+ 
+                    edgePending = true; 
+                    edgePendingDir = dir; 
+                    edgePendingAt = now; 
+ 
+                    return; 
+                } 
+ 
+                if (gap &gt;= 140) { 
+                    edgePending = false; 
+                    edgePendingDir = 0; 
+                    sectionEngaged = false; 
+                    wheelConsumed = false; 
+ 
+                    return; 
+                } 
+ 
+                block(e); 
+                return; 
+            } 
+ 
+            // 반대 방향이면 양끝 대기 상태 초기화 
+            edgePending = false; 
+            edgePendingDir = 0; 
+ 
+            const next = currentIndex + dir; 
+ 
+            if ( 
+                next &gt;= 0 &amp;&amp; 
+                next &lt;= lastIndex 
+            ) { 
+                block(e); 
+                goTo(next); 
+            } 
+        }; 
+ 
+        const onScroll = () =&gt; { 
+            if (window.innerWidth &lt;= 960) return; 
+            if (animating) return; 
+ 
+            const { start, end } = metrics(); 
+ 
+            if (end &lt;= start) return; 
+ 
+            const y = window.scrollY; 
+ 
+            if ( 
+                y &lt; start - 20 || 
+                y &gt; end + 20 
+            ) { 
+                sectionEngaged = false; 
+                edgePending = false; 
+                edgePendingDir = 0; 
+                return; 
+            } 
+ 
+            const progress = Math.min( 
+                Math.max( 
+                    (y - start) / 
+                    (end - start), 
+                    0 
+                ), 
+                1 
+            ); 
+ 
+            currentIndex = Math.max( 
+                0, 
+                Math.min( 
+                    lastIndex, 
+                    Math.round( 
+                        progress * lastIndex 
+                    ) 
+                ) 
+            ); 
+ 
+            sectionEngaged = true; 
+ 
+            setActiveIndex(currentIndex); 
+        }; 
+ 
+        window.addEventListener( 
+            'wheel', 
+            onWheel, 
+            { 
+                passive: false, 
+                capture: true, 
+            } 
+        ); 
+ 
+        window.addEventListener( 
+            'scroll', 
+            onScroll, 
+            { 
+                passive: true, 
+            } 
+        ); 
+ 
+        return () =&gt; { 
+            window.removeEventListener( 
+                'wheel', 
+                onWheel, 
+                { 
+                    capture: true, 
+                } 
+            ); 
+ 
+            window.removeEventListener( 
+                'scroll', 
+                onScroll 
+            ); 
+ 
+            clearTimeout(unlockTimer); 
+        }; 
+    }, []);*/</span>
+
     <span class="s1">useEffect</span><span class="s2">(() =&gt; {</span>
         <span class="s0">const </span><span class="s1">wrap </span><span class="s2">= </span><span class="s1">wrapRef</span><span class="s2">.</span><span class="s1">current</span><span class="s2">;</span>
         <span class="s0">if </span><span class="s2">(!</span><span class="s1">wrap</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
+
         <span class="s0">const </span><span class="s1">total </span><span class="s2">= </span><span class="s1">serviceList</span><span class="s2">.</span><span class="s1">length</span><span class="s2">;</span>
+        <span class="s0">const </span><span class="s1">lastIndex </span><span class="s2">= </span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">;</span>
 
-        <span class="s0">let </span><span class="s1">animating </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;      </span><span class="s5">// 카드 이동 중인지</span>
-        <span class="s0">let </span><span class="s1">blockedStream </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;  </span><span class="s5">// 이미 처리한 제스처의 남은 입력(관성) 차단용</span>
-        <span class="s0">let </span><span class="s1">startedInside </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;  </span><span class="s5">// 이번 제스처가 섹션 안에서 시작됐는지</span>
-        <span class="s0">let </span><span class="s1">lastWheel </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;</span>
-        <span class="s0">let </span><span class="s1">lastDelta </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;</span>
-        <span class="s0">let </span><span class="s1">edgeDir </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;            </span><span class="s5">// 끝 카드에서 첫 휠을 막은 방향 (-1 위 / 1 아래)</span>
-        <span class="s0">let </span><span class="s1">edgeAt </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;             </span><span class="s5">// 마지막으로 막은 시각</span>
-        <span class="s0">let </span><span class="s1">passThrough </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;    </span><span class="s5">// 이번 제스처는 전체 스크롤로 넘겨도 되는지</span>
-        <span class="s0">let </span><span class="s1">unlockTimer</span><span class="s2">;</span>
-        <span class="s0">let </span><span class="s1">snapTimer</span><span class="s2">;</span>
+        <span class="s0">let </span><span class="s1">currentIndex </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;</span>
+        <span class="s0">let </span><span class="s1">snapTimer </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s0">let </span><span class="s1">ticking </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
 
-        <span class="s5">// 항상 &quot;지금&quot; 레이아웃 기준으로 계산 (낡은 값에 의존하지 않음)</span>
         <span class="s0">const </span><span class="s1">metrics </span><span class="s2">= () =&gt; {</span>
-            <span class="s0">const </span><span class="s1">start </span><span class="s2">= </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">getBoundingClientRect</span><span class="s2">().</span><span class="s1">top </span><span class="s2">+ </span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY</span><span class="s2">;</span>
-            <span class="s0">return </span><span class="s2">{ </span><span class="s1">start</span><span class="s2">, </span><span class="s1">end</span><span class="s2">: </span><span class="s1">start </span><span class="s2">+ </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">offsetHeight </span><span class="s2">- </span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerHeight </span><span class="s2">};</span>
+            <span class="s0">const </span><span class="s1">sticky </span><span class="s2">= </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'.service-section'</span><span class="s2">);</span>
+            <span class="s0">const </span><span class="s1">stickyTop </span><span class="s2">= </span><span class="s1">parseFloat</span><span class="s2">(</span><span class="s1">getComputedStyle</span><span class="s2">(</span><span class="s1">sticky</span><span class="s2">).</span><span class="s1">top</span><span class="s2">) || </span><span class="s4">0</span><span class="s2">;</span>
+
+            <span class="s5">// 카드 전환은 sticky가 실제로 고정되는 시점부터 시작</span>
+            <span class="s0">const </span><span class="s1">start </span><span class="s2">= </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">getBoundingClientRect</span><span class="s2">().</span><span class="s1">top </span><span class="s2">+ </span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY </span><span class="s2">- </span><span class="s1">stickyTop</span><span class="s2">;</span>
+            <span class="s0">const </span><span class="s1">end </span><span class="s2">= </span><span class="s1">start </span><span class="s2">+ </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">offsetHeight </span><span class="s2">- </span><span class="s1">sticky</span><span class="s2">.</span><span class="s1">offsetHeight</span><span class="s2">;</span>
+
+            <span class="s0">return </span><span class="s2">{ </span><span class="s1">start</span><span class="s2">, </span><span class="s1">end</span><span class="s2">: </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s1">start</span><span class="s2">, </span><span class="s1">end</span><span class="s2">) };</span>
         <span class="s2">};</span>
 
-        <span class="s0">const </span><span class="s1">block </span><span class="s2">= (</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
-            <span class="s1">e</span><span class="s2">.</span><span class="s1">preventDefault</span><span class="s2">();</span>
-            <span class="s1">e</span><span class="s2">.</span><span class="s1">stopPropagation</span><span class="s2">();   </span><span class="s5">// Lenis가 이 휠을 못 받게 막음</span>
-        <span class="s2">};</span>
-
-        <span class="s0">const </span><span class="s1">goTo </span><span class="s2">= (</span><span class="s1">next</span><span class="s2">) =&gt; {</span>
-            <span class="s0">const </span><span class="s2">{ </span><span class="s1">start</span><span class="s2">, </span><span class="s1">end </span><span class="s2">} = </span><span class="s1">metrics</span><span class="s2">();</span>
-            <span class="s1">animating </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
-            <span class="s1">blockedStream </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
-            <span class="s1">edgeDir </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;</span>
-            <span class="s1">clearTimeout</span><span class="s2">(</span><span class="s1">snapTimer</span><span class="s2">);</span>
-            <span class="s1">setActiveIndex</span><span class="s2">(</span><span class="s1">next</span><span class="s2">);</span>
-            <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">scrollTo</span><span class="s2">(</span><span class="s1">start </span><span class="s2">+ (</span><span class="s1">next </span><span class="s2">/ (</span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">)) * (</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s2">), { </span><span class="s1">duration</span><span class="s2">: </span><span class="s4">1.0 </span><span class="s2">});</span>
-            <span class="s1">clearTimeout</span><span class="s2">(</span><span class="s1">unlockTimer</span><span class="s2">);</span>
-            <span class="s1">unlockTimer </span><span class="s2">= </span><span class="s1">setTimeout</span><span class="s2">(() =&gt; { </span><span class="s1">animating </span><span class="s2">= </span><span class="s0">false</span><span class="s2">; }, </span><span class="s4">900</span><span class="s2">);</span>
-        <span class="s2">};</span>
-
-        <span class="s0">const </span><span class="s1">onWheel </span><span class="s2">= (</span><span class="s1">e</span><span class="s2">) =&gt; {</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerWidth </span><span class="s2">&lt;= </span><span class="s4">960 </span><span class="s2">|| !</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis </span><span class="s2">|| </span><span class="s1">e</span><span class="s2">.</span><span class="s1">ctrlKey</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">dir </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">sign</span><span class="s2">(</span><span class="s1">e</span><span class="s2">.</span><span class="s1">deltaY</span><span class="s2">);</span>
-            <span class="s0">if </span><span class="s2">(!</span><span class="s1">dir</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-
-            <span class="s0">const </span><span class="s1">now </span><span class="s2">= </span><span class="s1">performance</span><span class="s2">.</span><span class="s1">now</span><span class="s2">();</span>
-            <span class="s0">const </span><span class="s1">gap </span><span class="s2">= </span><span class="s1">now </span><span class="s2">- </span><span class="s1">lastWheel</span><span class="s2">;</span>
-            <span class="s1">lastWheel </span><span class="s2">= </span><span class="s1">now</span><span class="s2">;</span>
-
-            <span class="s0">const </span><span class="s1">absDelta </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">e</span><span class="s2">.</span><span class="s1">deltaY</span><span class="s2">);</span>
-            <span class="s0">const </span><span class="s1">isNewGesture </span><span class="s2">= </span><span class="s1">gap </span><span class="s2">&gt; </span><span class="s4">80 </span><span class="s2">|| </span><span class="s1">absDelta </span><span class="s2">&gt; </span><span class="s1">lastDelta </span><span class="s2">+ </span><span class="s4">6</span><span class="s2">;</span>
-            <span class="s1">lastDelta </span><span class="s2">= </span><span class="s1">absDelta</span><span class="s2">;</span>
+        <span class="s0">const </span><span class="s1">updateActiveIndex </span><span class="s2">= () =&gt; {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerWidth </span><span class="s2">&lt;= </span><span class="s4">960</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
 
             <span class="s0">const </span><span class="s2">{ </span><span class="s1">start</span><span class="s2">, </span><span class="s1">end </span><span class="s2">} = </span><span class="s1">metrics</span><span class="s2">();</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">end </span><span class="s2">&lt;= </span><span class="s1">start</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
+
             <span class="s0">const </span><span class="s1">y </span><span class="s2">= </span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">TOL </span><span class="s2">= </span><span class="s4">6</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">zone </span><span class="s2">= </span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerHeight </span><span class="s2">* </span><span class="s4">0.6</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">inRange    </span><span class="s2">= </span><span class="s1">y </span><span class="s2">&gt;= </span><span class="s1">start </span><span class="s2">- </span><span class="s1">TOL </span><span class="s2">&amp;&amp; </span><span class="s1">y </span><span class="s2">&lt;= </span><span class="s1">end </span><span class="s2">+ </span><span class="s1">TOL</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">nearTop    </span><span class="s2">= </span><span class="s1">y </span><span class="s2">&lt; </span><span class="s1">start </span><span class="s2">- </span><span class="s1">TOL </span><span class="s2">&amp;&amp; </span><span class="s1">y </span><span class="s2">&gt;= </span><span class="s1">start </span><span class="s2">- </span><span class="s1">zone</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">nearBottom </span><span class="s2">= </span><span class="s1">y </span><span class="s2">&gt; </span><span class="s1">end </span><span class="s2">+ </span><span class="s1">TOL </span><span class="s2">&amp;&amp; </span><span class="s1">y </span><span class="s2">&lt;= </span><span class="s1">end </span><span class="s2">+ </span><span class="s1">zone</span><span class="s2">;</span>
 
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">gap </span><span class="s2">&gt; </span><span class="s4">150</span><span class="s2">) </span><span class="s1">passThrough </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">isNewGesture </span><span class="s2">&amp;&amp; !</span><span class="s1">animating</span><span class="s2">) {</span>
-                <span class="s1">blockedStream </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
-                <span class="s1">startedInside </span><span class="s2">= </span><span class="s1">inRange</span><span class="s2">;</span>
-            <span class="s2">}</span>
-
-            <span class="s5">// 탈출이 허용된 제스처는 Lenis에 맡김</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">passThrough</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-
-            <span class="s5">// 이동 중이거나 이미 처리한 제스처의 남은 입력은 무시</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">animating </span><span class="s2">|| (</span><span class="s1">blockedStream </span><span class="s2">&amp;&amp; (</span><span class="s1">inRange </span><span class="s2">|| </span><span class="s1">nearTop </span><span class="s2">|| </span><span class="s1">nearBottom</span><span class="s2">))) {</span>
-                <span class="s1">block</span><span class="s2">(</span><span class="s1">e</span><span class="s2">);</span>
+            <span class="s5">/* 
+             * service-scroll-wrap 영역을 완전히 벗어난 경우 
+             * 내부 카드 제어를 종료한다. 
+             */</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">y </span><span class="s2">&lt; </span><span class="s1">start </span><span class="s2">|| </span><span class="s1">y </span><span class="s2">&gt; </span><span class="s1">end</span><span class="s2">) {</span>
                 <span class="s0">return</span><span class="s2">;</span>
             <span class="s2">}</span>
 
-            <span class="s5">// 섹션에 접근 중이면 끝 카드를 정중앙에 착지</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">nearTop </span><span class="s2">&amp;&amp; </span><span class="s1">dir </span><span class="s2">&gt; </span><span class="s4">0</span><span class="s2">)    { </span><span class="s1">block</span><span class="s2">(</span><span class="s1">e</span><span class="s2">); </span><span class="s1">startedInside </span><span class="s2">= </span><span class="s0">true</span><span class="s2">; </span><span class="s1">goTo</span><span class="s2">(</span><span class="s4">0</span><span class="s2">);         </span><span class="s0">return</span><span class="s2">; }</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">nearBottom </span><span class="s2">&amp;&amp; </span><span class="s1">dir </span><span class="s2">&lt; </span><span class="s4">0</span><span class="s2">) { </span><span class="s1">block</span><span class="s2">(</span><span class="s1">e</span><span class="s2">); </span><span class="s1">startedInside </span><span class="s2">= </span><span class="s0">true</span><span class="s2">; </span><span class="s1">goTo</span><span class="s2">(</span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">); </span><span class="s0">return</span><span class="s2">; }</span>
+            <span class="s0">const </span><span class="s1">progress </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">min</span><span class="s2">(</span>
+                <span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span>
+                    <span class="s2">(</span><span class="s1">y </span><span class="s2">- </span><span class="s1">start</span><span class="s2">) / (</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s2">),</span>
+                    <span class="s4">0</span>
+                <span class="s2">),</span>
+                <span class="s4">1</span>
+            <span class="s2">);</span>
 
-            <span class="s0">if </span><span class="s2">(!</span><span class="s1">inRange</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;   </span><span class="s5">// 그 외 섹션 밖은 Lenis가 평소처럼 처리</span>
+            <span class="s0">const </span><span class="s1">nextIndex </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span>
+                <span class="s4">0</span><span class="s2">,</span>
+                <span class="s1">Math</span><span class="s2">.</span><span class="s1">min</span><span class="s2">(</span>
+                    <span class="s1">lastIndex</span><span class="s2">,</span>
+                    <span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">progress </span><span class="s2">* </span><span class="s1">lastIndex</span><span class="s2">)</span>
+                <span class="s2">)</span>
+            <span class="s2">);</span>
 
-            <span class="s0">const </span><span class="s1">cur </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(((</span><span class="s1">y </span><span class="s2">- </span><span class="s1">start</span><span class="s2">) / (</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s2">)) * (</span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">));</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">nextIndex </span><span class="s2">=== </span><span class="s1">currentIndex</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
 
-            <span class="s0">if </span><span class="s2">(!</span><span class="s1">startedInside</span><span class="s2">) {</span>
-                <span class="s1">block</span><span class="s2">(</span><span class="s1">e</span><span class="s2">);</span>
-                <span class="s1">startedInside </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
-                <span class="s1">goTo</span><span class="s2">(</span><span class="s1">cur</span><span class="s2">);</span>
-                <span class="s0">return</span><span class="s2">;</span>
-            <span class="s2">}</span>
-
-            <span class="s0">const </span><span class="s1">next </span><span class="s2">= </span><span class="s1">cur </span><span class="s2">+ </span><span class="s1">dir</span><span class="s2">;</span>
-
-            <span class="s5">// 끝 카드에서 나가는 방향</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">next </span><span class="s2">&lt; </span><span class="s4">0 </span><span class="s2">|| </span><span class="s1">next </span><span class="s2">&gt; </span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">) {</span>
-                <span class="s0">const </span><span class="s1">armed </span><span class="s2">= </span><span class="s1">edgeDir </span><span class="s2">=== </span><span class="s1">dir </span><span class="s2">&amp;&amp; </span><span class="s1">now </span><span class="s2">- </span><span class="s1">edgeAt </span><span class="s2">&lt; </span><span class="s4">2500</span><span class="s2">;</span>
-                <span class="s0">if </span><span class="s2">(</span><span class="s1">armed </span><span class="s2">&amp;&amp; </span><span class="s1">gap </span><span class="s2">&gt; </span><span class="s4">150</span><span class="s2">) {   </span><span class="s5">// 막은 뒤 완전히 쉬었다가 다시 굴림 → 탈출 허용</span>
-                    <span class="s1">passThrough </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
-                    <span class="s1">edgeDir </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;</span>
-                    <span class="s0">return</span><span class="s2">;</span>
-                <span class="s2">}</span>
-                <span class="s1">block</span><span class="s2">(</span><span class="s1">e</span><span class="s2">);                   </span><span class="s5">// 첫 번째 휠 → 막고 카드는 중앙에 유지</span>
-                <span class="s1">edgeDir </span><span class="s2">= </span><span class="s1">dir</span><span class="s2">;</span>
-                <span class="s1">edgeAt </span><span class="s2">= </span><span class="s1">now</span><span class="s2">;               </span><span class="s5">// 막을 때마다 갱신 (같은 제스처의 연속 입력은 계속 '첫 번째'로 간주)</span>
-                <span class="s0">return</span><span class="s2">;</span>
-            <span class="s2">}</span>
-
-            <span class="s1">block</span><span class="s2">(</span><span class="s1">e</span><span class="s2">);</span>
-            <span class="s1">goTo</span><span class="s2">(</span><span class="s1">next</span><span class="s2">);</span>
+            <span class="s1">currentIndex </span><span class="s2">= </span><span class="s1">nextIndex</span><span class="s2">;</span>
+            <span class="s1">setActiveIndex</span><span class="s2">(</span><span class="s1">nextIndex</span><span class="s2">);</span>
         <span class="s2">};</span>
 
-        <span class="s5">// 스크롤바 드래그/키보드 이동 대응 + 카드 번호 동기화</span>
+        <span class="s5">/* 
+         * 현재 스크롤 위치에서 가장 가까운 카드 위치로 
+         * 짧게 스냅한다. 
+         * 
+         * wheel 이벤트를 막지 않기 때문에 
+         * 터치패드의 연속적인 스크롤도 그대로 Lenis가 처리한다. 
+         */</span>
+        <span class="s0">const </span><span class="s1">snapToNearestCard </span><span class="s2">= () =&gt; {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerWidth </span><span class="s2">&lt;= </span><span class="s4">960</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
+
+            <span class="s0">const </span><span class="s2">{ </span><span class="s1">start</span><span class="s2">, </span><span class="s1">end </span><span class="s2">} = </span><span class="s1">metrics</span><span class="s2">();</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">end </span><span class="s2">&lt;= </span><span class="s1">start</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
+
+            <span class="s0">const </span><span class="s1">y </span><span class="s2">= </span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY</span><span class="s2">;</span>
+
+            <span class="s5">/* 
+             * service 영역 밖에서는 절대 snap하지 않는다. 
+             * → 마지막 카드 이후 아래로 빠져나갈 때 
+             *   페이지 전체 스크롤을 그대로 허용한다. 
+             */</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">y </span><span class="s2">&lt; </span><span class="s1">start </span><span class="s2">|| </span><span class="s1">y </span><span class="s2">&gt; </span><span class="s1">end</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
+
+            <span class="s0">const </span><span class="s1">progress </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">min</span><span class="s2">(</span>
+                <span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span>
+                    <span class="s2">(</span><span class="s1">y </span><span class="s2">- </span><span class="s1">start</span><span class="s2">) / (</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s2">),</span>
+                    <span class="s4">0</span>
+                <span class="s2">),</span>
+                <span class="s4">1</span>
+            <span class="s2">);</span>
+
+            <span class="s0">const </span><span class="s1">nextIndex </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span>
+                <span class="s4">0</span><span class="s2">,</span>
+                <span class="s1">Math</span><span class="s2">.</span><span class="s1">min</span><span class="s2">(</span>
+                    <span class="s1">lastIndex</span><span class="s2">,</span>
+                    <span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">progress </span><span class="s2">* </span><span class="s1">lastIndex</span><span class="s2">)</span>
+                <span class="s2">)</span>
+            <span class="s2">);</span>
+
+            <span class="s0">const </span><span class="s1">target </span><span class="s2">=</span>
+                <span class="s1">start </span><span class="s2">+</span>
+                <span class="s2">(</span><span class="s1">nextIndex </span><span class="s2">/ </span><span class="s1">lastIndex</span><span class="s2">) *</span>
+                <span class="s2">(</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s2">);</span>
+
+            <span class="s5">/* 
+             * 이미 거의 정확한 위치라면 
+             * 불필요한 Lenis 애니메이션을 실행하지 않는다. 
+             */</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">abs</span><span class="s2">(</span><span class="s1">y </span><span class="s2">- </span><span class="s1">target</span><span class="s2">) &lt; </span><span class="s4">10</span><span class="s2">) {</span>
+                <span class="s1">currentIndex </span><span class="s2">= </span><span class="s1">nextIndex</span><span class="s2">;</span>
+                <span class="s1">setActiveIndex</span><span class="s2">(</span><span class="s1">nextIndex</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s1">currentIndex </span><span class="s2">= </span><span class="s1">nextIndex</span><span class="s2">;</span>
+            <span class="s1">setActiveIndex</span><span class="s2">(</span><span class="s1">nextIndex</span><span class="s2">);</span>
+
+            <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">scrollTo</span><span class="s2">(</span><span class="s1">target</span><span class="s2">, {</span>
+                <span class="s1">duration</span><span class="s2">: </span><span class="s4">0.25</span><span class="s2">,</span>
+                <span class="s1">force</span><span class="s2">: </span><span class="s0">false</span><span class="s2">,</span>
+            <span class="s2">});</span>
+        <span class="s2">};</span>
+
+        <span class="s5">/* 
+         * Lenis가 처리한 실제 스크롤 위치를 기준으로 
+         * 현재 카드만 변경한다. 
+         */</span>
         <span class="s0">const </span><span class="s1">onScroll </span><span class="s2">= () =&gt; {</span>
             <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerWidth </span><span class="s2">&lt;= </span><span class="s4">960</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">animating</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s2">{ </span><span class="s1">start</span><span class="s2">, </span><span class="s1">end </span><span class="s2">} = </span><span class="s1">metrics</span><span class="s2">();</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start </span><span class="s2">&lt;= </span><span class="s4">0</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-            <span class="s0">const </span><span class="s1">progress </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">min</span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">((</span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY </span><span class="s2">- </span><span class="s1">start</span><span class="s2">) / (</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s2">), </span><span class="s4">0</span><span class="s2">), </span><span class="s4">1</span><span class="s2">);</span>
-            <span class="s1">setActiveIndex</span><span class="s2">(</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">progress </span><span class="s2">* (</span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">)));</span>
 
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">ticking</span><span class="s2">) {</span>
+                <span class="s1">window</span><span class="s2">.</span><span class="s1">requestAnimationFrame</span><span class="s2">(() =&gt; {</span>
+                    <span class="s1">updateActiveIndex</span><span class="s2">();</span>
+                    <span class="s1">ticking </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+                <span class="s2">});</span>
+
+                <span class="s1">ticking </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s5">/* 
+             * 스크롤 입력이 잠시 멈추면 
+             * 가장 가까운 카드 위치로 가볍게 정렬한다. 
+             * 
+             * debounce 방식이라 터치패드의 연속 입력을 
+             * 중간중간 강제로 끊지 않는다. 
+             */</span>
             <span class="s1">clearTimeout</span><span class="s2">(</span><span class="s1">snapTimer</span><span class="s2">);</span>
+
             <span class="s1">snapTimer </span><span class="s2">= </span><span class="s1">setTimeout</span><span class="s2">(() =&gt; {</span>
-                <span class="s0">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">innerWidth </span><span class="s2">&lt;= </span><span class="s4">960 </span><span class="s2">|| !</span><span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
-                <span class="s0">const </span><span class="s1">m </span><span class="s2">= </span><span class="s1">metrics</span><span class="s2">();</span>
-                <span class="s0">const </span><span class="s1">yy </span><span class="s2">= </span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY</span><span class="s2">;</span>
-                <span class="s0">if </span><span class="s2">(</span><span class="s1">yy </span><span class="s2">&lt;= </span><span class="s1">m</span><span class="s2">.</span><span class="s1">start </span><span class="s2">+ </span><span class="s4">2 </span><span class="s2">|| </span><span class="s1">yy </span><span class="s2">&gt;= </span><span class="s1">m</span><span class="s2">.</span><span class="s1">end </span><span class="s2">- </span><span class="s4">2</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;   </span><span class="s5">// 양 끝이거나 섹션 밖이면 무시</span>
-                <span class="s0">const </span><span class="s1">idx </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(((</span><span class="s1">yy </span><span class="s2">- </span><span class="s1">m</span><span class="s2">.</span><span class="s1">start</span><span class="s2">) / (</span><span class="s1">m</span><span class="s2">.</span><span class="s1">end </span><span class="s2">- </span><span class="s1">m</span><span class="s2">.</span><span class="s1">start</span><span class="s2">)) * (</span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">));</span>
-                <span class="s1">window</span><span class="s2">.</span><span class="s1">lenis</span><span class="s2">.</span><span class="s1">scrollTo</span><span class="s2">(</span><span class="s1">m</span><span class="s2">.</span><span class="s1">start </span><span class="s2">+ (</span><span class="s1">idx </span><span class="s2">/ (</span><span class="s1">total </span><span class="s2">- </span><span class="s4">1</span><span class="s2">)) * (</span><span class="s1">m</span><span class="s2">.</span><span class="s1">end </span><span class="s2">- </span><span class="s1">m</span><span class="s2">.</span><span class="s1">start</span><span class="s2">), { </span><span class="s1">duration</span><span class="s2">: </span><span class="s4">1.0 </span><span class="s2">});</span>
-            <span class="s2">}, </span><span class="s4">200</span><span class="s2">);</span>
+                <span class="s1">snapToNearestCard</span><span class="s2">();</span>
+            <span class="s2">}, </span><span class="s4">100</span><span class="s2">);</span>
         <span class="s2">};</span>
 
-        <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'wheel'</span><span class="s2">, </span><span class="s1">onWheel</span><span class="s2">, { </span><span class="s1">passive</span><span class="s2">: </span><span class="s0">false</span><span class="s2">, </span><span class="s1">capture</span><span class="s2">: </span><span class="s0">true </span><span class="s2">});</span>
-        <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">onScroll</span><span class="s2">, { </span><span class="s1">passive</span><span class="s2">: </span><span class="s0">true </span><span class="s2">});</span>
+        <span class="s5">/* 
+         * 초기 진입 시 현재 위치에 맞는 카드 계산 
+         */</span>
+        <span class="s1">updateActiveIndex</span><span class="s2">();</span>
+
+        <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span>
+            <span class="s3">'scroll'</span><span class="s2">,</span>
+            <span class="s1">onScroll</span><span class="s2">,</span>
+            <span class="s2">{</span>
+                <span class="s1">passive</span><span class="s2">: </span><span class="s0">true</span><span class="s2">,</span>
+            <span class="s2">}</span>
+        <span class="s2">);</span>
+
+        <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span>
+            <span class="s3">'resize'</span><span class="s2">,</span>
+            <span class="s1">updateActiveIndex</span>
+        <span class="s2">);</span>
 
         <span class="s0">return </span><span class="s2">() =&gt; {</span>
-            <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span><span class="s3">'wheel'</span><span class="s2">, </span><span class="s1">onWheel</span><span class="s2">, { </span><span class="s1">capture</span><span class="s2">: </span><span class="s0">true </span><span class="s2">});</span>
-            <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">onScroll</span><span class="s2">);</span>
-            <span class="s1">clearTimeout</span><span class="s2">(</span><span class="s1">unlockTimer</span><span class="s2">);</span>
+            <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span>
+                <span class="s3">'scroll'</span><span class="s2">,</span>
+                <span class="s1">onScroll</span>
+            <span class="s2">);</span>
+
+            <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span>
+                <span class="s3">'resize'</span><span class="s2">,</span>
+                <span class="s1">updateActiveIndex</span>
+            <span class="s2">);</span>
+
             <span class="s1">clearTimeout</span><span class="s2">(</span><span class="s1">snapTimer</span><span class="s2">);</span>
         <span class="s2">};</span>
     <span class="s2">}, []);</span>
@@ -236,23 +603,25 @@ ServiceView.jsx</font>
         <span class="s0">const </span><span class="s1">wrap </span><span class="s2">= </span><span class="s1">wrapRef</span><span class="s2">.</span><span class="s1">current</span><span class="s2">;</span>
         <span class="s0">if </span><span class="s2">(!</span><span class="s1">wrap</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
         <span class="s0">const </span><span class="s1">cards </span><span class="s2">= </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">querySelectorAll</span><span class="s2">(</span><span class="s3">'.service-card'</span><span class="s2">);</span>
-        <span class="s0">const </span><span class="s1">img </span><span class="s2">= </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'.service-img-wrap'</span><span class="s2">);   </span><span class="s5">// ← .service-img-section 에서 변경</span>
+        <span class="s0">const </span><span class="s1">img </span><span class="s2">= </span><span class="s1">wrap</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'.service-img-wrap'</span><span class="s2">);</span>
+        <span class="s0">const </span><span class="s1">nav </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'.service-subnav-fixed'</span><span class="s2">);</span>
         <span class="s0">if </span><span class="s2">(!</span><span class="s1">cards</span><span class="s2">.</span><span class="s1">length </span><span class="s2">|| !</span><span class="s1">img</span><span class="s2">) </span><span class="s0">return</span><span class="s2">;</span>
 
-        <span class="s5">// 헤더 + subnav가 실제로 차지하는 높이를 측정해서 CSS 변수로 전달</span>
+        <span class="s5">// nav의 실제 하단 위치를 그대로 사용 (전환 중에도 현재 값 반영)</span>
         <span class="s0">const </span><span class="s1">measure </span><span class="s2">= () =&gt; {</span>
-            <span class="s0">const </span><span class="s1">nav </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'.service-subnav-sticky'</span><span class="s2">);</span>
-            <span class="s0">let </span><span class="s1">top </span><span class="s2">= </span><span class="s4">0</span><span class="s2">;</span>
-            <span class="s0">if </span><span class="s2">(</span><span class="s1">nav</span><span class="s2">) {</span>
-                <span class="s1">top </span><span class="s2">= (</span><span class="s1">parseFloat</span><span class="s2">(</span><span class="s1">getComputedStyle</span><span class="s2">(</span><span class="s1">nav</span><span class="s2">).</span><span class="s1">top</span><span class="s2">) || </span><span class="s4">0</span><span class="s2">) + </span><span class="s1">nav</span><span class="s2">.</span><span class="s1">offsetHeight</span><span class="s2">;</span>
-            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
-                <span class="s0">const </span><span class="s1">header </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'header'</span><span class="s2">);</span>
-                <span class="s1">top </span><span class="s2">= </span><span class="s1">header </span><span class="s2">? </span><span class="s1">header</span><span class="s2">.</span><span class="s1">getBoundingClientRect</span><span class="s2">().</span><span class="s1">height </span><span class="s2">: </span><span class="s4">0</span><span class="s2">;</span>
-            <span class="s2">}</span>
-            <span class="s0">const </span><span class="s1">stick </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">top</span><span class="s2">) - </span><span class="s4">1</span><span class="s2">;</span>
-            <span class="s1">wrap</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">setProperty</span><span class="s2">(</span><span class="s3">'--stick-top'</span><span class="s2">, </span><span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">stick</span><span class="s2">}</span><span class="s3">px`</span><span class="s2">);</span>
-            <span class="s5">// 이미지의 &quot;실제&quot; 높이를 재서 카드가 멈출 위치를 결정</span>
-            <span class="s1">wrap</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">setProperty</span><span class="s2">(</span><span class="s3">'--cards-top'</span><span class="s2">, </span><span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">stick </span><span class="s2">+ </span><span class="s1">img</span><span class="s2">.</span><span class="s1">offsetHeight</span><span class="s2">}</span><span class="s3">px`</span><span class="s2">);</span>
+            <span class="s0">const </span><span class="s1">stick </span><span class="s2">= </span><span class="s1">nav</span>
+                <span class="s2">? </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">round</span><span class="s2">(</span><span class="s1">nav</span><span class="s2">.</span><span class="s1">getBoundingClientRect</span><span class="s2">().</span><span class="s1">bottom</span><span class="s2">) - </span><span class="s4">1</span>
+                <span class="s2">: </span><span class="s4">0</span><span class="s2">;</span>
+
+            <span class="s1">wrap</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">setProperty</span><span class="s2">(</span>
+                <span class="s3">'--stick-top'</span><span class="s2">,</span>
+                <span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">stick</span><span class="s2">}</span><span class="s3">px`</span>
+            <span class="s2">);</span>
+
+            <span class="s1">wrap</span><span class="s2">.</span><span class="s1">style</span><span class="s2">.</span><span class="s1">setProperty</span><span class="s2">(</span>
+                <span class="s3">'--cards-top'</span><span class="s2">,</span>
+                <span class="s3">`</span><span class="s1">$</span><span class="s2">{</span><span class="s1">stick </span><span class="s2">+ </span><span class="s1">img</span><span class="s2">.</span><span class="s1">offsetHeight</span><span class="s2">}</span><span class="s3">px`</span>
+            <span class="s2">);</span>
         <span class="s2">};</span>
 
         <span class="s0">let </span><span class="s1">ticking </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
@@ -273,10 +642,12 @@ ServiceView.jsx</font>
 
         <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">onScroll</span><span class="s2">, { </span><span class="s1">passive</span><span class="s2">: </span><span class="s0">true </span><span class="s2">});</span>
         <span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'resize'</span><span class="s2">, </span><span class="s1">onScroll</span><span class="s2">);</span>
+        <span class="s1">nav</span><span class="s2">?.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'transitionend'</span><span class="s2">, </span><span class="s1">measure</span><span class="s2">);   </span><span class="s5">// nav 전환이 끝난 뒤 한 번 더 보정</span>
         <span class="s1">update</span><span class="s2">();</span>
         <span class="s0">return </span><span class="s2">() =&gt; {</span>
             <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">onScroll</span><span class="s2">);</span>
             <span class="s1">window</span><span class="s2">.</span><span class="s1">removeEventListener</span><span class="s2">(</span><span class="s3">'resize'</span><span class="s2">, </span><span class="s1">onScroll</span><span class="s2">);</span>
+            <span class="s1">nav</span><span class="s2">?.</span><span class="s1">removeEventListener</span><span class="s2">(</span><span class="s3">'transitionend'</span><span class="s2">, </span><span class="s1">measure</span><span class="s2">);</span>
         <span class="s2">};</span>
     <span class="s2">}, []);</span>
 
@@ -289,8 +660,6 @@ ServiceView.jsx</font>
 
                 <span class="s2">{</span><span class="s5">/* ─── Hero Section with Motion Canvas ─── */</span><span class="s2">}</span>
                 <span class="s6">&lt;section </span><span class="s2">className</span><span class="s3">=&quot;service-hero-detail fade-up&quot;</span><span class="s6">&gt;</span>
-                    <span class="s6">&lt;HeroMotionCanvas /&gt;</span>
-
                     <span class="s6">&lt;div </span><span class="s2">className</span><span class="s3">=&quot;hero-badge-row&quot;</span><span class="s6">&gt;</span>
                         <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=&quot;hero-service-tag&quot;</span><span class="s6">&gt;</span><span class="s1">MARKETWITH INTEGRATED SOLUTIONS</span><span class="s6">&lt;/span&gt;</span>
                         <span class="s6">&lt;span </span><span class="s2">className</span><span class="s3">=&quot;hero-status-pill&quot;</span><span class="s6">&gt;</span><span class="s1">ALL-IN-ONE GROWTH ARCHITECTURE</span><span class="s6">&lt;/span&gt;</span>

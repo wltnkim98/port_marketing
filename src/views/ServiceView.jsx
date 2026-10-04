@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ServiceNav from '../components/ServiceNav';
@@ -71,158 +70,83 @@ const ServiceView = () => {
     useEffect(() => {
         const wrap = wrapRef.current;
         if (!wrap) return;
-        const total = serviceList.length;
 
-        let animating = false;      // 카드 이동 중인지
-        let blockedStream = false;  // 이미 처리한 제스처의 남은 입력(관성) 차단용
-        let startedInside = false;  // 이번 제스처가 섹션 안에서 시작됐는지
-        let lastWheel = 0;
-        let lastDelta = 0;
-        let edgeDir = 0;            // 끝 카드에서 첫 휠을 막은 방향 (-1 위 / 1 아래)
-        let edgeAt = 0;             // 마지막으로 막은 시각
-        let passThrough = false;    // 이번 제스처는 전체 스크롤로 넘겨도 되는지
-        let unlockTimer;
-        let snapTimer;
+        const lastIndex = serviceList.length - 1;
+        let currentIndex = 0;
+        let ticking = false;
 
-        // 항상 "지금" 레이아웃 기준으로 계산 (낡은 값에 의존하지 않음)
         const metrics = () => {
-            const start = wrap.getBoundingClientRect().top + window.scrollY;
-            return { start, end: start + wrap.offsetHeight - window.innerHeight };
+            const sticky = wrap.querySelector('.service-section');
+            const stickyTop = parseFloat(getComputedStyle(sticky).top) || 0;
+
+            const start = wrap.getBoundingClientRect().top + window.scrollY - stickyTop;
+            const end = start + wrap.offsetHeight - sticky.offsetHeight;
+
+            return { start, end: Math.max(start, end) };
         };
 
-        const block = (e) => {
-            e.preventDefault();
-            e.stopPropagation();   // Lenis가 이 휠을 못 받게 막음
-        };
-
-        const goTo = (next) => {
-            const { start, end } = metrics();
-            animating = true;
-            blockedStream = true;
-            edgeDir = 0;
-            clearTimeout(snapTimer);
-            setActiveIndex(next);
-            window.lenis.scrollTo(start + (next / (total - 1)) * (end - start), { duration: 1.0 });
-            clearTimeout(unlockTimer);
-            unlockTimer = setTimeout(() => { animating = false; }, 900);
-        };
-
-        const onWheel = (e) => {
-            if (window.innerWidth <= 960 || !window.lenis || e.ctrlKey) return;
-            const dir = Math.sign(e.deltaY);
-            if (!dir) return;
-
-            const now = performance.now();
-            const gap = now - lastWheel;
-            lastWheel = now;
-
-            const absDelta = Math.abs(e.deltaY);
-            const isNewGesture = gap > 80 || absDelta > lastDelta + 6;
-            lastDelta = absDelta;
-
-            const { start, end } = metrics();
-            const y = window.scrollY;
-            const TOL = 6;
-            const zone = window.innerHeight * 0.6;
-            const inRange    = y >= start - TOL && y <= end + TOL;
-            const nearTop    = y < start - TOL && y >= start - zone;
-            const nearBottom = y > end + TOL && y <= end + zone;
-
-            if (gap > 150) passThrough = false;
-            if (isNewGesture && !animating) {
-                blockedStream = false;
-                startedInside = inRange;
-            }
-
-            // 탈출이 허용된 제스처는 Lenis에 맡김
-            if (passThrough) return;
-
-            // 이동 중이거나 이미 처리한 제스처의 남은 입력은 무시
-            if (animating || (blockedStream && (inRange || nearTop || nearBottom))) {
-                block(e);
-                return;
-            }
-
-            // 섹션에 접근 중이면 끝 카드를 정중앙에 착지
-            if (nearTop && dir > 0)    { block(e); startedInside = true; goTo(0);         return; }
-            if (nearBottom && dir < 0) { block(e); startedInside = true; goTo(total - 1); return; }
-
-            if (!inRange) return;   // 그 외 섹션 밖은 Lenis가 평소처럼 처리
-
-            const cur = Math.round(((y - start) / (end - start)) * (total - 1));
-
-            if (!startedInside) {
-                block(e);
-                startedInside = true;
-                goTo(cur);
-                return;
-            }
-
-            const next = cur + dir;
-
-            // 끝 카드에서 나가는 방향
-            if (next < 0 || next > total - 1) {
-                const armed = edgeDir === dir && now - edgeAt < 2500;
-                if (armed && gap > 150) {   // 막은 뒤 완전히 쉬었다가 다시 굴림 → 탈출 허용
-                    passThrough = true;
-                    edgeDir = 0;
-                    return;
-                }
-                block(e);                   // 첫 번째 휠 → 막고 카드는 중앙에 유지
-                edgeDir = dir;
-                edgeAt = now;               // 막을 때마다 갱신 (같은 제스처의 연속 입력은 계속 '첫 번째'로 간주)
-                return;
-            }
-
-            block(e);
-            goTo(next);
-        };
-
-        // 스크롤바 드래그/키보드 이동 대응 + 카드 번호 동기화
-        const onScroll = () => {
+        const updateActiveIndex = () => {
             if (window.innerWidth <= 960) return;
-            if (animating) return;
-            const { start, end } = metrics();
-            if (end - start <= 0) return;
-            const progress = Math.min(Math.max((window.scrollY - start) / (end - start), 0), 1);
-            setActiveIndex(Math.round(progress * (total - 1)));
 
-            clearTimeout(snapTimer);
-            snapTimer = setTimeout(() => {
-                if (window.innerWidth <= 960 || !window.lenis) return;
-                const m = metrics();
-                const yy = window.scrollY;
-                if (yy <= m.start + 2 || yy >= m.end - 2) return;   // 양 끝이거나 섹션 밖이면 무시
-                const idx = Math.round(((yy - m.start) / (m.end - m.start)) * (total - 1));
-                window.lenis.scrollTo(m.start + (idx / (total - 1)) * (m.end - m.start), { duration: 1.0 });
-            }, 200);
+            const { start, end } = metrics();
+            if (end <= start) return;
+
+            // 영역 밖이면 0 또는 1로 고정되어 첫/마지막 카드가 유지됨
+            const progress = Math.min(
+                Math.max((window.scrollY - start) / (end - start), 0),
+                1
+            );
+            const count = lastIndex + 1;
+            const nextIndex = Math.min(lastIndex, Math.floor(progress * count));
+
+            if (nextIndex === currentIndex) return;
+            currentIndex = nextIndex;
+            setActiveIndex(nextIndex);
         };
 
-        window.addEventListener('wheel', onWheel, { passive: false, capture: true });
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                updateActiveIndex();
+                ticking = false;
+            });
+        };
+
+        updateActiveIndex();
         window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', updateActiveIndex);
 
         return () => {
-            window.removeEventListener('wheel', onWheel, { capture: true });
             window.removeEventListener('scroll', onScroll);
-            clearTimeout(unlockTimer);
-            clearTimeout(snapTimer);
+            window.removeEventListener('resize', updateActiveIndex);
         };
     }, []);
 
-    // 모바일 전용 Sticky 처리
+    // mobile sticky
     useEffect(() => {
         const wrap = wrapRef.current;
         if (!wrap) return;
         const cards = wrap.querySelectorAll('.service-card');
         const img = wrap.querySelector('.service-img-wrap');
-        const nav = document.querySelector('.service-subnav-sticky');
+        const nav = document.querySelector('.service-subnav-fixed');
         if (!cards.length || !img) return;
 
         // nav의 실제 하단 위치를 그대로 사용 (전환 중에도 현재 값 반영)
         const measure = () => {
-            const stick = nav ? Math.round(nav.getBoundingClientRect().bottom) - 1 : 0;
-            wrap.style.setProperty('--stick-top', `${stick}px`);
-            wrap.style.setProperty('--cards-top', `${stick + img.offsetHeight}px`);
+            const stick = nav
+                ? Math.round(nav.getBoundingClientRect().bottom) - 1
+                : 0;
+
+            wrap.style.setProperty(
+                '--stick-top',
+                `${stick}px`
+            );
+
+            wrap.style.setProperty(
+                '--cards-top',
+                `${stick + img.offsetHeight}px`
+            );
         };
 
         let ticking = false;
@@ -350,7 +274,6 @@ const ServiceView = () => {
                                     key={idx}
                                     className={`service-card ${activeIndex === idx ? 'active' : idx < activeIndex ? 'past' : ''}`}
                                     style={{ '--i': idx }}
-                                    data-lenis-prevent
                                 >
                                     {/* ↓ 기존 카드 안쪽 내용 그대로 (span, h2, p, dl, Link) */}
                                     <span className="service-card-index">Service 0{idx + 1}</span>

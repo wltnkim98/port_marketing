@@ -40,8 +40,8 @@ _service.scss</font>
 <span class="s2">}</span>
 
 <span class="s0">// ─── STICKY SUB-NAVIGATION BAR ───</span>
-<span class="s2">.</span><span class="s3">service-subnav-sticky </span><span class="s2">{</span>
-    <span class="s4">position</span><span class="s5">: </span><span class="s8">sticky</span><span class="s2">;</span>
+<span class="s2">.</span><span class="s3">service-subnav-fixed </span><span class="s2">{</span>
+    <span class="s4">position</span><span class="s5">: </span><span class="s8">fixed</span><span class="s2">;</span>
     <span class="s4">top</span><span class="s5">: </span><span class="s7">74</span><span class="s8">px</span><span class="s2">;</span>
     <span class="s4">z-index</span><span class="s5">: </span><span class="s7">95</span><span class="s2">;</span>
     <span class="s4">background</span><span class="s5">: </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">245</span><span class="s2">, </span><span class="s7">240</span><span class="s2">, </span><span class="s7">232</span><span class="s2">, </span><span class="s7">0.88</span><span class="s2">);</span>
@@ -132,7 +132,7 @@ _service.scss</font>
 <span class="s2">.</span><span class="s3">service-hero-detail </span><span class="s2">{</span>
     <span class="s4">max-width</span><span class="s5">: </span><span class="s7">1300</span><span class="s8">px</span><span class="s2">;</span>
     <span class="s4">margin</span><span class="s5">: </span><span class="s7">0 </span><span class="s8">auto</span><span class="s2">;</span>
-    <span class="s4">padding</span><span class="s5">: </span><span class="s7">110</span><span class="s8">px </span><span class="s7">24</span><span class="s8">px </span><span class="s7">50</span><span class="s8">px</span><span class="s2">;</span>
+    <span class="s4">padding</span><span class="s5">: </span><span class="s7">180</span><span class="s8">px </span><span class="s7">24</span><span class="s8">px </span><span class="s7">50</span><span class="s8">px</span><span class="s2">;</span>
     <span class="s4">text-align</span><span class="s5">: </span><span class="s8">center</span><span class="s2">;</span>
     <span class="s4">position</span><span class="s5">: </span><span class="s8">relative</span><span class="s2">;</span>
     <span class="s4">z-index</span><span class="s5">: </span><span class="s7">1</span><span class="s2">;</span>
@@ -631,6 +631,8 @@ _service.scss</font>
     <span class="s2">}</span>
 <span class="s2">}</span>
 
+
+
 <span class="s0">// ─── INTERACTIVE PROCESS TIMELINE (MOTION) ───</span>
 <span class="s2">.</span><span class="s3">interactive-process-container </span><span class="s2">{</span>
     <span class="s4">background</span><span class="s5">: </span><span class="s6">#ffffff</span><span class="s2">;</span>
@@ -642,6 +644,13 @@ _service.scss</font>
 
     <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">768</span><span class="s8">px</span><span class="s2">) {</span>
         <span class="s4">padding</span><span class="s5">: </span><span class="s7">24</span><span class="s8">px </span><span class="s7">16</span><span class="s8">px</span><span class="s2">;</span>
+
+        <span class="s2">.</span><span class="s3">timeline-nav-bar </span><span class="s2">{</span>
+            <span class="s4">display</span><span class="s5">: </span><span class="s8">none</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s2">.</span><span class="s3">timeline-active-stage </span><span class="s2">{</span>
+            <span class="s4">min-height</span><span class="s5">: </span><span class="s7">420</span><span class="s8">px</span><span class="s2">;                </span><span class="s0">// 스텝마다 글 길이가 달라도 높이가 덜 출렁이게</span>
+        <span class="s2">}</span>
     <span class="s2">}</span>
 
     <span class="s2">.</span><span class="s3">timeline-nav-bar </span><span class="s2">{</span>
@@ -669,6 +678,7 @@ _service.scss</font>
     <span class="s2">}</span>
 
     <span class="s2">.</span><span class="s3">timeline-nodes-row </span><span class="s2">{</span>
+        <span class="s4">cursor</span><span class="s5">: </span><span class="s8">pointer</span><span class="s2">;</span>
         <span class="s4">position</span><span class="s5">: </span><span class="s8">relative</span><span class="s2">;</span>
         <span class="s4">z-index</span><span class="s5">: </span><span class="s7">2</span><span class="s2">;</span>
         <span class="s4">display</span><span class="s5">: </span><span class="s8">flex</span><span class="s2">;</span>
@@ -843,6 +853,16 @@ _service.scss</font>
             <span class="s4">border</span><span class="s5">: </span><span class="s7">1</span><span class="s8">px solid </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">13</span><span class="s2">, </span><span class="s7">13</span><span class="s2">, </span><span class="s7">13</span><span class="s2">, </span><span class="s7">0.06</span><span class="s2">);</span>
             <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">10</span><span class="s8">px</span><span class="s2">;</span>
             <span class="s4">transition</span><span class="s5">: </span><span class="s8">all </span><span class="s7">0.25</span><span class="s8">s ease</span><span class="s2">;</span>
+
+            <span class="s4">width</span><span class="s5">: </span><span class="s7">100</span><span class="s2">%;</span>
+            <span class="s4">text-align</span><span class="s5">: </span><span class="s8">left</span><span class="s2">;</span>
+            <span class="s4">cursor</span><span class="s5">: </span><span class="s8">pointer</span><span class="s2">;</span>
+            <span class="s4">font</span><span class="s5">: </span><span class="s8">inherit</span><span class="s2">;</span>
+            <span class="s4">appearance</span><span class="s5">: </span><span class="s8">none</span><span class="s2">;</span>
+
+            <span class="s3">&amp;</span><span class="s5">:</span><span class="s3">not</span><span class="s2">(.</span><span class="s3">current</span><span class="s2">)</span><span class="s5">:</span><span class="s3">hover </span><span class="s2">{</span>
+                <span class="s4">border-color</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--accent</span><span class="s2">, </span><span class="s6">#f64f1e</span><span class="s2">);</span>
+            <span class="s2">}</span>
 
             <span class="s3">&amp;</span><span class="s2">.</span><span class="s3">current </span><span class="s2">{</span>
                 <span class="s4">background</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--ink</span><span class="s2">, </span><span class="s6">#0d0d0d</span><span class="s2">);</span>
@@ -1488,7 +1508,6 @@ _service.scss</font>
     <span class="s4">height</span><span class="s5">: </span><span class="s7">500</span><span class="s8">px</span><span class="s2">;</span>
     <span class="s4">background</span><span class="s5">: </span><span class="s6">#0a0e17</span><span class="s2">;</span>
     <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">20</span><span class="s8">px</span><span class="s2">;</span>
-    <span class="s4">border</span><span class="s5">: </span><span class="s7">1</span><span class="s8">px solid </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">255</span><span class="s2">, </span><span class="s7">255</span><span class="s2">, </span><span class="s7">255</span><span class="s2">, </span><span class="s7">0.15</span><span class="s2">);</span>
     <span class="s4">padding</span><span class="s5">: </span><span class="s7">24</span><span class="s8">px</span><span class="s2">;</span>
     <span class="s4">box-shadow</span><span class="s5">: </span><span class="s7">0 16</span><span class="s8">px </span><span class="s7">40</span><span class="s8">px </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0.2</span><span class="s2">);</span>
     <span class="s4">color</span><span class="s5">: </span><span class="s6">#ffffff</span><span class="s2">;</span>
@@ -1936,61 +1955,61 @@ _service.scss</font>
     <span class="s2">}</span>
 <span class="s2">}</span>
 
-<span class="s0">//여기부터 스티키 작업</span>
-<span class="s2">.</span><span class="s3">service-scroll-wrap </span><span class="s2">{                       </span><span class="s0">// ← 새로 추가</span>
-    <span class="s4">height</span><span class="s5">: </span><span class="s3">calc</span><span class="s2">(</span><span class="s7">100</span><span class="s8">vh </span><span class="s2">+ (</span><span class="s3">var</span><span class="s2">(</span><span class="s3">--count</span><span class="s2">, </span><span class="s7">6</span><span class="s2">) - </span><span class="s7">1</span><span class="s2">) * </span><span class="s7">90</span><span class="s8">vh</span><span class="s2">);</span>
+<span class="s0">// Sticky Scroll</span>
+<span class="s2">.</span><span class="s3">service-scroll-wrap </span><span class="s2">{</span>
+    <span class="s4">--service-top</span><span class="s5">: </span><span class="s7">130</span><span class="s8">px</span><span class="s2">;</span>
+    <span class="s4">--service-bottom</span><span class="s5">: </span><span class="s7">40</span><span class="s8">px</span><span class="s2">;</span>
+    <span class="s4">--service-media-height</span><span class="s5">: </span><span class="s3">clamp</span><span class="s2">(</span><span class="s7">460</span><span class="s8">px</span><span class="s2">, </span><span class="s3">calc</span><span class="s2">(</span><span class="s7">100</span><span class="s8">vh </span><span class="s2">- </span><span class="s7">170</span><span class="s8">px</span><span class="s2">), </span><span class="s7">720</span><span class="s8">px</span><span class="s2">);</span>
+    <span class="s0">// sticky 박스의 실제 높이 = 내용 높이</span>
+    <span class="s4">--service-sticky-h</span><span class="s5">: </span><span class="s3">calc</span><span class="s2">(</span>
+            <span class="s3">var</span><span class="s2">(</span><span class="s3">--service-top</span><span class="s2">) + </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-media-height</span><span class="s2">) + </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-bottom</span><span class="s2">)</span>
+    <span class="s2">);</span>
+    <span class="s4">--service-step</span><span class="s5">: </span><span class="s3">clamp</span><span class="s2">(</span><span class="s7">480</span><span class="s8">px</span><span class="s2">, </span><span class="s7">80</span><span class="s8">vh</span><span class="s2">, </span><span class="s7">820</span><span class="s8">px</span><span class="s2">);</span>
+
+    <span class="s4">height</span><span class="s5">: </span><span class="s3">calc</span><span class="s2">(</span>
+            <span class="s3">var</span><span class="s2">(</span><span class="s3">--service-sticky-h</span><span class="s2">) + (</span><span class="s3">var</span><span class="s2">(</span><span class="s3">--count</span><span class="s2">, </span><span class="s7">6</span><span class="s2">) - </span><span class="s7">1</span><span class="s2">) * </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-step</span><span class="s2">)</span>
+    <span class="s2">);</span>
+
     <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {</span>
         <span class="s4">height</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
-        <span class="s4">padding</span><span class="s5">: </span><span class="s7">0 24</span><span class="s8">px</span><span class="s2">;</span>
+        <span class="s4">padding-bottom</span><span class="s5">: </span><span class="s8">unset</span><span class="s2">;</span>
     <span class="s2">}</span>
 <span class="s2">}</span>
 
 <span class="s2">.</span><span class="s3">service-section </span><span class="s2">{</span>
-    <span class="s4">position</span><span class="s5">: </span><span class="s8">sticky</span><span class="s2">;                        </span><span class="s0">// ← 추가</span>
-    <span class="s4">top</span><span class="s5">: </span><span class="s7">0</span><span class="s2">;                                  </span><span class="s0">// ← 추가</span>
-    <span class="s4">height</span><span class="s5">: </span><span class="s7">100</span><span class="s8">vh</span><span class="s2">;                           </span><span class="s0">// ← 추가</span>
+    <span class="s0">// --service-top, --service-media-height 정의는 삭제 (위로 이동)</span>
+    <span class="s4">position</span><span class="s5">: </span><span class="s8">sticky</span><span class="s2">;</span>
+    <span class="s4">top</span><span class="s5">: </span><span class="s3">max</span><span class="s2">(</span><span class="s7">0</span><span class="s8">px</span><span class="s2">, </span><span class="s3">calc</span><span class="s2">((</span><span class="s7">100</span><span class="s8">vh </span><span class="s2">- </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-sticky-h</span><span class="s2">)) / </span><span class="s7">2</span><span class="s2">)); </span><span class="s0">// 화면 중앙에 고정</span>
+    <span class="s4">height</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-sticky-h</span><span class="s2">);                            </span><span class="s0">// 100vh → 내용 높이</span>
+    <span class="s4">padding</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-top</span><span class="s2">) </span><span class="s7">24</span><span class="s8">px </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-bottom</span><span class="s2">);</span>
     <span class="s4">display</span><span class="s5">: </span><span class="s8">grid</span><span class="s2">;</span>
     <span class="s4">grid-template-columns</span><span class="s5">: </span><span class="s7">1</span><span class="s8">fr </span><span class="s7">1</span><span class="s8">fr</span><span class="s2">;</span>
     <span class="s4">gap</span><span class="s5">: </span><span class="s7">40</span><span class="s8">px</span><span class="s2">;</span>
     <span class="s4">max-width</span><span class="s5">: </span><span class="s7">1400</span><span class="s8">px</span><span class="s2">;</span>
-    <span class="s4">margin</span><span class="s5">: </span><span class="s7">0 </span><span class="s8">auto</span><span class="s2">;                          </span><span class="s0">// ← 기존 80px auto 에서 변경</span>
-    <span class="s4">padding</span><span class="s5">: </span><span class="s7">100</span><span class="s8">px </span><span class="s7">24</span><span class="s8">px </span><span class="s7">40</span><span class="s8">px</span><span class="s2">;                </span><span class="s0">// ← 기존 0 24px 에서 변경 (위 100px = 헤더 여백)</span>
-    <span class="s4">align-items</span><span class="s5">: </span><span class="s8">center</span><span class="s2">;                     </span><span class="s0">// ← 기존 start 에서 변경</span>
+    <span class="s4">margin</span><span class="s5">: </span><span class="s7">0 </span><span class="s8">auto</span><span class="s2">;</span>
+    <span class="s4">align-items</span><span class="s5">: </span><span class="s8">start</span><span class="s2">;</span>
+    <span class="s4">box-sizing</span><span class="s5">: </span><span class="s8">border-box</span><span class="s2">;</span>
 
-    <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {</span>
-        <span class="s4">display</span><span class="s5">: </span><span class="s8">block</span><span class="s2">;</span>
-        <span class="s4">position</span><span class="s5">: </span><span class="s8">static</span><span class="s2">;</span>
-        <span class="s4">height</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
-        <span class="s4">margin</span><span class="s5">: </span><span class="s7">24</span><span class="s8">px auto </span><span class="s7">0</span><span class="s2">;</span>
-        <span class="s4">padding</span><span class="s5">: </span><span class="s7">0 16</span><span class="s8">px </span><span class="s7">80</span><span class="s8">px</span><span class="s2">;</span>
-        <span class="s4">--img-h</span><span class="s5">: </span><span class="s3">clamp</span><span class="s2">(</span><span class="s7">140</span><span class="s8">px</span><span class="s2">, </span><span class="s7">24</span><span class="s8">svh</span><span class="s2">, </span><span class="s7">230</span><span class="s8">px</span><span class="s2">);   </span><span class="s0">// 이미지 높이 지정용으로만 유지</span>
-        <span class="s4">--card-space</span><span class="s5">: </span><span class="s3">calc</span><span class="s2">(</span>
-                <span class="s7">100</span><span class="s8">svh </span><span class="s2">- </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--cards-top</span><span class="s2">, </span><span class="s7">300</span><span class="s8">px</span><span class="s2">)</span>
-                <span class="s2">- (</span><span class="s3">var</span><span class="s2">(</span><span class="s3">--count</span><span class="s2">, </span><span class="s7">6</span><span class="s2">) - </span><span class="s7">1</span><span class="s2">) * </span><span class="s7">10</span><span class="s8">px </span><span class="s2">- </span><span class="s7">12</span><span class="s8">px</span>
-        <span class="s2">);</span>
-    <span class="s2">}</span>
 
     <span class="s2">.</span><span class="s3">service-img-wrap </span><span class="s2">{</span>
         <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {</span>
             <span class="s4">position</span><span class="s5">: </span><span class="s8">sticky</span><span class="s2">;</span>
-            <span class="s4">top</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--stick-top</span><span class="s2">, </span><span class="s7">110</span><span class="s8">px</span><span class="s2">);     </span><span class="s0">// subnav 바로 아래에서 고정</span>
+            <span class="s4">top</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--stick-top</span><span class="s2">, </span><span class="s7">110</span><span class="s8">px</span><span class="s2">);</span>
             <span class="s4">z-index</span><span class="s5">: </span><span class="s7">10</span><span class="s2">;</span>
-            <span class="s4">margin</span><span class="s5">: </span><span class="s7">0 </span><span class="s2">-</span><span class="s7">16</span><span class="s8">px</span><span class="s2">;                  </span><span class="s0">// section 좌우 padding(16px)만큼 넓혀서 옆으로 안 비치게</span>
-            <span class="s4">padding</span><span class="s5">: </span><span class="s7">20</span><span class="s8">px </span><span class="s7">16</span><span class="s8">px </span><span class="s7">25</span><span class="s8">px</span><span class="s2">;          </span><span class="s0">// 위 20px: subnav와의 여백 / 아래 25px: 카드와의 여백</span>
+            <span class="s4">margin</span><span class="s5">: </span><span class="s7">0 </span><span class="s2">-</span><span class="s7">16</span><span class="s8">px</span><span class="s2">;</span>
+            <span class="s4">padding</span><span class="s5">: </span><span class="s7">20</span><span class="s8">px </span><span class="s7">16</span><span class="s8">px </span><span class="s7">0</span><span class="s2">;</span>
             <span class="s4">background</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--paper</span><span class="s2">, </span><span class="s6">#f5f0e8</span><span class="s2">);</span>
         <span class="s2">}</span>
 
         <span class="s2">.</span><span class="s3">service-img-section </span><span class="s2">{</span>
-            <span class="s4">position</span><span class="s5">: </span><span class="s8">sticky</span><span class="s2">;</span>
-            <span class="s4">top</span><span class="s5">: </span><span class="s7">150</span><span class="s8">px</span><span class="s2">;</span>
-            <span class="s4">height</span><span class="s5">: </span><span class="s7">530</span><span class="s8">px</span><span class="s2">;</span>
+            <span class="s4">position</span><span class="s5">: </span><span class="s8">relative</span><span class="s2">;</span>
+            <span class="s4">height</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-media-height</span><span class="s2">);</span>
             <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">20</span><span class="s8">px</span><span class="s2">;</span>
             <span class="s4">overflow</span><span class="s5">: </span><span class="s8">hidden</span><span class="s2">;</span>
             <span class="s4">background</span><span class="s5">: </span><span class="s6">#111</span><span class="s2">;</span>
             <span class="s4">box-shadow</span><span class="s5">: </span><span class="s7">0 8</span><span class="s8">px </span><span class="s7">30</span><span class="s8">px </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0.12</span><span class="s2">);</span>
 
             <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {</span>
-                <span class="s4">position</span><span class="s5">: </span><span class="s8">relative</span><span class="s2">;</span>
                 <span class="s4">height</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--img-h</span><span class="s2">);</span>
                 <span class="s4">margin-bottom</span><span class="s5">: </span><span class="s7">0</span><span class="s2">;</span>
                 <span class="s4">box-shadow</span><span class="s5">: </span><span class="s8">none</span><span class="s2">;</span>
@@ -2010,30 +2029,34 @@ _service.scss</font>
     <span class="s2">}</span>
 
     <span class="s2">.</span><span class="s3">service-cards-container </span><span class="s2">{</span>
-        <span class="s4">display</span><span class="s5">: </span><span class="s8">grid</span><span class="s2">;                       </span><span class="s0">// ← flex 에서 변경 (카드 겹쳐 쌓기)</span>
-        <span class="s0">// flex-direction, gap: 60px 삭제</span>
+        <span class="s4">display</span><span class="s5">: </span><span class="s8">grid</span><span class="s2">;</span>
+        <span class="s4">height</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--service-media-height</span><span class="s2">);</span>
 
-        <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {          </span><span class="s0">// ← 모바일은 기존처럼 세로 나열</span>
-            <span class="s4">display</span><span class="s5">: </span><span class="s8">flex</span><span class="s2">;</span>
-            <span class="s4">flex-direction</span><span class="s5">: </span><span class="s8">column</span><span class="s2">;</span>
-            <span class="s4">gap</span><span class="s5">: </span><span class="s7">45</span><span class="s8">px</span><span class="s2">;</span>
+        <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {</span>
+            <span class="s4">display</span><span class="s5">: </span><span class="s8">block</span><span class="s2">;</span>
+            <span class="s4">height</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
         <span class="s2">}</span>
     <span class="s2">}</span>
 
     <span class="s2">.</span><span class="s3">service-card </span><span class="s2">{</span>
-        <span class="s4">grid-area</span><span class="s5">: </span><span class="s7">1 </span><span class="s2">/ </span><span class="s7">1</span><span class="s2">;                    </span><span class="s0">// ← 추가 (6장이 같은 칸에 겹침)</span>
+        <span class="s4">grid-area</span><span class="s5">: </span><span class="s7">1 </span><span class="s2">/ </span><span class="s7">1</span><span class="s2">;</span>
+        <span class="s4">display</span><span class="s5">: </span><span class="s8">flex</span><span class="s2">;</span>
+        <span class="s4">width</span><span class="s5">: </span><span class="s7">100</span><span class="s2">%;</span>
+        <span class="s4">height</span><span class="s5">: </span><span class="s7">100</span><span class="s2">%;</span>
         <span class="s4">padding</span><span class="s5">: </span><span class="s7">40</span><span class="s8">px</span><span class="s2">;</span>
         <span class="s4">background</span><span class="s5">: </span><span class="s6">#ffffff</span><span class="s2">;</span>
         <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">24</span><span class="s8">px</span><span class="s2">;</span>
         <span class="s4">border</span><span class="s5">: </span><span class="s7">1</span><span class="s8">px solid </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">13</span><span class="s2">, </span><span class="s7">13</span><span class="s2">, </span><span class="s7">13</span><span class="s2">, </span><span class="s7">0.08</span><span class="s2">);</span>
+        <span class="s4">box-sizing</span><span class="s5">: </span><span class="s8">border-box</span><span class="s2">;</span>
         <span class="s4">box-shadow</span><span class="s5">: </span><span class="s7">0 4</span><span class="s8">px </span><span class="s7">20</span><span class="s8">px </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0.04</span><span class="s2">);</span>
         <span class="s4">opacity</span><span class="s5">: </span><span class="s7">0</span><span class="s2">;</span>
         <span class="s4">visibility</span><span class="s5">: </span><span class="s8">hidden</span><span class="s2">;</span>
         <span class="s4">transform</span><span class="s5">: </span><span class="s3">translateY</span><span class="s2">(</span><span class="s7">60</span><span class="s8">px</span><span class="s2">);</span>
         <span class="s4">pointer-events</span><span class="s5">: </span><span class="s8">none</span><span class="s2">;</span>
-        <span class="s4">transition</span><span class="s5">: </span><span class="s8">opacity </span><span class="s7">0.5</span><span class="s8">s ease</span><span class="s2">,</span>
-        <span class="s8">transform </span><span class="s7">0.8</span><span class="s8">s </span><span class="s3">cubic-bezier</span><span class="s2">(</span><span class="s7">0.65</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">0.35</span><span class="s2">, </span><span class="s7">1</span><span class="s2">),</span>
-        <span class="s8">visibility </span><span class="s7">0</span><span class="s8">s linear </span><span class="s7">0.5</span><span class="s8">s</span><span class="s2">;</span>
+        <span class="s4">transition</span><span class="s5">:</span>
+                <span class="s8">opacity </span><span class="s7">0.35</span><span class="s8">s ease</span><span class="s2">,</span>
+                <span class="s8">transform </span><span class="s7">0.4</span><span class="s8">s </span><span class="s3">cubic-bezier</span><span class="s2">(</span><span class="s7">0.22</span><span class="s2">, </span><span class="s7">1</span><span class="s2">, </span><span class="s7">0.36</span><span class="s2">, </span><span class="s7">1</span><span class="s2">),</span>
+                <span class="s8">visibility </span><span class="s7">0</span><span class="s8">s linear </span><span class="s7">0.4</span><span class="s8">s</span><span class="s2">;</span>
 
         <span class="s3">&amp;</span><span class="s2">.</span><span class="s3">past </span><span class="s2">{</span>
             <span class="s4">transform</span><span class="s5">: </span><span class="s3">translateY</span><span class="s2">(-</span><span class="s7">60</span><span class="s8">px</span><span class="s2">);</span>
@@ -2044,31 +2067,45 @@ _service.scss</font>
             <span class="s4">visibility</span><span class="s5">: </span><span class="s8">visible</span><span class="s2">;</span>
             <span class="s4">transform</span><span class="s5">: </span><span class="s3">translateY</span><span class="s2">(</span><span class="s7">0</span><span class="s2">);</span>
             <span class="s4">pointer-events</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
-            <span class="s4">border-color</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--accent</span><span class="s2">, </span><span class="s6">#f64f1e</span><span class="s2">);</span>
-            <span class="s4">box-shadow</span><span class="s5">: </span><span class="s7">0 8</span><span class="s8">px </span><span class="s7">32</span><span class="s8">px </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">246</span><span class="s2">, </span><span class="s7">79</span><span class="s2">, </span><span class="s7">30</span><span class="s2">, </span><span class="s7">0.15</span><span class="s2">);</span>
-            <span class="s4">transition</span><span class="s5">: </span><span class="s8">opacity </span><span class="s7">1</span><span class="s8">s ease </span><span class="s7">0.2</span><span class="s8">s</span><span class="s2">,</span>
-            <span class="s8">transform </span><span class="s7">1.1</span><span class="s8">s </span><span class="s3">cubic-bezier</span><span class="s2">(</span><span class="s7">0.22</span><span class="s2">, </span><span class="s7">1</span><span class="s2">, </span><span class="s7">0.36</span><span class="s2">, </span><span class="s7">1</span><span class="s2">) </span><span class="s7">0.2</span><span class="s8">s</span><span class="s2">,</span>
-            <span class="s8">border-color </span><span class="s7">0.8</span><span class="s8">s ease </span><span class="s7">0.2</span><span class="s8">s</span><span class="s2">,</span>
-            <span class="s8">box-shadow </span><span class="s7">0.8</span><span class="s8">s ease </span><span class="s7">0.2</span><span class="s8">s</span><span class="s2">,</span>
-            <span class="s8">visibility </span><span class="s7">0</span><span class="s8">s linear </span><span class="s7">0</span><span class="s8">s</span><span class="s2">;</span>
+
+            <span class="s4">transition</span><span class="s5">:</span>
+                    <span class="s8">opacity </span><span class="s7">0.4</span><span class="s8">s ease</span><span class="s2">,</span>
+                    <span class="s8">transform </span><span class="s7">0.45</span><span class="s8">s </span><span class="s3">cubic-bezier</span><span class="s2">(</span><span class="s7">0.22</span><span class="s2">, </span><span class="s7">1</span><span class="s2">, </span><span class="s7">0.36</span><span class="s2">, </span><span class="s7">1</span><span class="s2">),</span>
+                    <span class="s8">border-color </span><span class="s7">0.4</span><span class="s8">s ease</span><span class="s2">,</span>
+                    <span class="s8">box-shadow </span><span class="s7">0.4</span><span class="s8">s ease</span><span class="s2">,</span>
+                    <span class="s8">visibility </span><span class="s7">0</span><span class="s8">s linear </span><span class="s7">0</span><span class="s8">s</span><span class="s2">;</span>
         <span class="s2">}</span>
+
         <span class="s9">@media </span><span class="s2">(</span><span class="s4">max-width</span><span class="s5">: </span><span class="s7">960</span><span class="s8">px</span><span class="s2">) {</span>
             <span class="s4">position</span><span class="s5">: </span><span class="s8">sticky</span><span class="s2">;</span>
-            <span class="s4">top</span><span class="s5">: </span><span class="s3">calc</span><span class="s2">(</span><span class="s3">var</span><span class="s2">(</span><span class="s3">--cards-top</span><span class="s2">, </span><span class="s7">300</span><span class="s8">px</span><span class="s2">) + </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--i</span><span class="s2">, </span><span class="s7">0</span><span class="s2">) * </span><span class="s7">10</span><span class="s8">px</span><span class="s2">);</span>
+            <span class="s4">top</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--cards-top</span><span class="s2">, </span><span class="s7">300</span><span class="s8">px</span><span class="s2">);</span>
+            <span class="s4">height</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
+            <span class="s4">min-height</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--media-height</span><span class="s2">);</span>
+            <span class="s4">box-sizing</span><span class="s5">: </span><span class="s8">border-box</span><span class="s2">;</span>
+
             <span class="s4">margin-bottom</span><span class="s5">: </span><span class="s7">24</span><span class="s8">px</span><span class="s2">;</span>
-            <span class="s4">font-size</span><span class="s5">: </span><span class="s3">max</span><span class="s2">(</span><span class="s7">9</span><span class="s8">px</span><span class="s2">, </span><span class="s3">min</span><span class="s2">(</span><span class="s7">14</span><span class="s8">px</span><span class="s2">, </span><span class="s7">3.6</span><span class="s8">vw</span><span class="s2">, </span><span class="s3">calc</span><span class="s2">(</span><span class="s3">var</span><span class="s2">(</span><span class="s3">--card-space</span><span class="s2">) / </span><span class="s7">26</span><span class="s2">)));</span>
+
+            <span class="s4">font-size</span><span class="s5">: </span><span class="s3">max</span><span class="s2">(</span>
+                    <span class="s7">9</span><span class="s8">px</span><span class="s2">,</span>
+                    <span class="s3">min</span><span class="s2">(</span><span class="s7">14</span><span class="s8">px</span><span class="s2">, </span><span class="s7">3.6</span><span class="s8">vw</span><span class="s2">, </span><span class="s3">calc</span><span class="s2">(</span><span class="s3">var</span><span class="s2">(</span><span class="s3">--card-space</span><span class="s2">) / </span><span class="s7">26</span><span class="s2">))</span>
+            <span class="s2">);</span>
+
             <span class="s4">padding</span><span class="s5">: </span><span class="s7">1.1</span><span class="s8">em </span><span class="s7">1.2</span><span class="s8">em</span><span class="s2">;</span>
             <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">1.4</span><span class="s8">em</span><span class="s2">;</span>
-            <span class="s4">pointer-events</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
 
-            <span class="s0">// past / active 상태의 이동·딜레이를 모바일에서 확실히 제거</span>
+            <span class="s4">pointer-events</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
+            <span class="s4">box-shadow</span><span class="s5">: </span><span class="s8">unset</span><span class="s2">;</span>
+
             <span class="s3">&amp;</span><span class="s2">,</span>
             <span class="s3">&amp;</span><span class="s2">.</span><span class="s3">past</span><span class="s2">,</span>
             <span class="s3">&amp;</span><span class="s2">.</span><span class="s3">active </span><span class="s2">{</span>
                 <span class="s4">opacity</span><span class="s5">: </span><span class="s7">1</span><span class="s2">;</span>
                 <span class="s4">visibility</span><span class="s5">: </span><span class="s8">visible</span><span class="s2">;</span>
                 <span class="s4">transform</span><span class="s5">: </span><span class="s8">none</span><span class="s2">;</span>
-                <span class="s4">transition</span><span class="s5">: </span><span class="s8">border-color </span><span class="s7">0.3</span><span class="s8">s ease</span><span class="s2">, </span><span class="s8">box-shadow </span><span class="s7">0.3</span><span class="s8">s ease</span><span class="s2">;</span>
+
+                <span class="s4">transition</span><span class="s5">:</span>
+                        <span class="s8">border-color </span><span class="s7">0.3</span><span class="s8">s ease</span><span class="s2">,</span>
+                        <span class="s8">box-shadow </span><span class="s7">0.3</span><span class="s8">s ease</span><span class="s2">;</span>
             <span class="s2">}</span>
         <span class="s2">}</span>
 
@@ -2108,6 +2145,7 @@ _service.scss</font>
 
         <span class="s2">.</span><span class="s3">service-card-grid </span><span class="s2">{</span>
             <span class="s4">width</span><span class="s5">: </span><span class="s7">100</span><span class="s2">%;</span>
+            <span class="s4">margin-bottom</span><span class="s5">: </span><span class="s7">20</span><span class="s8">px</span><span class="s2">;</span>
             <span class="s4">background</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--paper</span><span class="s2">, </span><span class="s6">#f5f0e8</span><span class="s2">);</span>
             <span class="s4">padding</span><span class="s5">: </span><span class="s7">24</span><span class="s8">px </span><span class="s7">28</span><span class="s8">px</span><span class="s2">;</span>
             <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">16</span><span class="s8">px</span><span class="s2">;</span>
@@ -2149,13 +2187,14 @@ _service.scss</font>
         <span class="s2">}</span>
 
         <span class="s2">.</span><span class="s3">service-card-footer </span><span class="s2">{</span>
-            <span class="s4">display</span><span class="s5">: </span><span class="s8">flex</span><span class="s2">;</span>
+            <span class="s4">display</span><span class="s5">: </span><span class="s8">inline-flex</span><span class="s2">;</span>
+            <span class="s4">align-self</span><span class="s5">: </span><span class="s8">flex-start</span><span class="s2">;</span>
             <span class="s4">justify-content</span><span class="s5">: </span><span class="s8">space-between</span><span class="s2">;</span>
             <span class="s4">width</span><span class="s5">: </span><span class="s7">100</span><span class="s2">%;</span>
             <span class="s4">align-items</span><span class="s5">: </span><span class="s8">center</span><span class="s2">;</span>
             <span class="s4">border-top</span><span class="s5">: </span><span class="s7">1</span><span class="s8">px solid </span><span class="s3">rgba</span><span class="s2">(</span><span class="s7">13</span><span class="s2">, </span><span class="s7">13</span><span class="s2">, </span><span class="s7">13</span><span class="s2">, </span><span class="s7">0.06</span><span class="s2">);</span>
-            <span class="s4">padding-top</span><span class="s5">: </span><span class="s7">16</span><span class="s8">px</span><span class="s2">;</span>
-            <span class="s4">margin-top</span><span class="s5">: </span><span class="s7">20</span><span class="s8">px</span><span class="s2">;</span>
+            <span class="s4">padding-top</span><span class="s5">: </span><span class="s7">0.6</span><span class="s8">em</span><span class="s2">;</span>
+            <span class="s4">margin-top</span><span class="s5">: </span><span class="s8">auto</span><span class="s2">;</span>
             <span class="s4">text-decoration</span><span class="s5">: </span><span class="s8">none</span><span class="s2">;</span>
             <span class="s4">color</span><span class="s5">: </span><span class="s3">var</span><span class="s2">(</span><span class="s3">--ink</span><span class="s2">, </span><span class="s6">#0d0d0d</span><span class="s2">);</span>
 
@@ -2203,7 +2242,7 @@ _service.scss</font>
             <span class="s2">}</span>
 
             <span class="s2">.</span><span class="s3">service-card-grid </span><span class="s2">{</span>
-                <span class="s4">margin</span><span class="s5">: </span><span class="s7">0</span><span class="s2">;</span>
+                <span class="s4">margin</span><span class="s5">: </span><span class="s7">0 0 0.7</span><span class="s8">em</span><span class="s2">;</span>
                 <span class="s4">padding</span><span class="s5">: </span><span class="s7">0.8</span><span class="s8">em </span><span class="s7">1</span><span class="s8">em</span><span class="s2">;</span>
                 <span class="s4">border-radius</span><span class="s5">: </span><span class="s7">1</span><span class="s8">em</span><span class="s2">;</span>
 

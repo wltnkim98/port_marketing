@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 // 4대 전문 컨설턴트 정보 (임의 가상 데이터, 통일된 텍스트 볼륨 & 고화질 프로필 이미지)
 const CONSULTANTS = [

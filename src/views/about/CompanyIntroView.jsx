@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { companyInfo } from '../constants';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { companyInfo } from '../../constants';
 
 const CompanyIntroView = () => {
     const [scrollProgress, setScrollProgress] = useState(0);
