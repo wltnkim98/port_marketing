@@ -171,19 +171,20 @@ const Ai = () => {
                                     key={i}
                                     style={{
                                         textAlign: 'left',
-                                        background: 'rgba(255,255,255,0.5)',
+                                        background: 'rgba(255,255,255,0.8)',
                                         border: '1px solid rgba(255,255,255,0.5)',
-                                        padding: '8px 12px',
-                                        borderRadius: '8px',
+                                        padding: '10px 20px',
+                                        borderRadius: '20px',
                                         color: '#000',
                                         fontSize: '15px',
                                         cursor: 'pointer',
-                                        transition: 'all 0.2s'
+                                        transition: 'all 0.2s',
+                                        width: 'fit-content'
                                     }}
                                     onClick={() => send(q)}
                                     disabled={loading}
                                 >
-                                    💬 {q}
+                                    <span style={{ marginRight: '8px' }}>✦</span>{q}
                                 </button>
                             ))}
                         </div>

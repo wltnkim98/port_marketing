@@ -7,7 +7,19 @@
   position: relative;
   background: var(--paper);
   overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(13, 13, 13, 0.5), rgba(13, 13, 13, 0.6));
+    z-index: 1;
+  }
 }
+
 .cases-video-bg {
   position: absolute;
   top: 0;
@@ -16,16 +28,6 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-}
-.cases-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(13, 13, 13, 0.5), rgba(13, 13, 13, 0.6));
-  z-index: 1;
 }
 .cases-content {
   display: grid;
@@ -47,10 +49,43 @@
   transition: background 0.3s;
   position: relative;
   overflow: hidden;
+
+  &:hover {
+    background: var(--ink);
+
+    * {
+      color: var(--paper) !important;
+    }
+
+    .case-tag {
+      background: var(--accent);
+      color: white !important;
+    }
+
+    .case-problem {
+      color: var(--gold) !important;
+    }
+
+    .case-metric-val {
+      color: var(--gold) !important;
+    }
+
+    .case-arrow {
+      opacity: 1;
+      transform: translateX(0);
+      color: var(--paper) !important;
+    }
+
+    circle[stroke="var(--accent)"] {
+      stroke: var(--gold);
+    }
+
+    text {
+      fill: var(--paper) !important;
+    }
+  }
 }
-.case-card:hover { background: var(--ink); }
-.case-card:hover * { color: var(--paper) !important; }
-.case-card:hover .case-tag { background: var(--accent); color: white !important; }
+
 .case-tag {
   display: inline-block;
   font-family: 'Space Mono', monospace;
@@ -63,6 +98,7 @@
   margin-bottom: 24px;
   transition: background 0.3s, color 0.3s;
 }
+
 .case-problem {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
@@ -71,7 +107,7 @@
   color: var(--accent);
   margin-bottom: 8px;
 }
-.case-card:hover .case-problem { color: var(--gold) !important; }
+
 .case-title {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 32px;
@@ -80,23 +116,27 @@
   margin-bottom: 16px;
   line-height: 1.1;
 }
+
 .case-desc {
   font-size: 13px;
   line-height: 1.8;
   color: var(--muted);
   margin-bottom: 32px;
 }
+
 .case-metrics {
   display: flex; gap: 32px;
 }
+
 .case-metric {}
+
 .case-metric-val {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 36px;
   color: var(--accent);
   line-height: 1;
 }
-.case-card:hover .case-metric-val { color: var(--gold) !important; }
+
 .case-metric-label {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
@@ -105,6 +145,7 @@
   color: var(--muted);
   margin-top: 4px;
 }
+
 .case-arrow {
   position: absolute; bottom: 48px; right: 48px;
   font-size: 24px;
@@ -112,12 +153,4 @@
   opacity: 0;
   transform: translateX(-8px);
   transition: opacity 0.2s, transform 0.2s;
-}
-.case-card:hover .case-arrow { opacity: 1; transform: translateX(0); color: var(--paper) !important; }
-
-.case-card:hover circle[stroke="var(--accent)"] {
-  stroke: var(--gold);
-}
-.case-card:hover text {
-  fill: var(--paper) !important;
 }

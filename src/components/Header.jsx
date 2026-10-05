@@ -52,6 +52,18 @@ const Header = () => {
         }
     }, [scrolled]);
 
+    // 모바일 메뉴 열림/닫힘 시 body 스크롤 제어
+    useEffect(() => {
+        if (mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileMenuOpen]);
+
     // 메인 페이지 진입 및 해시 변경 시 해당 섹션으로 부드럽게 스크롤
     useEffect(() => {
         if (location.pathname === '/') {

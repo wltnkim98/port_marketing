@@ -189,30 +189,30 @@
 .admin-dashboard-table {
   width: 100%;
   border-collapse: collapse;
-}
 
-.admin-dashboard-table th,
-.admin-dashboard-table td {
-  padding: 16px;
-  text-align: left;
-  border-bottom: 1px solid rgba(13, 13, 13, 0.08);
-}
+  th,
+  td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(13, 13, 13, 0.08);
+  }
 
-.admin-dashboard-table th {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
+  th {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
-.admin-dashboard-table td {
-  font-size: 14px;
-  color: var(--ink);
-}
+  td {
+    font-size: 14px;
+    color: var(--ink);
+  }
 
-.admin-dashboard-table tr:hover td {
-  background: var(--paper);
+  tr:hover td {
+    background: var(--paper);
+  }
 }
 
 .admin-dashboard-status {

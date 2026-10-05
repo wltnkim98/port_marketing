@@ -16,8 +16,11 @@ nav.scrolled { padding: 12px 60px; }
   letter-spacing: 0.12em;
   color: var(--ink);
   text-decoration: none;
+
+  span {
+    color: var(--accent);
+  }
 }
-.nav-logo span { color: var(--accent); }
 .nav-links {
   display: flex;
   gap: 40px;
@@ -26,28 +29,27 @@ nav.scrolled { padding: 12px 60px; }
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-}
 
-.mobile-menu-logo {
-    display: none;
+  a,
+  button.nav-link-with-children {
+    font-family: "Pretendard","Malgun Gothic","맑은 고딕",AppleGothic,Dotum,"돋움",sans-serif;
+    font-size: 18px;
+    font-weight : 500;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
-.nav-links a,
-.nav-links button.nav-link-with-children {
-  font-family: "Pretendard","Malgun Gothic","맑은 고딕",AppleGothic,Dotum,"돋움",sans-serif;
-  font-size: 18px;
-  font-weight : 500;
-  text-transform: uppercase;
-  color: var(--ink);
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-}
-.nav-links a:hover,
-.nav-links button.nav-link-with-children:hover { opacity: 1; }
 .nav-cta {
   display: inline-flex;
   align-items: center;
@@ -63,8 +65,11 @@ nav.scrolled { padding: 12px 60px; }
   padding: 10px 24px;
   cursor: none;
   transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: var(--accent);
+  }
 }
-.nav-cta:hover { background: var(--accent); }
 
 /* ── DROPDOWN ── */
 .nav-item-with-dropdown {
@@ -72,11 +77,10 @@ nav.scrolled { padding: 12px 60px; }
 }
 
 .nav-link-with-children {
-    position: relative;
-    padding-right: 20px !important;
-}
+  position: relative;
+  padding-right: 20px !important;
 
-.nav-link-with-children::after {
+  &::after {
     content: '▼';
     position: absolute;
     right: 0;
@@ -85,35 +89,58 @@ nav.scrolled { padding: 12px 60px; }
     transform: translateY(-50%);
     opacity: 0.6;
     transition: opacity 0.2s;
-}
+  }
 
-.nav-link-with-children:hover::after {
+  &:hover::after {
     opacity: 1;
+  }
 }
 
 .nav-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    min-width: 220px;
-    background: rgba(245,240,232,0.98);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(13,13,13,0.08);
-    border-radius: 8px;
-    padding: 12px 0;
-    margin-top: 8px;
-    list-style: none;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: rgba(245,240,232,0.98);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(13,13,13,0.08);
+  border-radius: 8px;
+  padding: 12px 0;
+  margin-top: 8px;
+  list-style: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0.2s;
+
+  li {
+    padding: 0;
+  }
+
+  a {
+    display: block;
+    padding: 10px 24px;
+    font-family: "Pretendard","Malgun Gothic","맑은 고딕",AppleGothic,Dotum,"돋움",sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: all 0.2s;
+
+    &:hover {
+      opacity: 1;
+      background: rgba(13,13,13,0.04);
+      padding-left: 28px;
+    }
+  }
 }
 
 .nav-item-with-dropdown:hover .nav-dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 @keyframes dropdownFadeIn {
@@ -165,38 +192,41 @@ nav.scrolled { padding: 12px 60px; }
 }
 
 /* ── MOBILE MENU TOGGLE ── */
-.mobile-menu-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px;
-    height: 24px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 1001;
+.mobile-menu-logo .nav-logo {
+display: none;
 }
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
 
-.mobile-menu-toggle span {
+  span {
     width: 100%;
     height: 2px;
     background: var(--ink);
     border-radius: 2px;
     transition: all 0.3s ease;
     transform-origin: center;
-}
 
-.mobile-menu-toggle span.open:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
+    &.open:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
 
-.mobile-menu-toggle span.open:nth-child(2) {
-    opacity: 0;
-}
+    &.open:nth-child(2) {
+      opacity: 0;
+    }
 
-.mobile-menu-toggle span.open:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    &.open:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+  }
 }
 
 /* ── MOBILE MENU OVERLAY ── */
@@ -270,6 +300,7 @@ nav.scrolled { padding: 12px 60px; }
     }
 
     .mobile-menu-logo .nav-logo {
+        display: block;
         font-family: "Bebas Neue";
         font-size: 26px;
         font-weight: 400;
@@ -326,9 +357,35 @@ nav.scrolled { padding: 12px 60px; }
         background: transparent;
         color: var(--ink);
         cursor: pointer;
+
+        span {
+            position: relative;
+            display: block;
+            width: 18px;
+            height: 18px;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 10px;
+                height: 1px;
+                background: currentColor;
+                transform: translate(-50%, -50%);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(90deg);
+            }
+        }
+
+        &.expanded span::after {
+            display: none;
+        }
     }
 
-    // 왼쪽 메뉴명
     .nav-links .mobile-nav-link {
         flex: 1;
         display: flex;
@@ -343,36 +400,6 @@ nav.scrolled { padding: 12px 60px; }
         opacity: unset;
         text-decoration: none;
         background: transparent;
-    }
-
-    // 기존 ::after 대신 실제 버튼 내부에 기호 표시
-    .mobile-nav-toggle span {
-        position: relative;
-        display: block;
-        width: 18px;
-        height: 18px;
-    }
-
-    .mobile-nav-toggle span::before,
-    .mobile-nav-toggle span::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 10px;
-        height: 1px;
-        background: currentColor;
-        transform: translate(-50%, -50%);
-    }
-
-    // 세로선을 추가해서 +
-    .mobile-nav-toggle span::after {
-        transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    // 펼쳐지면 세로선 제거 → -
-    .mobile-nav-toggle.expanded span::after {
-        display: none;
     }
 
     .nav-dropdown {
@@ -404,12 +431,12 @@ nav.scrolled { padding: 12px 60px; }
         color: var(--ink);
         text-decoration: none;
         opacity: 0.8;
-    }
 
-    .nav-dropdown a:hover {
-        padding-left: 32px;
-        background: rgba(13, 13, 13, 0.04);
-        opacity: 1;
+        &:hover {
+            padding-left: 32px;
+            background: rgba(13, 13, 13, 0.04);
+            opacity: 1;
+        }
     }
 
     .nav-cta {
@@ -419,57 +446,57 @@ nav.scrolled { padding: 12px 60px; }
 
 /* ── SCROLL TO TOP BUTTON ── */
 .scroll-to-top-btn {
-    position: fixed;
-    bottom: 80px;
-    right: 24px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(245, 240, 232, 0.9);
-    color: #080808;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    z-index: 1000;
-    opacity: 1;
-    pointer-events: auto;
-}
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(245, 240, 232, 0.9);
+  color: #080808;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1000;
+  opacity: 1;
+  pointer-events: auto;
 
-.scroll-to-top-btn:hover {
+  &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
+  }
 }
 
 /* ── FLOATING CONSULT BUTTON ── */
 .floating-consult-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--accent);
-    color: var(--paper);
-    border: none;
-    border-radius: 50px;
-    padding: 14px 24px;
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    z-index: 1000;
-    text-decoration: none;
-}
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--accent);
+  color: var(--paper);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
 
-.floating-consult-btn:hover {
+  &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .floating-btn-icon {
@@ -552,25 +579,25 @@ nav.scrolled { padding: 12px 60px; }
 }
 
 .consult-modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: transparent;
-    font-size: 24px;
-    color: var(--ink);
-    cursor: pointer;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: var(--ink);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 
-.consult-modal-close:hover {
+  &:hover {
     background: rgba(13, 13, 13, 0.08);
+  }
 }
 
 .consult-modal-title {
@@ -590,24 +617,24 @@ nav.scrolled { padding: 12px 60px; }
 }
 
 .consult-modal-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px 16px;
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(13, 13, 13, 0.08);
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--ink);
-    transition: all 0.2s ease;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(13, 13, 13, 0.08);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: all 0.2s ease;
 
-.consult-modal-option:hover {
+  &:hover {
     background: rgba(255, 255, 255, 0.9);
     border-color: var(--accent);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .consult-option-icon {

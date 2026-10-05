@@ -72,11 +72,15 @@
   overflow: visible;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
-}
 
-.portfolio-slider-card-link:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(13, 13, 13, 0.15);
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(13, 13, 13, 0.15);
+
+    .slider-card-thumbnail img {
+      transform: scale(1.05);
+    }
+  }
 }
 
 .slider-card-thumbnail {
@@ -96,10 +100,6 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
-}
-
-.portfolio-slider-card-link:hover .slider-card-thumbnail img {
-  transform: scale(1.05);
 }
 
 .slider-card-category {
@@ -174,19 +174,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.slider-nav-btn:hover {
-  background: var(--accent);
-  transform: translateY(-50%) scale(1.1);
-}
+  &:hover {
+    background: var(--accent);
+    transform: translateY(-50%) scale(1.1);
+  }
 
-.slider-prev-btn {
-  left: 0;
-}
+  &.slider-prev-btn {
+    left: 0;
+  }
 
-.slider-next-btn {
-  right: 0;
+  &.slider-next-btn {
+    right: 0;
+  }
 }
 
 .slider-dots {
@@ -204,16 +204,16 @@
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-}
 
-.slider-dot:hover {
-  background: var(--muted);
-}
+  &:hover {
+    background: var(--muted);
+  }
 
-.slider-dot.active {
-  background: var(--accent);
-  width: 24px;
-  border-radius: 4px;
+  &.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
 }
 
 .portfolio-slider-cta {

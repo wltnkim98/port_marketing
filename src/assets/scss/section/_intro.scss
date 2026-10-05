@@ -6,6 +6,17 @@
   position: relative;
   overflow: hidden;
   background-color: #0d0d0d;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(13, 13, 13, 0.3), rgba(13, 13, 13, 0.4));
+    z-index: 1;
+  }
 }
 
 .intro-video {
@@ -16,17 +27,6 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-}
-
-.intro::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(13, 13, 13, 0.3), rgba(13, 13, 13, 0.4));
-  z-index: 1;
 }
 
 .intro-title,
@@ -46,13 +46,13 @@
   color: white;
   margin-top: 40px;
   margin-bottom: 60px;
-}
-.intro-title .catchphrase {
-  //-webkit-text-stroke: 2px var(--white);
-  color: white;
-  display: inline-block;
-  margin-top: 5px;
-  margin-bottom: 20px;
+
+  .catchphrase {
+    color: white;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
 }
 .intro-desc {
   max-width: 520px;
@@ -81,9 +81,17 @@
   cursor: none;
   transition: transform 0.2s, box-shadow 0.2s;
   text-decoration: none;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
 }
-.btn-download:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-.btn-download svg { width: 18px; height: 18px; }
 
 .btn-primary {
   background: var(--accent);
@@ -96,5 +104,9 @@
   padding: 16px 40px;
   cursor: none;
   transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232,76,30,0.3);
+  }
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,76,30,0.3); }

@@ -192,6 +192,11 @@
   &.open {
     border-color: rgba(13, 13, 13, 0.22);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+    .qa-toggle-icon {
+      transform: translateY(-50%);
+      color: var(--accent);
+    }
   }
 }
 
@@ -252,11 +257,6 @@
   right: 22px;
   top: 50%;
   transform: translateY(-50%);
-}
-
-.qa-item.open .qa-toggle-icon {
-  transform: translateY(-50%);
-  color: var(--accent);
 }
 
 .qa-content-body {

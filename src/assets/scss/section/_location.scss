@@ -82,16 +82,18 @@
   flex-shrink: 0;
 }
 
-.quick-bar-info h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
+.quick-bar-info {
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
 
-.quick-bar-info p {
-  font-size: 13px;
-  color: var(--muted);
+  p {
+    font-size: 13px;
+    color: var(--muted);
+  }
 }
 
 .quick-bar-right {
@@ -113,27 +115,27 @@
   transition: all 0.2s ease;
   font-family: 'Space Mono', 'Noto Sans KR', sans-serif;
   letter-spacing: 0.02em;
-}
 
-.quick-btn.tel-btn {
-  background: var(--ink);
-  color: var(--paper);
-}
+  &.tel-btn {
+    background: var(--ink);
+    color: var(--paper);
 
-.quick-btn.tel-btn:hover {
-  background: var(--accent);
-  color: #fff;
-  transform: translateY(-2px);
-}
+    &:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  }
 
-.quick-btn.chat-btn {
-  background: #fee500;
-  color: #191919;
-}
+  &.chat-btn {
+    background: #fee500;
+    color: #191919;
 
-.quick-btn.chat-btn:hover {
-  background: #fada0a;
-  transform: translateY(-2px);
+    &:hover {
+      background: #fada0a;
+      transform: translateY(-2px);
+    }
+  }
 }
 
 /* ── LOCATION INFO & MAP SECTION ── */
@@ -213,17 +215,17 @@
   color: var(--ink);
   margin: 0;
   word-break: keep-all;
-}
 
-.info-value.link {
-  color: var(--accent);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
+  &.link {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
 
-.info-value.link:hover {
-  color: var(--ink);
-  text-decoration: underline;
+    &:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+  }
 }
 
 /* MAP CARD */
@@ -285,28 +287,28 @@
   overflow: hidden;
   transition: all 0.3s ease;
   box-shadow: 0 12px 30px rgba(13, 13, 13, 0.04);
-}
 
-.transport-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
-.transport-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 45px rgba(13, 13, 13, 0.09);
-  border-color: rgba(13, 13, 13, 0.2);
-}
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 45px rgba(13, 13, 13, 0.09);
+    border-color: rgba(13, 13, 13, 0.2);
 
-.transport-card:hover::before {
-  opacity: 1;
+    &::before {
+      opacity: 1;
+    }
+  }
 }
 
 .transport-card-header {
@@ -450,13 +452,13 @@
   border-radius: 4px;
   transition: background 0.2s, transform 0.2s;
   box-shadow: 0 10px 24px rgba(13, 13, 13, 0.15);
-}
 
-.cta-primary-btn:hover {
-  background: var(--accent);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(232, 76, 30, 0.25);
+  &:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(232, 76, 30, 0.25);
+  }
 }
 
 .cta-secondary-btn {
@@ -475,11 +477,11 @@
   padding: 16px 32px;
   border-radius: 4px;
   transition: all 0.2s;
-}
 
-.cta-secondary-btn:hover {
-  background: var(--ink);
-  color: var(--paper);
+  &:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
 }
 
 /* ── RESPONSIVE ── */

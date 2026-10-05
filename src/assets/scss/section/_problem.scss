@@ -8,9 +8,11 @@
   color: var(--paper);
   position: relative;
   overflow: hidden;
-}
 
-.problem-section .section-title { color: var(--paper); }
+  .section-title {
+    color: var(--paper);
+  }
+}
 .problem-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -21,25 +23,30 @@
   border-top: 1px solid rgba(245,240,232,0.15);
   padding-top: 32px;
   position: relative;
-}
-.problem-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 80px;
-  color: rgba(245,240,232,0.06);
-  position: absolute; top: -16px; right: 0;
-  line-height: 1;
-}
-.problem-item h3 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.05em;
-  color: var(--gold);
-  margin-bottom: 12px;
-}
-.problem-item p {
-  font-size: 14px;
-  line-height: 1.8;
-  color: rgba(245,240,232,0.65);
+
+  .problem-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(245,240,232,0.06);
+    position: absolute;
+    top: -16px;
+    right: 0;
+    line-height: 1;
+  }
+
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.65);
+  }
 }
 .problem-bg-text {
   position: absolute;

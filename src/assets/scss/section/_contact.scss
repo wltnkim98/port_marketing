@@ -9,9 +9,10 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-.contact-section .section-title {
-  color: var(--paper);
+
+  .section-title {
+    color: var(--paper);
+  }
 }
 .contact-desc {
   font-size: 16px;
@@ -29,8 +30,11 @@
   display: block;
   text-decoration: none;
   transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent);
+  }
 }
-.contact-email:hover { color: var(--accent); }
 .contact-phone-wrapper {
   display: inline-block;
 }
@@ -44,9 +48,10 @@
   text-decoration: none;
   display: block;
   transition: transform 0.3s ease;
-}
-.contact-phone:hover {
-  transform: translateY(-5px);
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
 .contact-bg {
   position: absolute;
@@ -71,8 +76,11 @@
   color: rgba(245,240,232,0.4);
   text-decoration: none;
   transition: color 0.2s;
+
+  &:hover {
+    color: var(--gold);
+  }
 }
-.contact-link:hover { color: var(--gold); }
 .contact-buttons {
   display: flex;
   justify-content: center;
@@ -94,33 +102,39 @@
   border-radius: 8px;
   transition: all 0.2s;
   width: 500px;
-  gap : 20px;
-}
-.contact-btn-solid {
-  background: #4a4a4a;
-  color: var(--paper);
-  border: 1px solid #4a4a4a;
-}
-.contact-btn-outline {
-  background: #FFD700;
-  color: var(--ink);
-  border: 1px solid #FFD700;
-}
-.contact-btn-solid:hover {
-  background: var(--paper);
-  border-color: var(--paper);
-  color: var(--ink);
-}
-.contact-btn-outline:hover {
-  background: var(--paper);
-  border-color: var(--paper);
-  color: var(--ink);
-}
-.contact-btn-outline img[alt="카카오톡"] {
-  filter: brightness(0) saturate(100%) invert(5%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(5%) contrast(96%);
-}
-.contact-btn-outline:hover img[alt="카카오톡"] {
-  filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+  gap: 20px;
+
+  &-solid {
+    background: #4a4a4a;
+    color: var(--paper);
+    border: 1px solid #4a4a4a;
+
+    &:hover {
+      background: var(--paper);
+      border-color: var(--paper);
+      color: var(--ink);
+    }
+  }
+
+  &-outline {
+    background: #FFD700;
+    color: var(--ink);
+    border: 1px solid #FFD700;
+
+    &:hover {
+      background: var(--paper);
+      border-color: var(--paper);
+      color: var(--ink);
+
+      img[alt="카카오톡"] {
+        filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+      }
+    }
+
+    img[alt="카카오톡"] {
+      filter: brightness(0) saturate(100%) invert(5%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(5%) contrast(96%);
+    }
+  }
 }
 
 /* ── CONTACT RESPONSIVE ── */

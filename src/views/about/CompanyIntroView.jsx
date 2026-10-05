@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { companyInfo } from '../../constants';
 
 const CompanyIntroView = () => {
-    const [scrollProgress, setScrollProgress] = useState(0);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            if (totalHeight > 0) {
-                const currentProgress = (window.scrollY / totalHeight) * 100;
-                setScrollProgress(currentProgress);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -40,12 +26,6 @@ const CompanyIntroView = () => {
 
     return (
         <div className="company-intro-page">
-            <div 
-                className="reading-progress-bar" 
-                style={{ width: `${scrollProgress}%` }}
-                aria-hidden="true"
-            />
-
             <Header />
 
             <main className="company-intro-article">

@@ -9,20 +9,23 @@
 .value-item {
   border-top: 2px solid var(--ink);
   padding-top: 24px;
-}
-.value-icon {
-  font-size: 28px;
-  margin-bottom: 16px;
-}
-.value-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 0.06em;
-  color: var(--ink);
-  margin-bottom: 12px;
-}
-.value-desc {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--muted);
+
+  .value-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .value-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .value-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+  }
 }
