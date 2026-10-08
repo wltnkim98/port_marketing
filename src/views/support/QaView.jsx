@@ -374,7 +374,7 @@ const QaView = () => {
                         <div className="qa-empty">
                             <p>아직 등록된 Q&A가 없습니다.</p>
                         </div>
-                    ) : (\
+                    ) : (
                         <div className="qa-list">
                             {questions.map((qa, idx) => {
                                 const isOpen = openQaIndex === idx;
@@ -555,7 +555,7 @@ const QaView = () => {
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`qa-page-btn ${currentPage === page ? 'active' : ''}`}\
+                                    className={`qa-page-btn ${currentPage === page ? 'active' : ''}`}
                                 >
                                     {page}
                                 </button>
