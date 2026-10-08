@@ -90,14 +90,17 @@ router.post('/', upload.single('file'), async (req, res) => {
     // Save to database
     await newConsult.save();
 
-    // Send emails (non-blocking)
-    sendConsultationEmail(newConsult).catch(err => {
-      console.error('Failed to send consultation email:', err);
-    });
-    
-    sendConfirmationEmail(newConsult).catch(err => {
-      console.error('Failed to send confirmation email:', err);
-    });
+    // Send emails (await both to guarantee execution on server)
+    try {
+      const [adminResult, customerResult] = await Promise.allSettled([
+        sendConsultationEmail(newConsult),
+        sendConfirmationEmail(newConsult)
+      ]);
+      console.log('Admin email status:', adminResult.status, adminResult.value);
+      console.log('Customer email status:', customerResult.status, customerResult.value);
+    } catch (emailErr) {
+      console.error('Failed to send consultation emails:', emailErr);
+    }
 
     res.status(201).json({
       success: true,
@@ -125,8 +128,8 @@ router.post('/', upload.single('file'), async (req, res) => {
     if (error.name === 'ValidationError') {
       return res.status(400).json({
         success: false,
-        message: Object.values(error.errors).map(err => err.message).join(', ')
-      });
+        message: Object.values(error.errors).map(err => err.message).join(', ')}
+      );
     }
 
     res.status(500).json({

@@ -10,18 +10,13 @@ const path = require('path');
 const consultRoutes = require('./routes/consult');
 const qaRoutes = require('./routes/qa');
 const authRoutes = require('./routes/auth');
+const { verifyEmailConnection } = require('./middleware/email');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Trust proxy for Render and other hosting platforms (set to 1 hop for Render reverse proxy)
+// Trust proxy for Render and other hosting platforms (1 hop for Render reverse proxy)
 app.set('trust proxy', 1);
-
-// Security middleware (disabled for development to allow file serving)
-// app.use(helmet({
-//   contentSecurityPolicy: false,
-//   crossOriginEmbedderPolicy: false
-// }));
 
 // CORS configuration
 const allowedOrigins = [
@@ -72,7 +67,6 @@ app.get('/uploads/:filename', (req, res) => {
   const { filename } = req.params;
   const filePath = path.join(__dirname, 'uploads', filename);
   
-  // Set CORS headers for all responses
   res.header('Access-Control-Allow-Origin', req.headers.origin || process.env.CLIENT_URL || 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -82,7 +76,6 @@ app.get('/uploads/:filename', (req, res) => {
     return res.sendStatus(200);
   }
   
-  // Check if file exists
   if (!require('fs').existsSync(filePath)) {
     return res.status(404).json({
       success: false,
@@ -90,7 +83,6 @@ app.get('/uploads/:filename', (req, res) => {
     });
   }
   
-  // Determine content type
   const ext = path.extname(filename).toLowerCase();
   let contentType = 'application/octet-stream';
   
@@ -117,6 +109,16 @@ app.get('/uploads/:filename', (req, res) => {
   res.sendFile(filePath);
 });
 
+// Root endpoint for Render health checks and browser test
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'MarketWith API Server',
+    environment: process.env.NODE_ENV || 'development',
+    time: new Date().toISOString()
+  });
+});
+
 // Routes
 app.use('/api/support/consult', consultRoutes);
 app.use('/api/support/qa', qaRoutes);
@@ -125,6 +127,22 @@ app.use('/api/auth', authRoutes);
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
+});
+
+// Email configuration test endpoint
+app.get('/api/health/email', async (req, res) => {
+  try {
+    const result = await verifyEmailConnection();
+    res.json({
+      success: result.success,
+      message: result.message,
+      emailUserConfigured: Boolean(process.env.EMAIL_USER),
+      emailPassConfigured: Boolean(process.env.EMAIL_PASS),
+      user: process.env.EMAIL_USER ? `${process.env.EMAIL_USER.slice(0, 3)}***` : null
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 // MongoDB connection
@@ -137,12 +155,21 @@ mongoose.connect(process.env.MONGODB_URI)
     process.exit(1);
   });
 
-// Error handling middleware
-app.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).json({ 
+// 404 handler for undefined routes
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: `경로를 찾을 수 없습니다: ${req.method} ${req.originalUrl}`
+  });
+});
+
+// Error handling middleware (Express REQUIRES exactly 4 arguments: err, req, res, next)
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error('[Unhandled Error]', err.stack || err);
+  res.status(err.status || 500).json({ 
     success: false, 
-    message: 'Internal server error',
+    message: err.message || 'Internal server error',
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
 });
@@ -151,4 +178,6 @@ app.use((err, req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`[Config Check] EMAIL_USER: ${process.env.EMAIL_USER ? 'SET (' + process.env.EMAIL_USER + ')' : 'NOT SET'}`);
+  console.log(`[Config Check] EMAIL_PASS: ${process.env.EMAIL_PASS ? 'SET (length: ' + process.env.EMAIL_PASS.length + ')' : 'NOT SET'}`);
 });

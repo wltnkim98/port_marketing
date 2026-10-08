@@ -24,16 +24,41 @@ const createTransporter = () => {
     });
   }
   
-  // Default to Gmail
+  // Default to Gmail with explicit host/port and IPv4 forcing
   return nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE || 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     },
-    // Force IPv4 to avoid IPv6 connection issues
     family: 4
   });
+};
+
+// Verify email connection
+const verifyEmailConnection = async () => {
+  if (!process.env.SENDGRID_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)) {
+    return {
+      success: false,
+      message: 'EMAIL_USER 또는 EMAIL_PASS 환경 변수가 설정되어 있지 않습니다.'
+    };
+  }
+
+  try {
+    const transporter = createTransporter();
+    await transporter.verify();
+    return {
+      success: true,
+      message: 'SMTP 서버 연결 및 인증에 성공했습니다.'
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: `SMTP 연결 실패: ${error.message}`
+    };
+  }
 };
 
 // Send consultation notification email
@@ -48,7 +73,7 @@ const sendConsultationEmail = async (consultData) => {
     
     const emailContent = {
       from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // Send to yourself for now
+      to: process.env.EMAIL_USER, // Send to admin
       subject: `[새 상담 신청] ${consultData.company} - ${consultData.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -157,5 +182,6 @@ const sendConfirmationEmail = async (consultData) => {
 
 module.exports = {
   sendConsultationEmail,
-  sendConfirmationEmail
+  sendConfirmationEmail,
+  verifyEmailConnection
 };
