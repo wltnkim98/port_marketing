@@ -137,8 +137,8 @@ app.get('/api/health/email', async (req, res) => {
       success: result.success,
       provider: result.provider,
       message: result.message,
-      resendConfigured: Boolean(process.env.RESEND_API_KEY),
-      smtpUserConfigured: Boolean(process.env.EMAIL_USER)
+      gmailApiConfigured: Boolean(process.env.GMAIL_CLIENT_ID && process.env.GMAIL_REFRESH_TOKEN),
+      smtpConfigured: Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASS)
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -178,5 +178,6 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`[Email Service] ${process.env.RESEND_API_KEY ? 'Resend API (HTTPS)' : 'Nodemailer SMTP (Port 465)'}`);
+  const hasGmailApi = Boolean(process.env.GMAIL_CLIENT_ID && process.env.GMAIL_REFRESH_TOKEN);
+  console.log(`[Email Service] ${hasGmailApi ? 'Gmail REST API (HTTPS Port 443)' : 'Nodemailer SMTP'}`);
 });

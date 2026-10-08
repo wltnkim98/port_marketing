@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { Resend } = require('resend');
+const MailComposer = require('nodemailer/lib/mail-composer');
 
 // Category mapping for Korean labels
 const CATEGORY_LABELS = {
@@ -11,34 +11,76 @@ const CATEGORY_LABELS = {
   'etc': '종합 비즈니스 상담'
 };
 
-const getResendClient = () => {
-  if (process.env.RESEND_API_KEY) {
-    return new Resend(process.env.RESEND_API_KEY);
-  }
-  return null;
-};
-
-const getResendFrom = () => {
-  return process.env.RESEND_FROM || 'MarketWith <onboarding@resend.dev>';
-};
-
 const getAdminEmail = () => {
-  return process.env.EMAIL_USER || 'wltnkim98@gmail.com';
+  return process.env.GMAIL_USER || process.env.EMAIL_USER || 'wltnkim98@gmail.com';
 };
 
-// Create fallback email transporter (Gmail SMTP)
-const createTransporter = () => {
-  if (process.env.SENDGRID_API_KEY) {
-    return nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY
-      }
-    });
+// Check if Gmail REST API credentials are configured
+const isGmailApiConfigured = () => {
+  return Boolean(
+    process.env.GMAIL_CLIENT_ID &&
+    process.env.GMAIL_CLIENT_SECRET &&
+    process.env.GMAIL_REFRESH_TOKEN
+  );
+};
+
+// Get fresh access token from Google OAuth2
+const getGoogleAccessToken = async () => {
+  const params = new URLSearchParams({
+    client_id: process.env.GMAIL_CLIENT_ID,
+    client_secret: process.env.GMAIL_CLIENT_SECRET,
+    refresh_token: process.env.GMAIL_REFRESH_TOKEN,
+    grant_type: 'refresh_token'
+  });
+
+  const response = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString()
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error_description || data.error || 'Failed to refresh Google access token');
   }
-  
+
+  return data.access_token;
+};
+
+// Send email via Gmail REST API (HTTPS port 443 - Render free tier compatible)
+const sendViaGmailApi = async ({ to, subject, html }) => {
+  const accessToken = await getGoogleAccessToken();
+  const fromEmail = getAdminEmail();
+
+  const mail = new MailComposer({
+    from: `MarketWith <${fromEmail}>`,
+    to,
+    subject,
+    html
+  });
+
+  const messageBuffer = await mail.compile().build();
+  const raw = Buffer.from(messageBuffer).toString('base64url');
+
+  const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ raw })
+  });
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error?.message || 'Failed to send email via Gmail REST API');
+  }
+
+  return data;
+};
+
+// Fallback SMTP Transporter (Local development)
+const createSmtpTransporter = () => {
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -53,63 +95,48 @@ const createTransporter = () => {
 
 // Verify email connection
 const verifyEmailConnection = async () => {
-  const resend = getResendClient();
-  if (resend) {
+  // 1. Gmail REST API 검증
+  if (isGmailApiConfigured()) {
     try {
-      const { data, error } = await resend.apiKeys.list();
-      if (error) {
-        // Resend에서 "Sending access" 권한으로 생성한 키는 목록 조회 권한이 제한되어 있으나, 발송은 정상 가능함
-        if (error.message && error.message.includes('restricted to only send emails')) {
-          return {
-            success: true,
-            provider: 'resend',
-            message: 'Resend API 키 인증 성공 (발송 전용 권한 확인됨 - 메일 발송 정상 작동)'
-          };
-        }
-        return {
-          success: false,
-          provider: 'resend',
-          message: `Resend 인증 실패: ${error.message}`
-        };
-      }
+      await getGoogleAccessToken();
       return {
         success: true,
-        provider: 'resend',
-        message: 'Resend API 키 인증 성공 (HTTPS 통신 정상)'
+        provider: 'gmail_api',
+        message: 'Gmail REST API OAuth2 인증 성공 (HTTPS 통신 정상, 모든 수신자 발송 가능)'
       };
     } catch (err) {
       return {
         success: false,
-        provider: 'resend',
-        message: `Resend 통신 오류: ${err.message}`
+        provider: 'gmail_api',
+        message: `Gmail REST API 인증 실패: ${err.message}`
       };
     }
   }
 
-  // Fallback SMTP check
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    return {
-      success: false,
-      provider: 'smtp',
-      message: 'RESEND_API_KEY 또는 EMAIL_USER/EMAIL_PASS 환경 변수가 설정되어 있지 않습니다.'
-    };
+  // 2. SMTP 검증 (로컬 환경 등)
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    try {
+      const transporter = createSmtpTransporter();
+      await transporter.verify();
+      return {
+        success: true,
+        provider: 'smtp',
+        message: 'Gmail SMTP 서버 연결 성공 (포트 465)'
+      };
+    } catch (err) {
+      return {
+        success: false,
+        provider: 'smtp',
+        message: `SMTP 연결 실패: ${err.message}`
+      };
+    }
   }
 
-  try {
-    const transporter = createTransporter();
-    await transporter.verify();
-    return {
-      success: true,
-      provider: 'smtp',
-      message: 'SMTP 서버 연결 및 인증에 성공했습니다.'
-    };
-  } catch (error) {
-    return {
-      success: false,
-      provider: 'smtp',
-      message: `SMTP 연결 실패: ${error.message}`
-    };
-  }
+  return {
+    success: false,
+    provider: 'none',
+    message: 'Gmail API 또는 SMTP 환경변수가 설정되어 있지 않습니다.'
+  };
 };
 
 // Send consultation notification email to admin
@@ -160,49 +187,41 @@ const sendConsultationEmail = async (consultData) => {
     </div>
   `;
 
-  // 1. Resend API 우선 사용
-  const resend = getResendClient();
-  if (resend) {
+  // 1. Gmail REST API 우선 사용
+  if (isGmailApiConfigured()) {
     try {
-      const { data, error } = await resend.emails.send({
-        from: getResendFrom(),
+      const result = await sendViaGmailApi({
         to: adminEmail,
         subject,
         html
       });
-
-      if (error) {
-        console.error('[Resend Error] Failed to send admin email:', error);
-        return false;
-      }
-
-      console.log('[Resend Success] Consultation email sent to admin:', data.id);
+      console.log('[Gmail API Success] Admin email sent:', result.id);
       return true;
     } catch (err) {
-      console.error('[Resend Exception] Error sending admin email:', err);
+      console.error('[Gmail API Error] Failed to send admin email:', err.message);
       return false;
     }
   }
 
-  // 2. Fallback: SMTP 전송
+  // 2. Fallback: SMTP
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error('[Email Error] EMAIL_USER or EMAIL_PASS environment variable is not configured.');
+      console.error('[Email Error] No email configuration found.');
       return false;
     }
 
-    const transporter = createTransporter();
+    const transporter = createSmtpTransporter();
     const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      from: `MarketWith <${process.env.EMAIL_USER}>`,
       to: adminEmail,
       subject,
       html
     });
 
-    console.log('[SMTP Success] Consultation email sent to admin:', info.messageId);
+    console.log('[SMTP Success] Admin email sent:', info.messageId);
     return true;
   } catch (error) {
-    console.error('[SMTP Error] Failed to send consultation email to admin:', error);
+    console.error('[SMTP Error] Failed to send admin email:', error);
     return false;
   }
 };
@@ -237,52 +256,41 @@ const sendConfirmationEmail = async (consultData) => {
     </div>
   `;
 
-  // 1. Resend API 우선 사용
-  const resend = getResendClient();
-  if (resend) {
+  // 1. Gmail REST API 우선 사용
+  if (isGmailApiConfigured()) {
     try {
-      const { data, error } = await resend.emails.send({
-        from: getResendFrom(),
+      const result = await sendViaGmailApi({
         to: consultData.email,
         subject,
         html
       });
-
-      if (error) {
-        console.error('[Resend Error] Failed to send customer confirmation email:', error);
-        if (error.statusCode === 403 || (error.message && error.message.includes('testing emails'))) {
-          console.warn('[Resend Sandbox Notice] onboarding@resend.dev 테스트 도메인은 계정 본인 이메일로만 발송 가능합니다. 고객에게 발송하려면 Resend에서 커스텀 도메인을 등록해 주세요.');
-        }
-        return false;
-      }
-
-      console.log('[Resend Success] Confirmation email sent to customer:', data.id);
+      console.log('[Gmail API Success] Customer confirmation sent to:', consultData.email, 'ID:', result.id);
       return true;
     } catch (err) {
-      console.error('[Resend Exception] Error sending customer confirmation email:', err);
+      console.error('[Gmail API Error] Failed to send customer confirmation:', err.message);
       return false;
     }
   }
 
-  // 2. Fallback: SMTP 전송
+  // 2. Fallback: SMTP
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error('[Email Error] EMAIL_USER or EMAIL_PASS environment variable is not configured.');
+      console.error('[Email Error] No email configuration found.');
       return false;
     }
 
-    const transporter = createTransporter();
+    const transporter = createSmtpTransporter();
     const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      from: `MarketWith <${process.env.EMAIL_USER}>`,
       to: consultData.email,
       subject,
       html
     });
 
-    console.log('[SMTP Success] Confirmation email sent to customer:', info.messageId);
+    console.log('[SMTP Success] Customer confirmation sent to:', consultData.email, 'ID:', info.messageId);
     return true;
   } catch (error) {
-    console.error('[SMTP Error] Failed to send confirmation email to customer:', error);
+    console.error('[SMTP Error] Failed to send customer confirmation:', error);
     return false;
   }
 };
