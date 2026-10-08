@@ -20,8 +20,15 @@ router.get('/', async (req, res) => {
       .lean();
     
     // 관리자 인증 확인
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    const isAdmin = token && jwt.verify(token, process.env.JWT_SECRET);
+    let isAdmin = false;
+    try {
+      const token = req.header('Authorization')?.replace('Bearer ', '');
+      if (token) {
+        isAdmin = Boolean(jwt.verify(token, process.env.JWT_SECRET));
+      }
+    } catch (e) {
+      isAdmin = false;
+    }
     
     // 비밀글의 경우 내용을 숨김 처리 (관리자 제외)
     const sanitizedQuestions = questions.map(qa => {
@@ -68,9 +75,20 @@ router.get('/:id', async (req, res) => {
         message: '해당 Q&A를 찾을 수 없습니다.'
       });
     }
+
+    // 관리자 인증 확인
+    let isAdmin = false;
+    try {
+      const token = req.header('Authorization')?.replace('Bearer ', '');
+      if (token) {
+        isAdmin = Boolean(jwt.verify(token, process.env.JWT_SECRET));
+      }
+    } catch (e) {
+      isAdmin = false;
+    }
     
-    // 비밀글인 경우 비밀번호 확인 필요
-    if (qa.isPrivate) {
+    // 비밀글인 경우 비밀번호 확인 필요 (관리자 제외)
+    if (qa.isPrivate && !isAdmin) {
       const { password } = req.query;
       if (!password || password !== qa.password) {
         return res.json({
@@ -100,10 +118,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/qa - 질문 등록 (공개)
+// POST /api/qa - 질문 등록
 router.post('/', async (req, res) => {
   try {
-    const { title, questionerName, question, password } = req.body;
+    const { title, questionerName, question, password, isPrivate = false } = req.body;
     
     if (!title || title.trim().length === 0) {
       return res.status(400).json({
@@ -118,20 +136,32 @@ router.post('/', async (req, res) => {
         message: '질문 내용은 필수입니다.'
       });
     }
-    
-    const isPrivate = Boolean(password && password.trim().length > 0);
+
+    if (!password || password.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: '비밀번호는 필수입니다.'
+      });
+    }
+
+    if (password.trim().length < 4) {
+      return res.status(400).json({
+        success: false,
+        message: '비밀번호는 최소 4자리 이상이어야 합니다.'
+      });
+    }
     
     const newQa = await Qa.create({
       title: title.trim(),
-      questionerName: questionerName || '익명',
+      questionerName: questionerName?.trim() || '익명',
       question: question.trim(),
-      password: isPrivate ? password.trim() : '',
-      isPrivate
+      password: password.trim(),
+      isPrivate: Boolean(isPrivate)
     });
     
     res.status(201).json({
       success: true,
-      message: isPrivate ? '비밀글로 등록되었습니다.' : '질문이 등록되었습니다.',
+      message: Boolean(isPrivate) ? '비밀글로 등록되었습니다.' : '질문이 등록되었습니다.',
       data: newQa
     });
   } catch (error) {
@@ -185,8 +215,8 @@ router.put('/:id/answer', auth, async (req, res) => {
   }
 });
 
-// DELETE /api/qa/:id - Q&A 삭제 (관리자 전용)
-router.delete('/:id', auth, async (req, res) => {
+// DELETE /api/qa/:id - Q&A 삭제 (관리자 또는 작성자 비밀번호 인증)
+router.delete('/:id', async (req, res) => {
   try {
     const qa = await Qa.findById(req.params.id);
     
@@ -195,6 +225,36 @@ router.delete('/:id', auth, async (req, res) => {
         success: false,
         message: '해당 Q&A를 찾을 수 없습니다.'
       });
+    }
+
+    // 관리자 인증 확인
+    let isAdmin = false;
+    try {
+      const token = req.header('Authorization')?.replace('Bearer ', '');
+      if (token) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (decoded) isAdmin = true;
+      }
+    } catch (e) {
+      isAdmin = false;
+    }
+
+    // 관리자가 아닌 경우 사용자 비밀번호 검증
+    if (!isAdmin) {
+      const password = req.body?.password || req.query?.password;
+      if (!password || password.trim().length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: '삭제를 위해 비밀번호를 입력해주세요.'
+        });
+      }
+
+      if (qa.password !== password.trim()) {
+        return res.status(401).json({
+          success: false,
+          message: '비밀번호가 일치하지 않습니다.'
+        });
+      }
     }
     
     await Qa.findByIdAndDelete(req.params.id);
@@ -212,10 +272,10 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// PUT /api/qa/:id - 질문 수정 (비밀번호 인증 필요)
+// PUT /api/qa/:id - 질문 수정 (비밀번호 인증 필요 & 답변 완료 시 수정 불가)
 router.put('/:id', async (req, res) => {
   try {
-    const { title, question, password } = req.body;
+    const { title, question, password, isPrivate } = req.body;
     
     if (!title || title.trim().length === 0) {
       return res.status(400).json({
@@ -230,6 +290,13 @@ router.put('/:id', async (req, res) => {
         message: '질문 내용은 필수입니다.'
       });
     }
+
+    if (!password || password.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: '수정을 위해 비밀번호를 입력해주세요.'
+      });
+    }
     
     const qa = await Qa.findById(req.params.id);
     
@@ -239,9 +306,17 @@ router.put('/:id', async (req, res) => {
         message: '해당 Q&A를 찾을 수 없습니다.'
       });
     }
+
+    // 답변 완료 여부 확인: 답변이 완료된 질문은 수정 불가
+    if (qa.status === 'answered') {
+      return res.status(400).json({
+        success: false,
+        message: '답변이 완료된 질문은 수정할 수 없습니다.'
+      });
+    }
     
-    // 비밀번호 확인
-    if (qa.isPrivate && qa.password !== password) {
+    // 비밀번호 확인 (공개/비밀글 불문 필수 검증)
+    if (qa.password !== password.trim()) {
       return res.status(401).json({
         success: false,
         message: '비밀번호가 일치하지 않습니다.'
@@ -250,6 +325,9 @@ router.put('/:id', async (req, res) => {
     
     qa.title = title.trim();
     qa.question = question.trim();
+    if (typeof isPrivate === 'boolean') {
+      qa.isPrivate = isPrivate;
+    }
     await qa.save();
     
     res.json({
@@ -266,7 +344,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// PUT /api/qa/:id/answer - 답변 수정 (관리자 전용)
+// PUT /api/qa/:id/answer/edit - 답변 수정 (관리자 전용)
 router.put('/:id/answer/edit', auth, async (req, res) => {
   try {
     const { answer } = req.body;

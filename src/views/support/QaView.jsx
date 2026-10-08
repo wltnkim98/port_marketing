@@ -11,20 +11,33 @@ const QaView = () => {
         title: '',
         questionerName: '',
         question: '',
-        password: ''
+        password: '',
+        isPrivate: false
     });
     const [submitting, setSubmitting] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+    // 비밀글 열람 모달 상태
     const [privatePost, setPrivatePost] = useState(null);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [passwordInput, setPasswordInput] = useState('');
+
+    // 게시글 수정 상태
     const [editingPost, setEditingPost] = useState(null);
     const [editFormData, setEditFormData] = useState({
         title: '',
         question: '',
-        password: ''
+        password: '',
+        isPrivate: false
     });
+
+    // 게시글 삭제 모달 상태
+    const [deleteTargetPost, setDeleteTargetPost] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deletePasswordInput, setDeletePasswordInput] = useState('');
+    const [deleting, setDeleting] = useState(false);
+
     const [openQaIndex, setOpenQaIndex] = useState(null);
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
@@ -61,6 +74,10 @@ const QaView = () => {
             alert('질문 내용을 입력해주세요.');
             return;
         }
+        if (!formData.password || formData.password.trim().length < 4) {
+            alert('수정/삭제 시 사용할 비밀번호를 4자리 이상 입력해주세요.');
+            return;
+        }
 
         setSubmitting(true);
 
@@ -74,7 +91,8 @@ const QaView = () => {
                     title: formData.title,
                     questionerName: formData.questionerName || '익명',
                     question: formData.question,
-                    password: formData.password
+                    password: formData.password,
+                    isPrivate: formData.isPrivate
                 })
             });
 
@@ -82,7 +100,7 @@ const QaView = () => {
 
             if (data.success) {
                 alert(data.message || '질문이 등록되었습니다. 답변은 영업일 기준 48시간 이내에 등록됩니다.');
-                setFormData({ title: '', questionerName: '', question: '', password: '' });
+                setFormData({ title: '', questionerName: '', question: '', password: '', isPrivate: false });
                 setShowForm(false);
                 setCurrentPage(1);
                 fetchQuestions();
@@ -102,6 +120,7 @@ const QaView = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // 비밀글 본문 조회 처리
     const handleViewPrivatePost = (qa) => {
         setPrivatePost(qa);
         setShowPasswordModal(true);
@@ -115,11 +134,10 @@ const QaView = () => {
         }
 
         try {
-            const response = await fetch(`${API_URL}/api/support/qa/${privatePost._id}?password=${passwordInput}`);
+            const response = await fetch(`${API_URL}/api/support/qa/${privatePost._id}?password=${encodeURIComponent(passwordInput.trim())}`);
             const data = await response.json();
 
             if (data.success && !data.requirePassword) {
-                // 비밀번호 확인 성공, 해당 게시글 업데이트
                 setQuestions(prevQuestions => 
                     prevQuestions.map(q => 
                         q._id === privatePost._id ? data.data : q
@@ -137,12 +155,18 @@ const QaView = () => {
         }
     };
 
+    // 질문 수정 처리
     const handleEditPost = (qa) => {
+        if (qa.status === 'answered') {
+            alert('답변이 완료된 질문은 수정할 수 없습니다.');
+            return;
+        }
         setEditingPost(qa);
         setEditFormData({
             title: qa.title,
             question: qa.question,
-            password: ''
+            password: '',
+            isPrivate: Boolean(qa.isPrivate)
         });
     };
 
@@ -155,9 +179,8 @@ const QaView = () => {
             alert('질문 내용을 입력해주세요.');
             return;
         }
-
-        if (editingPost.isPrivate && !editFormData.password.trim()) {
-            alert('비밀글 수정을 위해 비밀번호를 입력해주세요.');
+        if (!editFormData.password.trim()) {
+            alert('수정을 위해 등록 시 설정한 비밀번호를 입력해주세요.');
             return;
         }
 
@@ -170,7 +193,8 @@ const QaView = () => {
                 body: JSON.stringify({
                     title: editFormData.title,
                     question: editFormData.question,
-                    password: editFormData.password
+                    password: editFormData.password.trim(),
+                    isPrivate: editFormData.isPrivate
                 })
             });
 
@@ -184,7 +208,7 @@ const QaView = () => {
                     )
                 );
                 setEditingPost(null);
-                setEditFormData({ title: '', question: '', password: '' });
+                setEditFormData({ title: '', question: '', password: '', isPrivate: false });
             } else {
                 alert(data.message || '수정에 실패했습니다.');
             }
@@ -196,7 +220,56 @@ const QaView = () => {
 
     const handleCancelEdit = () => {
         setEditingPost(null);
-        setEditFormData({ title: '', question: '', password: '' });
+        setEditFormData({ title: '', question: '', password: '', isPrivate: false });
+    };
+
+    // 질문 삭제 처리
+    const handleDeleteClick = (qa) => {
+        setDeleteTargetPost(qa);
+        setDeletePasswordInput('');
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteSubmit = async () => {
+        if (!deletePasswordInput.trim()) {
+            alert('비밀번호를 입력해주세요.');
+            return;
+        }
+
+        setDeleting(true);
+        try {
+            const response = await fetch(`${API_URL}/api/support/qa/${deleteTargetPost._id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    password: deletePasswordInput.trim()
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert('게시글이 삭제되었습니다.');
+                setQuestions(prevQuestions => 
+                    prevQuestions.filter(q => q._id !== deleteTargetPost._id)
+                );
+                setShowDeleteModal(false);
+                setDeleteTargetPost(null);
+                setDeletePasswordInput('');
+                if (editingPost && editingPost._id === deleteTargetPost._id) {
+                    setEditingPost(null);
+                }
+            } else {
+                alert(data.message || '삭제에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('게시글 삭제 에러:', error);
+            alert('서버 오류가 발생했습니다.');
+        } finally {
+            setDeleting(false);
+        }
     };
 
     return (
@@ -261,15 +334,27 @@ const QaView = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>비밀번호 (선택 - 입력 시 비밀글로 등록됩니다)</label>
+                                <label>비밀번호 * (4자리 이상)</label>
                                 <input
                                     type="password"
                                     value={formData.password}
                                     onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                    placeholder="비밀번호 (4자 이상)"
+                                    placeholder="비밀번호를 입력해주세요 (수정/삭제 시 필요)"
+                                    required
                                     minLength={4}
                                     maxLength={20}
                                 />
+                                <p className="form-hint">게시글 수정 및 삭제 시 본인 확인을 위해 사용됩니다.</p>
+                            </div>
+                            <div className="form-group form-group-checkbox">
+                                <label className="qa-checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.isPrivate}
+                                        onChange={(e) => setFormData({...formData, isPrivate: e.target.checked})}
+                                    />
+                                    <span>비밀글로 등록 (작성자와 관리자만 볼 수 있습니다)</span>
+                                </label>
                             </div>
                             <button 
                                 type="submit" 
@@ -289,7 +374,7 @@ const QaView = () => {
                         <div className="qa-empty">
                             <p>아직 등록된 Q&A가 없습니다.</p>
                         </div>
-                    ) : (
+                    ) : (\
                         <div className="qa-list">
                             {questions.map((qa, idx) => {
                                 const isOpen = openQaIndex === idx;
@@ -319,26 +404,36 @@ const QaView = () => {
                                                         rows={5}
                                                     />
                                                 </div>
-                                                {qa.isPrivate && (
-                                                    <div className="form-group">
-                                                        <label>비밀번호 *</label>
+                                                <div className="form-group">
+                                                    <label>비밀번호 *</label>
+                                                    <input
+                                                        type="password"
+                                                        value={editFormData.password}
+                                                        onChange={(e) => setEditFormData({...editFormData, password: e.target.value})}
+                                                        placeholder="등록 시 설정한 비밀번호를 입력해주세요"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="form-group form-group-checkbox">
+                                                    <label className="qa-checkbox-label">
                                                         <input
-                                                            type="password"
-                                                            value={editFormData.password}
-                                                            onChange={(e) => setEditFormData({...editFormData, password: e.target.value})}
-                                                            placeholder="비밀번호를 입력해주세요"
-                                                            required
+                                                            type="checkbox"
+                                                            checked={editFormData.isPrivate}
+                                                            onChange={(e) => setEditFormData({...editFormData, isPrivate: e.target.checked})}
                                                         />
-                                                    </div>
-                                                )}
+                                                        <span>비밀글로 등록</span>
+                                                    </label>
+                                                </div>
                                                 <div className="qa-edit-buttons">
                                                     <button 
+                                                        type="button"
                                                         className="qa-submit-btn"
                                                         onClick={handleEditSubmit}
                                                     >
                                                         수정 완료
                                                     </button>
                                                     <button 
+                                                        type="button"
                                                         className="qa-cancel-btn"
                                                         onClick={handleCancelEdit}
                                                     >
@@ -358,6 +453,9 @@ const QaView = () => {
                                                         <span className="qa-date">
                                                             {new Date(qa.createdAt).toLocaleDateString('ko-KR')}
                                                         </span>
+                                                        {qa.isPrivate && (
+                                                            <span className="qa-private-badge">비밀글 🔒</span>
+                                                        )}
                                                         {qa.status === 'answered' && (
                                                             <span className="qa-answered-badge">답변완료</span>
                                                         )}
@@ -379,23 +477,47 @@ const QaView = () => {
                                                         {qa.isPrivate && (!qa.question || qa.question === '') ? (
                                                             <div className="qa-private-content">
                                                                 <p className="qa-locked-text">🔒 비밀 게시글입니다. 비밀번호를 입력하여 확인하세요.</p>
-                                                                <button 
-                                                                    className="qa-password-btn"
-                                                                    onClick={() => handleViewPrivatePost(qa)}
-                                                                >
-                                                                    비밀번호 입력
-                                                                </button>
+                                                                <div className="qa-item-actions" style={{ justifyContent: 'center', marginTop: '12px' }}>
+                                                                    <button 
+                                                                        type="button"
+                                                                        className="qa-password-btn"
+                                                                        onClick={() => handleViewPrivatePost(qa)}
+                                                                    >
+                                                                        비밀번호 입력
+                                                                    </button>
+                                                                    <button 
+                                                                        type="button"
+                                                                        className="qa-delete-btn"
+                                                                        onClick={() => handleDeleteClick(qa)}
+                                                                    >
+                                                                        삭제
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         ) : (
                                                             <>
                                                                 <div className="qa-question-full">
                                                                     <p className="qa-question-text">{qa.question}</p>
-                                                                    <button 
-                                                                        className="qa-edit-btn"
-                                                                        onClick={() => handleEditPost(qa)}
-                                                                    >
-                                                                        수정
-                                                                    </button>
+                                                                    <div className="qa-item-actions">
+                                                                        {qa.status === 'answered' ? (
+                                                                            <span className="qa-answered-notice">※ 답변이 완료된 질문은 수정할 수 없습니다.</span>
+                                                                        ) : (
+                                                                            <button 
+                                                                                type="button"
+                                                                                className="qa-edit-btn"
+                                                                                onClick={() => handleEditPost(qa)}
+                                                                            >
+                                                                                수정
+                                                                            </button>
+                                                                        )}
+                                                                        <button 
+                                                                            type="button"
+                                                                            className="qa-delete-btn"
+                                                                            onClick={() => handleDeleteClick(qa)}
+                                                                        >
+                                                                            삭제
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                                 {qa.answer && (
                                                                     <div className="qa-answer">
@@ -433,7 +555,7 @@ const QaView = () => {
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`qa-page-btn ${currentPage === page ? 'active' : ''}`}
+                                    className={`qa-page-btn ${currentPage === page ? 'active' : ''}`}\
                                 >
                                     {page}
                                 </button>
@@ -449,6 +571,7 @@ const QaView = () => {
                     )}
                 </section>
 
+                {/* 비밀글 본문 조회 모달 */}
                 {showPasswordModal && (
                     <div className="qa-password-modal-overlay" onClick={() => setShowPasswordModal(false)}>
                         <div className="qa-password-modal" onClick={(e) => e.stopPropagation()}>
@@ -459,18 +582,58 @@ const QaView = () => {
                                 value={passwordInput}
                                 onChange={(e) => setPasswordInput(e.target.value)}
                                 placeholder="비밀번호"
+                                autoFocus
                                 onKeyPress={(e) => e.key === 'Enter' && handlePasswordSubmit()}
                             />
                             <div className="qa-password-modal-buttons">
                                 <button 
+                                    type="button"
                                     className="qa-submit-btn"
                                     onClick={handlePasswordSubmit}
                                 >
                                     확인
                                 </button>
                                 <button 
+                                    type="button"
                                     className="qa-cancel-btn"
                                     onClick={() => setShowPasswordModal(false)}
+                                >
+                                    취소
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 게시글 삭제 확인 모달 */}
+                {showDeleteModal && (
+                    <div className="qa-password-modal-overlay" onClick={() => !deleting && setShowDeleteModal(false)}>
+                        <div className="qa-password-modal" onClick={(e) => e.stopPropagation()}>
+                            <h3>게시글 삭제</h3>
+                            <p>게시글을 삭제하려면 등록 시 설정한 비밀번호를 입력해주세요.</p>
+                            <input
+                                type="password"
+                                value={deletePasswordInput}
+                                onChange={(e) => setDeletePasswordInput(e.target.value)}
+                                placeholder="비밀번호"
+                                autoFocus
+                                disabled={deleting}
+                                onKeyPress={(e) => e.key === 'Enter' && handleDeleteSubmit()}
+                            />
+                            <div className="qa-password-modal-buttons">
+                                <button 
+                                    type="button"
+                                    className="qa-submit-btn qa-delete-submit-btn"
+                                    onClick={handleDeleteSubmit}
+                                    disabled={deleting}
+                                >
+                                    {deleting ? '삭제 중...' : '삭제'}
+                                </button>
+                                <button 
+                                    type="button"
+                                    className="qa-cancel-btn"
+                                    onClick={() => setShowDeleteModal(false)}
+                                    disabled={deleting}
                                 >
                                     취소
                                 </button>

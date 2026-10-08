@@ -26,6 +26,7 @@ const qaSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: [true, '비밀번호는 필수입니다.'],
     trim: true
   },
   isPrivate: {
