@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -139,7 +138,7 @@ mongoose.connect(process.env.MONGODB_URI)
   });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).json({ 
     success: false, 
