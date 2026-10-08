@@ -135,10 +135,10 @@ app.get('/api/health/email', async (req, res) => {
     const result = await verifyEmailConnection();
     res.json({
       success: result.success,
+      provider: result.provider,
       message: result.message,
-      emailUserConfigured: Boolean(process.env.EMAIL_USER),
-      emailPassConfigured: Boolean(process.env.EMAIL_PASS),
-      user: process.env.EMAIL_USER ? `${process.env.EMAIL_USER.slice(0, 3)}***` : null
+      resendConfigured: Boolean(process.env.RESEND_API_KEY),
+      smtpUserConfigured: Boolean(process.env.EMAIL_USER)
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -178,6 +178,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`[Config Check] EMAIL_USER: ${process.env.EMAIL_USER ? 'SET (' + process.env.EMAIL_USER + ')' : 'NOT SET'}`);
-  console.log(`[Config Check] EMAIL_PASS: ${process.env.EMAIL_PASS ? 'SET (length: ' + process.env.EMAIL_PASS.length + ')' : 'NOT SET'}`);
+  console.log(`[Email Service] ${process.env.RESEND_API_KEY ? 'Resend API (HTTPS)' : 'Nodemailer SMTP (Port 465)'}`);
 });
