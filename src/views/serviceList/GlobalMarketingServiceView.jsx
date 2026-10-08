@@ -324,7 +324,7 @@ const GlobalMarketingServiceView = () => {
 
                     <div className="solution-panel-display">
                         <div className="solution-panel-visual">
-                            <img src={solutionTabs[activeTab].image} alt={solutionTabs[activeTab].title} />
+                            <img src={solutionTabs[activeTab].image} alt={solutionTabs[activeTab].title} loading="lazy" decoding="async" />
                             <span className="panel-img-badge">{solutionTabs[activeTab].tag}</span>
                         </div>
 

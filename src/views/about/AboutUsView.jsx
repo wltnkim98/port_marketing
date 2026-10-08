@@ -49,6 +49,8 @@ const AboutUsView = () => {
                     <img 
                         src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1400&q=80" 
                         alt="MarketWith Brand Marketing Architecture" 
+                        loading="eager"
+                        decoding="async"
                     />
                     <div className="aboutus-hero-caption">
                         <span>PERSPECTIVE 01</span>
@@ -99,6 +101,8 @@ const AboutUsView = () => {
                                     <img 
                                         src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" 
                                         alt="어디에 맡겨야 할지 고민하는 마케팅 전략 미팅" 
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                 </div>
                                 <div className="break-info-holder">
@@ -185,6 +189,8 @@ const AboutUsView = () => {
                                     <img 
                                         src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" 
                                         alt="정형화된 데이터의 맹점과 리스크 분석" 
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                 </div>
                             </div>
@@ -234,6 +240,8 @@ const AboutUsView = () => {
                                     <img 
                                         src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80" 
                                         alt="고객 맞춤형 심층 분석 및 크리에이티브 협업" 
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                 </div>
                                 <div className="break-info-holder">
@@ -313,6 +321,8 @@ const AboutUsView = () => {
                                     <img 
                                         src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80" 
                                         alt="글로벌 시장으로 도약하는 비즈니스 메트로폴리스" 
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                 </div>
                             </div>

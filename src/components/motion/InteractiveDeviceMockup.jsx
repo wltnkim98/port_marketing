@@ -16,6 +16,7 @@ const InteractiveDeviceMockup = ({ serviceType }) => {
                         muted
                         loop
                         playsInline
+                        preload="metadata"
                     >
                         <source src={PhotographyVideo} type="video/mp4" />
                     </video>
@@ -138,6 +139,7 @@ const InteractiveDeviceMockup = ({ serviceType }) => {
                         muted
                         loop
                         playsInline
+                        preload="metadata"
                     >
                         <source src={GlobalVideo} type="video/mp4" />
                     </video>

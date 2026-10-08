@@ -10,6 +10,7 @@ const Intro = () => {
                 muted
                 loop
                 playsInline
+                preload="metadata"
             >
                 <source src={IntroVideo} type="video/mp4" />
             </video>

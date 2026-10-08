@@ -263,6 +263,8 @@ const ServiceView = () => {
                                         src={srv.image}
                                         alt={srv.title}
                                         className={`service-sticky-image ${activeIndex === idx ? 'active' : ''}`}
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                 ))}
                             </div>
