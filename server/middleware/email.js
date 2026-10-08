@@ -39,6 +39,11 @@ const createTransporter = () => {
 // Send consultation notification email
 const sendConsultationEmail = async (consultData) => {
   try {
+    if (!process.env.SENDGRID_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)) {
+      console.error('[Email Error] EMAIL_USER or EMAIL_PASS environment variable is not configured.');
+      return false;
+    }
+
     const transporter = createTransporter();
     
     const emailContent = {
@@ -90,11 +95,11 @@ const sendConsultationEmail = async (consultData) => {
       `
     };
     
-    await transporter.sendMail(emailContent);
-    console.log('Email sent successfully');
+    const info = await transporter.sendMail(emailContent);
+    console.log('[Email Success] Consultation email sent to admin successfully:', info.messageId);
     return true;
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('[Email Error] Failed to send consultation email to admin:', error);
     return false;
   }
 };
@@ -102,6 +107,11 @@ const sendConsultationEmail = async (consultData) => {
 // Send confirmation email to customer
 const sendConfirmationEmail = async (consultData) => {
   try {
+    if (!process.env.SENDGRID_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)) {
+      console.error('[Email Error] EMAIL_USER or EMAIL_PASS environment variable is not configured.');
+      return false;
+    }
+
     const transporter = createTransporter();
     
     const emailContent = {
@@ -136,11 +146,11 @@ const sendConfirmationEmail = async (consultData) => {
       `
     };
     
-    await transporter.sendMail(emailContent);
-    console.log('Confirmation email sent successfully');
+    const info = await transporter.sendMail(emailContent);
+    console.log('[Email Success] Confirmation email sent to customer successfully:', info.messageId);
     return true;
   } catch (error) {
-    console.error('Confirmation email sending error:', error);
+    console.error('[Email Error] Failed to send confirmation email to customer:', error);
     return false;
   }
 };

@@ -15,8 +15,8 @@ const authRoutes = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Trust proxy for Render and other hosting platforms
-app.set('trust proxy', true);
+// Trust proxy for Render and other hosting platforms (set to 1 hop for Render reverse proxy)
+app.set('trust proxy', 1);
 
 // Security middleware (disabled for development to allow file serving)
 // app.use(helmet({
@@ -25,8 +25,29 @@ app.set('trust proxy', true);
 // }));
 
 // CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [])
+].map(url => url.trim().replace(/\/$/, '')).filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    
+    const cleanOrigin = origin.replace(/\/$/, '');
+    if (
+      allowedOrigins.includes(cleanOrigin) ||
+      allowedOrigins.includes('*') ||
+      cleanOrigin.endsWith('.netlify.app') ||
+      process.env.NODE_ENV !== 'production'
+    ) {
+      return callback(null, true);
+    }
+    
+    return callback(null, true);
+  },
   credentials: true
 }));
 
@@ -34,8 +55,11 @@ app.use(cors({
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  validate: { trustProxy: false },
   message: 'Too many requests from this IP, please try again later.',
-  skip: (req) => req.path.startsWith('/api/qa')
+  skip: (req) => (req.originalUrl && req.originalUrl.includes('/api/qa')) || req.path.startsWith('/qa')
 });
 app.use('/api/', limiter);
 
@@ -50,7 +74,7 @@ app.get('/uploads/:filename', (req, res) => {
   const filePath = path.join(__dirname, 'uploads', filename);
   
   // Set CORS headers for all responses
-  res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL || 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', req.headers.origin || process.env.CLIENT_URL || 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
