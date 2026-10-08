@@ -58,6 +58,14 @@ const verifyEmailConnection = async () => {
     try {
       const { data, error } = await resend.apiKeys.list();
       if (error) {
+        // Resend에서 "Sending access" 권한으로 생성한 키는 목록 조회 권한이 제한되어 있으나, 발송은 정상 가능함
+        if (error.message && error.message.includes('restricted to only send emails')) {
+          return {
+            success: true,
+            provider: 'resend',
+            message: 'Resend API 키 인증 성공 (발송 전용 권한 확인됨 - 메일 발송 정상 작동)'
+          };
+        }
         return {
           success: false,
           provider: 'resend',
