@@ -256,7 +256,7 @@ const Cases = () => {
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="none"
             >
                 <source src="/building_low.mp4" type="video/mp4" />
             </video>
