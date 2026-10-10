@@ -258,7 +258,7 @@ const Cases = () => {
                 playsInline
                 preload="auto"
             >
-                <source src="/building.mp4" type="video/mp4" />
+                <source src="/building_low.mp4" type="video/mp4" />
             </video>
             <RisingGraph isVisible={isVisible} />
             <div className="cases-content">
