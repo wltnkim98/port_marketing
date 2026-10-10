@@ -1,5 +1,5 @@
 import React from 'react';
-import IntroVideo from '../assets/video/Intro_video.mp4';
+import IntroVideo from '../assets/video/Intro_video_low.mp4';
 
 const Intro = () => {
     return (
@@ -10,7 +10,7 @@ const Intro = () => {
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="auto"
             >
                 <source src={IntroVideo} type="video/mp4" />
             </video>

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import PhotographyVideo from '../../assets/video/photography.mp4';
+import React from 'react';
+import PhotographyVideo from '../../assets/video/photography_low.mp4';
 import GlobalVideo from '../../assets/video/global_video.mp4';
 
 const InteractiveDeviceMockup = ({ serviceType }) => {
-    const [mockupTab, setMockupTab] = useState(0);
-
     return (
         <div className="interactive-mockup-container">
             {/* ─── Photography Viewfinder Mockup ─── */}
@@ -20,22 +18,6 @@ const InteractiveDeviceMockup = ({ serviceType }) => {
                     >
                         <source src={PhotographyVideo} type="video/mp4" />
                     </video>
-                    <div className="hud-top-bar">
-                        <span className="hud-rec-dot">● REC [4K 60FPS HDR]</span>
-                        <span className="hud-battery">98% ▮▮▮</span>
-                    </div>
-                    <div className="hud-center-grid">
-                        <div className="crosshair-center">+</div>
-                        <div className="hud-focus-box">
-                            <span className="focus-label">TRACKING: SUBJECT LOCKED</span>
-                        </div>
-                    </div>
-                    <div className="hud-bottom-bar">
-                        <span className="hud-stat">ISO 400</span>
-                        <span className="hud-stat">F 1.4</span>
-                        <span className="hud-stat">1/120s</span>
-                        <span className="hud-stat">COLOR: CINEMATIC LOG</span>
-                    </div>
                 </div>
             )}
 

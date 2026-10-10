@@ -1217,56 +1217,6 @@
         object-fit: cover;
         z-index: 0;
     }
-
-    .hud-top-bar {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        z-index: 1;
-
-        .hud-rec-dot {
-            color: #ff3333;
-            animation: pulse-dot 1.2s infinite;
-        }
-    }
-
-    .hud-center-grid {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        z-index: 1;
-
-        .crosshair-center {
-            font-size: 1.8rem;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .hud-focus-box {
-            border: 1px dashed rgba(246, 79, 30, 0.8);
-            padding: 8px 18px;
-            border-radius: 4px;
-            animation: focus-pulse 2.5s infinite;
-
-            .focus-label {
-                font-size: 0.75rem;
-                color: var(--accent, #f64f1e);
-                font-weight: 700;
-            }
-        }
-    }
-
-    .hud-bottom-bar {
-        display: flex;
-        justify-content: space-around;
-        font-size: 0.78rem;
-        color: rgba(255, 255, 255, 0.7);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 10px;
-        z-index: 1;
-    }
 }
 
 // 2. Phone Frame
