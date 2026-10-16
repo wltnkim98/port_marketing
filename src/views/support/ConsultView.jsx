@@ -143,7 +143,7 @@ const BadgeIcon = ({ type }) => {
 };
 
 const ConsultView = () => {
-    const [setScrollProgress] = useState(0);
+    const [scrollProgress, setScrollProgress] = useState(0);
     const formRef = useRef(null);
 
     // Form states

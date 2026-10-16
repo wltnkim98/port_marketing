@@ -506,10 +506,10 @@ const AdminDashboard = () => {
                                             {isImageFile(selectedConsultation.fileName) ? (
                                                 <div className="admin-modal-image-preview">
                                                     <img 
-                                                        src={`${API_URL}/uploads/${selectedConsultation.fileName}`} 
+                                                        src={`${API_URL}/api/support/consult/file/${selectedConsultation.fileName}`} 
                                                         alt="첨부파일 미리보기"
                                                         onError={handleImageError}
-                                                        onClick={() => handleImageZoom(`${API_URL}/uploads/${selectedConsultation.fileName}`)}
+                                                        onClick={() => handleImageZoom(`${API_URL}/api/support/consult/file/${selectedConsultation.fileName}`)}
                                                         style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain', cursor: 'pointer' }}
                                                     />
                                                     <p className="file-error-message" style={{ display: 'none', color: '#dc3545', marginTop: '10px' }}>
@@ -517,7 +517,7 @@ const AdminDashboard = () => {
                                                     </p>
                                                     <button 
                                                         className="admin-modal-download-btn"
-                                                        onClick={() => window.open(`${API_URL}/uploads/${selectedConsultation.fileName}`, '_blank')}
+                                                        onClick={() => window.open(`${API_URL}/api/support/consult/file/${selectedConsultation.fileName}`, '_blank')}
                                                     >
                                                         원본 보기
                                                     </button>
@@ -525,7 +525,7 @@ const AdminDashboard = () => {
                                             ) : (
                                                 <button 
                                                     className="admin-modal-download-btn"
-                                                    onClick={() => window.open(`${API_URL}/uploads/${selectedConsultation.fileName}`, '_blank')}
+                                                    onClick={() => window.open(`${API_URL}/api/support/consult/file/${selectedConsultation.fileName}`, '_blank')}
                                                 >
                                                     다운로드
                                                 </button>

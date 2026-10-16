@@ -81,7 +81,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       message: message || '',
       fileName: req.file ? req.file.filename : '',
       fileSize: req.file ? req.file.size : 0,
-      filePath: req.file ? req.file.path : '',
+      filePath: req.file ? req.file.filename : '',
       privacyAgreed: privacyAgreed === 'true' || privacyAgreed === true,
       ipAddress: req.ip || req.connection.remoteAddress,
       userAgent: req.headers['user-agent'] || ''
