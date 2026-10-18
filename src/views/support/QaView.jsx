@@ -465,9 +465,6 @@ const QaView = () => {
                                                         <span className="qa-date">
                                                             {new Date(qa.createdAt).toLocaleDateString('ko-KR')}
                                                         </span>
-                                                        {qa.isPrivate && (
-                                                            <span className="qa-private-badge">비밀글 🔒</span>
-                                                        )}
                                                         {qa.status === 'answered' && (
                                                             <span className="qa-answered-badge">답변완료</span>
                                                         )}
