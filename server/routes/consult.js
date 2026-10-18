@@ -79,9 +79,10 @@ router.post('/', upload.single('file'), async (req, res) => {
       email,
       website: website || '',
       message: message || '',
-      fileName: req.file ? req.file.filename : '',
+      fileName: req.file ? req.file.originalname : '',
       fileSize: req.file ? req.file.size : 0,
-      filePath: req.file ? req.file.filename : '',
+      filePath: req.file ? req.file.path : '', // Cloudinary URL
+      fileUrl: req.file ? req.file.secure_url : '', // Cloudinary secure URL
       privacyAgreed: privacyAgreed === 'true' || privacyAgreed === true,
       ipAddress: req.ip || req.connection.remoteAddress,
       userAgent: req.headers['user-agent'] || ''

@@ -68,6 +68,10 @@ const consultSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  fileUrl: {
+    type: String,
+    default: ''
+  },
   
   // 개인정보 동의
   privacyAgreed: {
