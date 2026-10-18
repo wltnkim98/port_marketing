@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 // Portfolio data from PortfolioView
@@ -75,7 +75,7 @@ const PortfolioSlider = () => {
     const [currentIndex, setCurrentIndex] = useState(centerOffset + 1);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         setCurrentIndex((prev) => {
             const newIndex = prev + 1;
             // 전체 복제된 아이템 끝에 도달하면 중앙 섹션 시작으로 순환
@@ -84,9 +84,9 @@ const PortfolioSlider = () => {
             }
             return newIndex;
         });
-    };
+    }, [duplicatedItems.length, centerOffset]);
 
-    const prevSlide = () => {
+    const prevSlide = useCallback(() => {
         setCurrentIndex((prev) => {
             const newIndex = prev - 1;
             // 전체 복제된 아이템 시작에 도달하면 중앙 섹션 끝으로 순환
@@ -95,7 +95,7 @@ const PortfolioSlider = () => {
             }
             return newIndex;
         });
-    };
+    }, [centerOffset, originalLength]);
 
     // Auto-play functionality
     useEffect(() => {

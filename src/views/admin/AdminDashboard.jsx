@@ -19,6 +19,38 @@ const AdminDashboard = () => {
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
     const token = localStorage.getItem('adminToken');
 
+    const fetchConsultations = useCallback(async () => {
+        const response = await fetch(`${API_URL}/api/support/consult`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await response.json();
+        if (data.success) {
+            setConsultations(data.data);
+        }
+    }, [API_URL, token]);
+
+    const fetchQaList = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/api/support/qa?status=all`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                setQaList(data.data);
+            } else {
+                console.error('Q&A 목록 조회 실패:', data.message);
+                alert('Q&A 목록을 불러오지 못했습니다: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Q&A 목록 조회 에러:', error);
+            alert('Q&A 목록을 불러오지 못했습니다.');
+        }
+    }, [API_URL, token]);
+
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
@@ -32,7 +64,7 @@ const AdminDashboard = () => {
         } finally {
             setLoading(false);
         }
-    }, [activeTab]);
+    }, [activeTab, fetchConsultations, fetchQaList]);
 
     useEffect(() => {
         if (!token) {
@@ -41,18 +73,6 @@ const AdminDashboard = () => {
         }
         fetchData();
     }, [token, navigate, fetchData]);
-
-    const fetchConsultations = async () => {
-        const response = await fetch(`${API_URL}/api/support/consult`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const data = await response.json();
-        if (data.success) {
-            setConsultations(data.data);
-        }
-    };
 
     const fetchConsultationDetail = async (consultId) => {
         try {
@@ -81,26 +101,6 @@ const AdminDashboard = () => {
     const closeConsultModal = () => {
         setShowConsultModal(false);
         setSelectedConsultation(null);
-    };
-
-    const fetchQaList = async () => {
-        try {
-            const response = await fetch(`${API_URL}/api/support/qa?status=all`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            if (data.success) {
-                setQaList(data.data);
-            } else {
-                console.error('Q&A 목록 조회 실패:', data.message);
-                alert('Q&A 목록을 불러오지 못했습니다: ' + data.message);
-            }
-        } catch (error) {
-            console.error('Q&A 목록 조회 에러:', error);
-            alert('서버 오류가 발생했습니다. Q&A 목록을 불러오지 못했습니다.');
-        }
     };
 
     const handleLogout = () => {
