@@ -20,24 +20,44 @@ const AdminDashboard = () => {
     const token = localStorage.getItem('adminToken');
 
     const fetchConsultations = useCallback(async () => {
-        const response = await fetch(`${API_URL}/api/support/consult`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        
+        try {
+            const response = await fetch(`${API_URL}/api/support/consult`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            const data = await response.json();
+            if (data.success) {
+                setConsultations(data.data);
             }
-        });
-        const data = await response.json();
-        if (data.success) {
-            setConsultations(data.data);
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.error('상담 목록 조회 타임아웃:', error);
+                alert('요청 시간이 초과되었습니다. 다시 시도해 주세요.');
+            } else {
+                console.error('상담 목록 조회 에러:', error);
+            }
         }
     }, [API_URL, token]);
 
     const fetchQaList = useCallback(async () => {
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+            
             const response = await fetch(`${API_URL}/api/support/qa?status=all`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
-                }
+                },
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
             const data = await response.json();
             if (data.success) {
                 setQaList(data.data);
@@ -46,8 +66,13 @@ const AdminDashboard = () => {
                 alert('Q&A 목록을 불러오지 못했습니다: ' + data.message);
             }
         } catch (error) {
-            console.error('Q&A 목록 조회 에러:', error);
-            alert('Q&A 목록을 불러오지 못했습니다.');
+            if (error.name === 'AbortError') {
+                console.error('Q&A 목록 조회 타임아웃:', error);
+                alert('요청 시간이 초과되었습니다. 다시 시도해 주세요.');
+            } else {
+                console.error('Q&A 목록 조회 에러:', error);
+                alert('Q&A 목록을 불러오지 못했습니다.');
+            }
         }
     }, [API_URL, token]);
 

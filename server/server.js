@@ -103,6 +103,9 @@ app.get('/uploads/:filename', (req, res) => {
     case '.pdf':
       contentType = 'application/pdf';
       break;
+    default:
+      contentType = 'application/octet-stream';
+      break;
   }
   
   res.contentType(contentType);
@@ -145,8 +148,14 @@ app.get('/api/health/email', async (req, res) => {
   }
 });
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
+// MongoDB connection with optimized settings
+mongoose.connect(process.env.MONGODB_URI, {
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  connectTimeoutMS: 10000
+})
   .then(() => {
     console.log('MongoDB connected successfully');
   })
@@ -164,11 +173,10 @@ app.use((req, res, next) => {
 });
 
 // Error handling middleware (Express REQUIRES exactly 4 arguments: err, req, res, next)
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error('[Unhandled Error]', err.stack || err);
-  res.status(err.status || 500).json({ 
-    success: false, 
+  res.status(err.status || 500).json({
+    success: false,
     message: err.message || 'Internal server error',
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
   });

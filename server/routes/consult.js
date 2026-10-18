@@ -59,7 +59,7 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
 
     // Phone format validation (basic)
-    const phoneRegex = /^[0-9\-\s\+]{10,20}$/;
+    const phoneRegex = /^[0-9\-s+]{10,20}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({
         success: false,
@@ -90,18 +90,21 @@ router.post('/', upload.single('file'), async (req, res) => {
     // Save to database
     await newConsult.save();
 
-    // Send emails (await both to guarantee execution on server)
-    try {
-      const [adminResult, customerResult] = await Promise.allSettled([
-        sendConsultationEmail(newConsult),
-        sendConfirmationEmail(newConsult)
-      ]);
-      console.log('Admin email status:', adminResult.status, adminResult.value);
-      console.log('Customer email status:', customerResult.status, customerResult.value);
-    } catch (emailErr) {
-      console.error('Failed to send consultation emails:', emailErr);
-    }
+    // Send emails asynchronously in background (don't wait for response)
+    setImmediate(async () => {
+      try {
+        const [adminResult, customerResult] = await Promise.allSettled([
+          sendConsultationEmail(newConsult),
+          sendConfirmationEmail(newConsult)
+        ]);
+        console.log('Admin email status:', adminResult.status, adminResult.value);
+        console.log('Customer email status:', customerResult.status, customerResult.value);
+      } catch (emailErr) {
+        console.error('Failed to send consultation emails:', emailErr);
+      }
+    });
 
+    // Respond immediately after saving to database
     res.status(201).json({
       success: true,
       message: '상담 신청이 접수되었습니다. 영업일 기준 48시간 이내에 연락드리겠습니다.',
@@ -268,6 +271,9 @@ router.get('/file/:filename', async (req, res) => {
         break;
       case '.pdf':
         contentType = 'application/pdf';
+        break;
+      default:
+        contentType = 'application/octet-stream';
         break;
     }
     

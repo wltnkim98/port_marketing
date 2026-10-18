@@ -45,7 +45,14 @@ const QaView = () => {
     const fetchQuestions = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${API_URL}/api/support/qa?page=${currentPage}&status=all`);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+            
+            const response = await fetch(`${API_URL}/api/support/qa?page=${currentPage}&status=all`, {
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
             const data = await response.json();
             
             if (data.success) {
@@ -53,7 +60,12 @@ const QaView = () => {
                 setTotalPages(data.pagination.pages);
             }
         } catch (error) {
-            console.error('Q&A 조회 에러:', error);
+            if (error.name === 'AbortError') {
+                console.error('Q&A 조회 타임아웃:', error);
+                alert('요청 시간이 초과되었습니다. 다시 시도해 주세요.');
+            } else {
+                console.error('Q&A 조회 에러:', error);
+            }
         } finally {
             setLoading(false);
         }

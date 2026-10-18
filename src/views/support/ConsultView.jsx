@@ -264,21 +264,33 @@ const ConsultView = () => {
             }
             formDataToSend.append('privacyAgreed', agreePrivacy);
             
+            // Add timeout to fetch request
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            
             const response = await fetch(`${API_URL}/api/support/consult`, {
                 method: 'POST',
-                body: formDataToSend
+                body: formDataToSend,
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || '신청서 전송에 실패했습니다.');
+                alert(data.message || '신청서 전송에 실패했습니다.');
+                return;
             }
 
             setShowSuccessModal(true);
         } catch (error) {
             console.error('Submission error:', error);
-            alert(error.message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            if (error.name === 'AbortError') {
+                alert('요청 시간이 초과되었습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.');
+            } else {
+                alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            }
         } finally {
             setIsSubmitting(false);
         }
