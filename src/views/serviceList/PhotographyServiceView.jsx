@@ -6,7 +6,6 @@ import ServiceNav from '../../components/ServiceNav';
 import TiltCard from '../../components/motion/TiltCard';
 import LiveMetricCountUp from '../../components/motion/LiveMetricCountUp';
 import InteractiveProcessTimeline from '../../components/motion/InteractiveProcessTimeline';
-import ServiceSimulator from '../../components/motion/ServiceSimulator';
 import InteractiveDeviceMockup from '../../components/motion/InteractiveDeviceMockup';
 import AnimatedTitle from '../../components/motion/AnimatedTitle';
 

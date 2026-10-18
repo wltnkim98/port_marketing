@@ -143,7 +143,6 @@ const BadgeIcon = ({ type }) => {
 };
 
 const ConsultView = () => {
-    const [scrollProgress, setScrollProgress] = useState(0);
     const formRef = useRef(null);
 
     // Form states
@@ -167,18 +166,6 @@ const ConsultView = () => {
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Reading progress
-    useEffect(() => {
-        const handleScroll = () => {
-            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            if (totalHeight > 0) {
-                setScrollProgress((window.scrollY / totalHeight) * 100);
-            }
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     // Scroll reveal observer
     useEffect(() => {

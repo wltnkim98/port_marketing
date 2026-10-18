@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -42,11 +42,7 @@ const QaView = () => {
 
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
-    useEffect(() => {
-        fetchQuestions();
-    }, [currentPage]);
-
-    const fetchQuestions = async () => {
+    const fetchQuestions = useCallback(async () => {
         try {
             setLoading(true);
             const response = await fetch(`${API_URL}/api/support/qa?page=${currentPage}&status=all`);
@@ -61,7 +57,11 @@ const QaView = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentPage]);
+
+    useEffect(() => {
+        fetchQuestions();
+    }, [fetchQuestions]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

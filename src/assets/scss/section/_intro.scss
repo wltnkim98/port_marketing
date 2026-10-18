@@ -1,7 +1,9 @@
 /* ── intro ── */
 .intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-height: 100vh;
-  display: flex; flex-direction: column; justify-content: center;
   padding: 120px 60px 80px;
   position: relative;
   overflow: hidden;

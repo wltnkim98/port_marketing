@@ -25,7 +25,7 @@ const AdminDashboard = () => {
             return;
         }
         fetchData();
-    }, [activeTab]);
+    }, [activeTab, token, navigate]);
 
     const fetchData = async () => {
         setLoading(true);
