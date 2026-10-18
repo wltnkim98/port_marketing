@@ -40,7 +40,7 @@ const QaView = () => {
 
     const [openQaIndex, setOpenQaIndex] = useState(null);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'https://marketwith.onrender.com';
+    const API_URL = process.env.REACT_APP_API_URL || 'https://marketwith.onrender.com';
 
     const fetchQuestions = useCallback(async () => {
         try {
