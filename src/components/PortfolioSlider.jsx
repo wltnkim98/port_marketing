@@ -97,10 +97,6 @@ const PortfolioSlider = () => {
         });
     };
 
-    const goToSlide = (index) => {
-        setCurrentIndex(centerOffset + index);
-    };
-
     // Auto-play functionality
     useEffect(() => {
         if (isAutoPlaying) {
@@ -111,7 +107,7 @@ const PortfolioSlider = () => {
                 clearInterval(autoPlayRef.current);
             }
         };
-    }, [isAutoPlaying, currentIndex]);
+    }, [isAutoPlaying, currentIndex, nextSlide]);
 
     // Pause auto-play on hover
     const handleMouseEnter = () => setIsAutoPlaying(false);

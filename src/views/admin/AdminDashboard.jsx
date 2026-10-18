@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -19,15 +19,7 @@ const AdminDashboard = () => {
     const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
     const token = localStorage.getItem('adminToken');
 
-    useEffect(() => {
-        if (!token) {
-            navigate('/admin/login');
-            return;
-        }
-        fetchData();
-    }, [activeTab, token, navigate]);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         setLoading(true);
         try {
             if (activeTab === 'consultations') {
@@ -40,7 +32,15 @@ const AdminDashboard = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [activeTab]);
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/admin/login');
+            return;
+        }
+        fetchData();
+    }, [token, navigate, fetchData]);
 
     const fetchConsultations = async () => {
         const response = await fetch(`${API_URL}/api/support/consult`, {

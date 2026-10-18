@@ -57,7 +57,7 @@ const QaView = () => {
         } finally {
             setLoading(false);
         }
-    }, [currentPage]);
+    }, [currentPage, API_URL]);
 
     useEffect(() => {
         fetchQuestions();

@@ -118,10 +118,11 @@ const Ai = () => {
                             const parsed = JSON.parse(jsonStr);
                             const token = parsed.candidates?.[0]?.content?.parts?.[0]?.text || '';
                             if (token) {
-                                botReply += token;
+                                const updatedReply = botReply + token;
+                                botReply = updatedReply;
                                 setMessages(prev => {
                                     const next = [...prev];
-                                    next[next.length - 1] = { role: 'bot', text: botReply };
+                                    next[next.length - 1] = { role: 'bot', text: updatedReply };
                                     return next;
                                 });
                             }
