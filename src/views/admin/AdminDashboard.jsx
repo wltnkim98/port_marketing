@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     const [zoomedImage, setZoomedImage] = useState(null);
     const navigate = useNavigate();
 
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'http://localhost:5001';
     const token = localStorage.getItem('adminToken');
 
     const fetchConsultations = useCallback(async () => {

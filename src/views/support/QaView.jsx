@@ -40,7 +40,7 @@ const QaView = () => {
 
     const [openQaIndex, setOpenQaIndex] = useState(null);
 
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
     const fetchQuestions = useCallback(async () => {
         try {
