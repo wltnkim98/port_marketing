@@ -67,6 +67,19 @@ router.post('/', upload.single('file'), async (req, res) => {
       });
     }
 
+    // 파일명 안전하게 처리 (한글 인코딩 문제 해결)
+    let safeFileName = '';
+    if (req.file) {
+      try {
+        // Buffer를 사용하여 UTF-8로 디코딩
+        const buffer = Buffer.from(req.file.originalname, 'latin1');
+        safeFileName = buffer.toString('utf8');
+      } catch (error) {
+        // 디코딩 실패 시 원본 파일명 사용
+        safeFileName = req.file.originalname;
+      }
+    }
+
     // Create new consultation
     const newConsult = new Consult({
       categories: parsedCategories || ['build'],
@@ -79,7 +92,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       email,
       website: website || '',
       message: message || '',
-      fileName: req.file ? req.file.originalname : '',
+      fileName: safeFileName,
       fileSize: req.file ? req.file.size : 0,
       filePath: req.file ? req.file.path : '', // Cloudinary URL
       fileUrl: req.file ? req.file.secure_url : '', // Cloudinary secure URL
