@@ -18,8 +18,12 @@ const storage = new CloudinaryStorage({
     allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip'],
     public_id: (req, file) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      // 한글 파일명을 안전하게 처리하기 위해 영문 ID 사용
       return `consult-${uniqueSuffix}`;
-    }
+    },
+    resource_type: 'auto',
+    use_filename: false, // 원본 파일명 사용하지 않음 (한글 깨짐 방지)
+    unique_filename: true // 고유한 파일명 생성
   }
 });
 
