@@ -456,7 +456,7 @@ const AdminDashboard = () => {
 
             {showConsultModal && selectedConsultation && (
                 <div className="admin-modal-overlay" onClick={closeConsultModal}>
-                    <div className="admin-modal-content" onClick={(e) => e.stopPropagation()}>
+                    <div className="admin-modal-content" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
                         <div className="admin-modal-header">
                             <h2 className="admin-modal-title">상담 신청 상세</h2>
                             <button className="admin-modal-close" onClick={closeConsultModal}>×</button>
