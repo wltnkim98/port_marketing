@@ -24,6 +24,8 @@ const Ai = () => {
 
     const chatContainerRef = useRef(null);
     const inputRef = useRef(null);
+    // IME 조합 중 Enter를 누른 경우, 조합 확정 후 전송하기 위한 플래그
+    const sendAfterCompositionRef = useRef(false);
 
     // 초기 마운트 시 입력창 포커스 (모바일 제외)
     useEffect(() => {
@@ -181,9 +183,10 @@ const Ai = () => {
             });
         }
         setLoading(false);
-        // 응답 완료 후 즉시 포커스
+        // 응답 완료 후 즉시 포커스 및 입력창 비우기
         setTimeout(() => {
             if (!isMobile) {
+                setInput('');
                 inputRef.current?.focus();
             }
         }, 100);
@@ -261,9 +264,25 @@ const Ai = () => {
                                 className="ai-input"
                                 ref={inputRef}
                                 autoFocus
+                                autoComplete="off"
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                                 onClick={() => inputRef.current?.focus()}
+                                onCompositionEnd={e => {
+                                    if (!sendAfterCompositionRef.current) return;
+                                    sendAfterCompositionRef.current = false;
+
+                                    // 확정된 전체 텍스트로 전송하고, 마지막 글자가 남지 않도록 DOM 값까지 비움
+                                    const el = e.currentTarget;
+                                    const text = el.value;
+                                    el.value = '';
+                                    setInput('');
+                                    send(text);
+                                    setTimeout(() => {
+                                        if (inputRef.current) inputRef.current.value = '';
+                                        setInput('');
+                                    }, 0);
+                                }}
                                 onKeyDown={e => {
                                     if (e.key !== 'Enter') return;
 
@@ -283,6 +302,11 @@ const Ai = () => {
 
                                     if (!e.ctrlKey && !e.metaKey) {
                                         e.preventDefault();
+                                        if (e.nativeEvent.isComposing || e.keyCode === 229) {
+                                            // 조합 중에는 전송을 보류하고, 조합이 확정된 뒤(onCompositionEnd) 전송
+                                            sendAfterCompositionRef.current = true;
+                                            return;
+                                        }
                                         send();
                                     }
                                 }}
@@ -292,7 +316,6 @@ const Ai = () => {
                                     ? "궁금한 내용을 질문해 보세요."
                                     : "예: 광고비는 늘었는데 ROAS가 떨어지고 있어요..."
                                 }
-                                disabled={loading}
                             />
                             <button className="ai-send" onClick={() => send()} disabled={loading || !input.trim()}>
                                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true"><path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" strokeWidth="1.2" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round"></path></svg>
