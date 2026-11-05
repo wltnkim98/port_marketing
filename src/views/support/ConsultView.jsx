@@ -266,7 +266,7 @@ const ConsultView = () => {
             
             // Add timeout to fetch request
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
             
             const response = await fetch(`${API_URL}/api/support/consult`, {
                 method: 'POST',

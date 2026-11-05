@@ -25,12 +25,45 @@ const Ai = () => {
     const chatContainerRef = useRef(null);
     const inputRef = useRef(null);
 
+    // 초기 마운트 시 입력창 포커스 (모바일 제외)
+    useEffect(() => {
+        if (isMobile) return;
+        const timer = setTimeout(() => {
+            inputRef.current?.focus();
+        }, 300);
+        return () => clearTimeout(timer);
+    }, []);
+
     // 채팅 박스 내부만 자동 하단 스크롤 (전체 윈도우 스크롤 방지)
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [messages, loading]);
+
+    // 로딩이 끝나면 입력창에 자동 포커스 (모바일 제외)
+    useEffect(() => {
+        if (!loading && !isMobile) {
+            const timer = setTimeout(() => {
+                inputRef.current?.focus();
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [loading]);
+
+    // 메시지가 업데이트될 때마다 입력창 포커스 유지 (모바일 제외)
+    useEffect(() => {
+        if (!loading && messages.length > 1 && !isMobile) {
+            const timer = setTimeout(() => {
+                inputRef.current?.focus();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [messages, loading]);
+
+    const handleChatClick = () => {
+        inputRef.current?.focus();
+    };
 
     const send = async (userText) => {
         const txt = (userText || input).trim();
@@ -148,6 +181,12 @@ const Ai = () => {
             });
         }
         setLoading(false);
+        // 응답 완료 후 즉시 포커스
+        setTimeout(() => {
+            if (!isMobile) {
+                inputRef.current?.focus();
+            }
+        }, 100);
     };
 
     return (
@@ -200,6 +239,7 @@ const Ai = () => {
                         className="ai-messages"
                         ref={chatContainerRef}
                         data-lenis-prevent
+                        onClick={handleChatClick}
                     >
                         {messages.map((m, i) => (
                             // 빈 텍스트(스트리밍 직전)는 렌더링 제외
@@ -215,13 +255,15 @@ const Ai = () => {
                             </div>
                         )}
                     </div>
-                    <div className="ai-bottom">
+                    <div className="ai-bottom" onClick={handleChatClick}>
                         <div className="ai-input-row">
                             <textarea
                                 className="ai-input"
                                 ref={inputRef}
+                                autoFocus
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
+                                onClick={() => inputRef.current?.focus()}
                                 onKeyDown={e => {
                                     if (e.key !== 'Enter') return;
 

@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
     const query = status === 'all' ? {} : { status };
     
     const questions = await Qa.find(query)
+      .select('title questionerName question answer isPrivate status createdAt answeredAt answeredBy')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))

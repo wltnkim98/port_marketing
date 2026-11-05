@@ -4,6 +4,7 @@ const Consult = require('../models/Consult');
 const { sendConsultationEmail, sendConfirmationEmail } = require('../middleware/email');
 const auth = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { uploadToCloudinary } = require('../middleware/upload');
 const path = require('path');
 const fs = require('fs');
 
@@ -69,6 +70,8 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     // 파일명 안전하게 처리 (한글 인코딩 문제 해결)
     let safeFileName = '';
+    let cloudinaryResult = null;
+
     if (req.file) {
       try {
         // Buffer를 사용하여 UTF-8로 디코딩
@@ -77,6 +80,17 @@ router.post('/', upload.single('file'), async (req, res) => {
       } catch (error) {
         // 디코딩 실패 시 원본 파일명 사용
         safeFileName = req.file.originalname;
+      }
+
+      // Cloudinary에 업로드
+      try {
+        cloudinaryResult = await uploadToCloudinary(req.file);
+      } catch (uploadError) {
+        console.error('Cloudinary upload error:', uploadError);
+        return res.status(500).json({
+          success: false,
+          message: '파일 업로드 중 오류가 발생했습니다.'
+        });
       }
     }
 
@@ -94,8 +108,8 @@ router.post('/', upload.single('file'), async (req, res) => {
       message: message || '',
       fileName: safeFileName,
       fileSize: req.file ? req.file.size : 0,
-      filePath: req.file ? req.file.path : '', // Cloudinary URL
-      fileUrl: req.file ? req.file.secure_url : '', // Cloudinary secure URL
+      filePath: cloudinaryResult ? cloudinaryResult.public_id : '', // Cloudinary public_id
+      fileUrl: cloudinaryResult ? cloudinaryResult.secure_url : '', // Cloudinary secure URL
       privacyAgreed: privacyAgreed === 'true' || privacyAgreed === true,
       ipAddress: req.ip || req.connection.remoteAddress,
       userAgent: req.headers['user-agent'] || ''
@@ -161,7 +175,9 @@ router.post('/', upload.single('file'), async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const consultations = await Consult.find().sort({ createdAt: -1 });
+    const consultations = await Consult.find()
+      .select('categories budget preferredTime company name role phone email website fileName fileSize status createdAt')
+      .sort({ createdAt: -1 });
     
     res.status(200).json({
       success: true,
@@ -267,7 +283,7 @@ router.get('/file/:filename', async (req, res) => {
     
     // Determine content type
     const ext = path.extname(filename).toLowerCase();
-    let contentType = 'application/octet-stream';
+    let contentType;
     
     switch (ext) {
       case '.jpg':

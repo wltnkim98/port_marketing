@@ -46,7 +46,7 @@ const QaView = () => {
         try {
             setLoading(true);
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
             
             const response = await fetch(`${API_URL}/api/support/qa?page=${currentPage}&status=all`, {
                 signal: controller.signal

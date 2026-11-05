@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
     const fetchConsultations = useCallback(async () => {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
         
         try {
             const response = await fetch(`${API_URL}/api/support/consult`, {
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
     const fetchQaList = useCallback(async () => {
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
             
             const response = await fetch(`${API_URL}/api/support/qa?status=all`, {
                 headers: {
@@ -262,6 +262,20 @@ const AdminDashboard = () => {
         return new Date(dateString).toLocaleString('ko-KR');
     };
 
+    const CATEGORY_LABELS = {
+        'build': '구축 컨설팅',
+        'branding': '창업 & 브랜딩',
+        'global': '글로벌 브랜딩',
+        'marketing': '마케팅 & 그로스',
+        'solution': '유지관리 & 솔루션',
+        'etc': '종합 비즈니스 상담'
+    };
+
+    const formatCategories = (categories) => {
+        if (!categories || !Array.isArray(categories)) return '-';
+        return categories.map(catId => CATEGORY_LABELS[catId] || catId).join(' / ');
+    };
+
     const isImageFile = (fileName) => {
         if (!fileName) return false;
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'];
@@ -343,7 +357,7 @@ const AdminDashboard = () => {
                                             <td>{consult.name}</td>
                                             <td>{consult.phone}</td>
                                             <td>{consult.email}</td>
-                                            <td>{consult.categories?.join(', ') || '-'}</td>
+                                            <td>{formatCategories(consult.categories)}</td>
                                             <td>{consult.budget || '-'}</td>
                                             <td>{formatDate(consult.createdAt)}</td>
                                         </tr>
@@ -494,7 +508,7 @@ const AdminDashboard = () => {
                                 <h3>상담 정보</h3>
                                 <div className="admin-modal-row">
                                     <span className="admin-modal-label">카테고리:</span>
-                                    <span className="admin-modal-value">{selectedConsultation.categories?.join(', ') || '-'}</span>
+                                    <span className="admin-modal-value">{formatCategories(selectedConsultation.categories)}</span>
                                 </div>
                                 <div className="admin-modal-row">
                                     <span className="admin-modal-label">예산:</span>

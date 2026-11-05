@@ -1,6 +1,5 @@
 const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require('path');
 
 // Cloudinary 설정
@@ -10,22 +9,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Cloudinary Storage 설정
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'consult-uploads',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip'],
-    public_id: (req, file) => {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      // 한글 파일명을 안전하게 처리하기 위해 영문 ID 사용
-      return `consult-${uniqueSuffix}`;
-    },
-    resource_type: 'auto',
-    use_filename: false, // 원본 파일명 사용하지 않음 (한글 깨짐 방지)
-    unique_filename: true // 고유한 파일명 생성
-  }
-});
+// 메모리 스토리지 사용 (파일을 메모리에 저장 후 Cloudinary로 업로드)
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
@@ -55,4 +40,29 @@ const upload = multer({
   }
 });
 
+// Cloudinary 업로드 헬퍼 함수
+const uploadToCloudinary = async (file, folder = 'consult-uploads') => {
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  const publicId = `consult-${uniqueSuffix}`;
+
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      {
+        folder: folder,
+        public_id: publicId,
+        resource_type: 'auto',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip']
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    ).end(file.buffer);
+  });
+};
+
 module.exports = upload;
+module.exports.uploadToCloudinary = uploadToCloudinary;

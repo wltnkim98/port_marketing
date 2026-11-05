@@ -610,4 +610,14 @@
   .admin-dashboard-table td {
     padding: 12px 8px;
   }
+
+  // Hide less important columns on mobile (phone, email, budget)
+  .admin-dashboard-table th:nth-child(3),
+  .admin-dashboard-table td:nth-child(3),
+  .admin-dashboard-table th:nth-child(4),
+  .admin-dashboard-table td:nth-child(4),
+  .admin-dashboard-table th:nth-child(6),
+  .admin-dashboard-table td:nth-child(6) {
+    display: none;
+  }
 }

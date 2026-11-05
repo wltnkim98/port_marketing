@@ -5,6 +5,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const compression = require('compression');
 
 // Import routes
 const consultRoutes = require('./routes/consult');
@@ -17,6 +18,17 @@ const PORT = process.env.PORT || 5000;
 
 // Trust proxy for Render and other hosting platforms (1 hop for Render reverse proxy)
 app.set('trust proxy', 1);
+
+// Enable gzip compression
+app.use(compression({
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    return compression.filter(req, res);
+  },
+  threshold: 1024
+}));
 
 // CORS configuration
 const allowedOrigins = [
@@ -62,6 +74,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Cache control headers for static assets
+app.use((req, res, next) => {
+  if (req.path.startsWith('/uploads') || req.path.startsWith('/api/health')) {
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+  }
+  next();
+});
+
 // Static files (uploads) - custom route with proper CORS
 app.get('/uploads/:filename', (req, res) => {
   const { filename } = req.params;
@@ -84,7 +104,7 @@ app.get('/uploads/:filename', (req, res) => {
   }
   
   const ext = path.extname(filename).toLowerCase();
-  let contentType = 'application/octet-stream';
+  let contentType;
   
   switch (ext) {
     case '.jpg':
@@ -165,7 +185,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   });
 
 // 404 handler for undefined routes
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: `경로를 찾을 수 없습니다: ${req.method} ${req.originalUrl}`
