@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import BuildingVideo from '../assets/video/building.mp4';
 
 function AnimatedMetric({ value, label, suffix, delay = 0, isVisible }) {
     const [displayValue, setDisplayValue] = useState(0);
@@ -258,7 +259,7 @@ const Cases = () => {
                 playsInline
                 preload="none"
             >
-                <source src="/building_low.mp4" type="video/mp4" />
+                <source src={BuildingVideo} type="video/mp4" />
             </video>
             <RisingGraph isVisible={isVisible} />
             <div className="cases-content">

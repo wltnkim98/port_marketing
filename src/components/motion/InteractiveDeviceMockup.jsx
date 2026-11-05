@@ -1,5 +1,5 @@
 import React from 'react';
-import PhotographyVideo from '../../assets/video/photography_low.mp4';
+import PhotographyVideo from '../../assets/video/photography.mp4';
 import GlobalVideo from '../../assets/video/global_video.mp4';
 
 const InteractiveDeviceMockup = ({ serviceType }) => {
